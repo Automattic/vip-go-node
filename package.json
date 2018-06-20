@@ -1,0 +1,20 @@
+{
+  "name": "@automattic/vip-go-node",
+  "version": "0.1.0",
+  "description": "All set for launch.",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Automattic/vip-go-node.git"
+  },
+  "keywords": [
+    "vip",
+    "vip-go"
+  ],
+  "author": "Automattic",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Automattic/vip-go-node/issues"
+  },
+  "homepage": "https://github.com/Automattic/vip-go-node#readme"
+}
