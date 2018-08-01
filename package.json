@@ -1,0 +1,29 @@
+{
+  "name": "vip-go-node",
+  "version": "0.0.1",
+  "description": "Node package helpers for VIP Go",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Automattic/vip-go-node.git"
+  },
+  "jest": {
+    "verbose": true,
+    "testURL": "http://localhost/"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Automattic/vip-go-node/issues"
+  },
+  "homepage": "https://github.com/Automattic/vip-go-node#readme",
+  "devDependencies": {
+    "jest": "^23.4.2"
+  },
+  "dependencies": {
+    "winston": "^3.0.0"
+  }
+}
