@@ -1,0 +1,13 @@
+{
+    "plugins": [
+        "wpcalypso"
+    ],
+    "extends": "wpcalypso",
+    "globals": {
+        "test": false,
+        "expect": false,
+        "require": false,
+        "module": false,
+        "process": false
+    }
+}
