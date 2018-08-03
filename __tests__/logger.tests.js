@@ -1,4 +1,4 @@
-const goLogger = require( '../logger/' );
+const goLogger = require( '../src/logger/' );
 const winston = require( 'winston' );
 const symbolForMessage = Symbol.for( 'message' );
 
