@@ -8,6 +8,8 @@
         "expect": false,
         "require": false,
         "module": false,
-        "process": false
+        "process": false,
+        "console": false,
+        "describe": false
     }
 }
