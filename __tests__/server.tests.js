@@ -1,7 +1,7 @@
 const server = require( '../src/server/' );
 const expressApp = require( 'express' )();
 const request = require( 'supertest' );
-const healthCheckUrl = '/cache-healthcheck?';
+const HEALTHCHECKURL = '/cache-healthcheck?';
 const requestHandler = ( req, res ) => {
 	if ( req.url === '/custom' ) {
 		res.writeHead( 201 );
@@ -21,7 +21,7 @@ describe( 'Should work with an express application', () => {
 
 	test( 'Should add a /cache-healthcheck? route returning 200 OK', ( done ) => {
 		const expressServer = server( { express: true, requestHandler: expressApp } );
-		request( 'http://localhost:3000' ).get( healthCheckUrl ).then( ( response ) => {
+		request( 'http://localhost:3000' ).get( HEALTHCHECKURL ).then( ( response ) => {
 			expect( response.statusCode ).toBe( 200 );
 			expressServer.close();
 			done();
@@ -31,7 +31,7 @@ describe( 'Should work with an express application', () => {
 	test( 'Should boot up a server on the provided PORT', ( done ) => {
 		const PORT = 8000;
 		const expressServer = server( { express: true, requestHandler: expressApp, PORT } );
-		request( `http://localhost:${ PORT }` ).get( healthCheckUrl ).then( ( response ) => {
+		request( `http://localhost:${ PORT }` ).get( HEALTHCHECKURL ).then( ( response ) => {
 			expect( response.statusCode ).toBe( 200 );
 			expressServer.close();
 			done();
@@ -61,7 +61,7 @@ describe( 'Should work with a custom request handler', () => {
 
 	test( 'Should add a /cache-healthcheck? route returning 200 OK', ( done ) => {
 		const httpServer = server( { requestHandler: requestHandler } );
-		request( 'http://localhost:3000' ).get( healthCheckUrl ).then( ( response ) => {
+		request( 'http://localhost:3000' ).get( HEALTHCHECKURL ).then( ( response ) => {
 			expect( response.statusCode ).toBe( 200 );
 			httpServer.close();
 			done();
@@ -71,7 +71,7 @@ describe( 'Should work with a custom request handler', () => {
 	test( 'Should boot up a server on the provided PORT', ( done ) => {
 		const PORT = 8000;
 		const httpServer = server( { requestHandler: requestHandler, PORT } );
-		request( `http://localhost:${ PORT }` ).get( healthCheckUrl ).then( ( response ) => {
+		request( `http://localhost:${ PORT }` ).get( HEALTHCHECKURL ).then( ( response ) => {
 			expect( response.statusCode ).toBe( 200 );
 			httpServer.close();
 			done();
