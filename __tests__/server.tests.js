@@ -21,20 +21,9 @@ describe( 'Should work with an express application', () => {
 
 	test( 'Should add a /cache-healthcheck? route returning 200 OK', ( done ) => {
 		const expressServer = server( { express: true, requestHandler: expressApp } );
-		request( 'http://localhost:3000' ).get( HEALTHCHECKURL ).then( ( response ) => {
+		request( expressServer.app ).get( HEALTHCHECKURL ).then( ( response ) => {
 			expect( response.statusCode ).toBe( 200 );
 			expect( response.text ).toBe( 'ok' );
-			expressServer.close();
-			done();
-		} );
-	} );
-
-	test( 'Should boot up a server on the provided PORT', ( done ) => {
-		const PORT = 8000;
-		const expressServer = server( { express: true, requestHandler: expressApp, PORT } );
-		request( `http://localhost:${ PORT }` ).get( HEALTHCHECKURL ).then( ( response ) => {
-			expect( response.statusCode ).toBe( 200 );
-			expressServer.close();
 			done();
 		} );
 	} );
@@ -45,15 +34,26 @@ describe( 'Should work with an express application', () => {
 		} );
 
 		const expressServer = server( { express: true, requestHandler: expressApp } );
-		request( 'http://localhost:3000' ).get( '/down' ).then( ( response ) => {
+		request( expressServer.app ).get( '/down' ).then( ( response ) => {
 			expect( response.statusCode ).toBe( 501 );
-			expressServer.close();
 			done();
 		} );
 	} );
+
+    test( 'Should boot up a server on the provided PORT', ( done ) => {
+        let expressServerOnPort = server( { requestHandler: expressApp, express: true, PORT: 8000 } );
+        expressServerOnPort.listen();
+        request( 'http://localhost:8000').get(HEALTHCHECKURL).then( (response) => {
+            expect(response.statusCode).toBe(200);
+            expressServerOnPort.close();
+            done();
+        })
+    } );
 } );
 
 describe( 'Should work with a custom request handler', () => {
+	const httpServer = server( { requestHandler: requestHandler } );
+
 	test( 'Should raise an error if no request handler is passed', () => {
 		expect( () => {
 			server();
@@ -61,40 +61,34 @@ describe( 'Should work with a custom request handler', () => {
 	} );
 
 	test( 'Should add a /cache-healthcheck? route returning 200 OK', ( done ) => {
-		const httpServer = server( { requestHandler: requestHandler } );
-		request( 'http://localhost:3000' ).get( HEALTHCHECKURL ).then( ( response ) => {
+		request( httpServer.app ).get( HEALTHCHECKURL ).then( ( response ) => {
 			expect( response.statusCode ).toBe( 200 );
 			expect( response.text ).toBe( 'ok' );
-			httpServer.close();
-			done();
-		} );
-	} );
-
-	test( 'Should boot up a server on the provided PORT', ( done ) => {
-		const PORT = 8000;
-		const httpServer = server( { requestHandler: requestHandler, PORT } );
-		request( `http://localhost:${ PORT }` ).get( HEALTHCHECKURL ).then( ( response ) => {
-			expect( response.statusCode ).toBe( 200 );
-			httpServer.close();
 			done();
 		} );
 	} );
 
 	test( 'Should match defined routes', ( done ) => {
-		const httpServer = server( { requestHandler: requestHandler } );
-		request( 'http://localhost:3000' ).get( '/custom' ).then( ( response ) => {
+		request( httpServer.app ).get( '/custom' ).then( ( response ) => {
 			expect( response.statusCode ).toBe( 201 );
-			httpServer.close();
 			done();
 		} );
 	} );
 
 	test( 'Should return default response if no route is matched', ( done ) => {
-		const httpServer = server( { requestHandler: requestHandler } );
-		request( 'http://localhost:3000' ).get( '/notfound' ).then( ( response ) => {
+		request( httpServer.app ).get( '/notfound' ).then( ( response ) => {
 			expect( response.statusCode ).toBe( 404 );
-			httpServer.close();
 			done();
 		} );
 	} );
+
+	test( 'Should boot up a server on the provided PORT', ( done ) => {
+        let httpServerOnPort = server( { requestHandler: requestHandler, PORT: 8000 } );
+        httpServerOnPort.listen();
+        request( 'http://localhost:8000').get(HEALTHCHECKURL).then( (response) => {
+            expect(response.statusCode).toBe(200);
+            httpServerOnPort.close();
+            done();
+        })
+    } );
 } );

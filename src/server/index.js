@@ -1,15 +1,30 @@
 const { createServer } = require( 'http' );
 const HEALTHCHECKURL = '/cache-healthcheck?';
+const wrapApplication = ( application, PORT ) => {
+	const app = application;
+	let server;
 
-module.exports = ( { PORT = 3000, requestHandler, express = false, logger = console } ) => {
+	return {
+		app,
+		server,
+		listen: ( connected ) => {
+			console.log("Starting server on", PORT)
+			server = app.listen( PORT, connected );
+		},
+		close: () => {
+			server.close();
+		},
+	};
+};
+
+module.exports = ( { PORT, requestHandler, express = false, logger = console } ) => {
 	if ( requestHandler && express ) {
 		logger.info( 'Creating an Express server...' );
 		requestHandler.get( HEALTHCHECKURL, ( req, res ) => {
 			res.status( 200 ).end( 'ok' );
 		} );
 
-		logger.info( `Starting server on port ${ PORT }...` );
-		return requestHandler.listen( PORT );
+		return wrapApplication( requestHandler, PORT || process.env.PORT || 3000 );
 	}
 
 	if ( requestHandler ) {
@@ -23,8 +38,7 @@ module.exports = ( { PORT = 3000, requestHandler, express = false, logger = cons
 			return requestHandler( req, res );
 		} );
 
-		logger.info( `Starting server on port ${ PORT }...` );
-		return server.listen( PORT );
+		return wrapApplication( server, PORT || process.env.PORT || 3000 );
 	}
 
 	throw Error( 'Please include a requestHandler and the appropriate flag' );
