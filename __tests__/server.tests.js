@@ -23,6 +23,7 @@ describe( 'Should work with an express application', () => {
 		const expressServer = server( { express: true, requestHandler: expressApp } );
 		request( 'http://localhost:3000' ).get( HEALTHCHECKURL ).then( ( response ) => {
 			expect( response.statusCode ).toBe( 200 );
+			expect( response.text ).toBe( 'ok' );
 			expressServer.close();
 			done();
 		} );
@@ -63,6 +64,7 @@ describe( 'Should work with a custom request handler', () => {
 		const httpServer = server( { requestHandler: requestHandler } );
 		request( 'http://localhost:3000' ).get( HEALTHCHECKURL ).then( ( response ) => {
 			expect( response.statusCode ).toBe( 200 );
+			expect( response.text ).toBe( 'ok' );
 			httpServer.close();
 			done();
 		} );
