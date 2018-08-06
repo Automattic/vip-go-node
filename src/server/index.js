@@ -1,6 +1,6 @@
 const { createServer } = require( 'http' );
 const HEALTHCHECKURL = '/cache-healthcheck?';
-const wrapApplication = ( application, PORT ) => {
+const wrapApplication = ( application, { PORT, logger } ) => {
 	const app = application;
 	let server;
 
@@ -8,7 +8,7 @@ const wrapApplication = ( application, PORT ) => {
 		app,
 		server,
 		listen: ( connected ) => {
-			console.log("Starting server on", PORT)
+			logger.log( 'Starting server on', PORT );
 			server = app.listen( PORT, connected );
 		},
 		close: () => {
@@ -17,29 +17,34 @@ const wrapApplication = ( application, PORT ) => {
 	};
 };
 
-module.exports = ( { PORT, requestHandler, express = false, logger = console } ) => {
-	if ( requestHandler && express ) {
+module.exports = ( app, { PORT, logger = console } = {} ) => {
+	if ( ! app ) {
+		throw Error( 'Please include a requestHandler and the appropriate flag' );
+	}
+
+	let server = null;
+
+	if ( app.route ) {
+		// Express app
 		logger.info( 'Creating an Express server...' );
-		requestHandler.get( HEALTHCHECKURL, ( req, res ) => {
+		app.get( HEALTHCHECKURL, ( req, res ) => {
 			res.status( 200 ).end( 'ok' );
 		} );
 
-		return wrapApplication( requestHandler, PORT || process.env.PORT || 3000 );
-	}
-
-	if ( requestHandler ) {
+		server = app;
+	} else {
+		// Custom request handler
 		logger.info( 'Creating an HTTP server...' );
-		const server = createServer( ( req, res ) => {
+
+		server = createServer( ( req, res ) => {
 			if ( req.url === HEALTHCHECKURL ) {
 				res.writeHead( 200 );
 				res.end( 'ok' );
 			}
 
-			return requestHandler( req, res );
+			return app( req, res );
 		} );
-
-		return wrapApplication( server, PORT || process.env.PORT || 3000 );
 	}
 
-	throw Error( 'Please include a requestHandler and the appropriate flag' );
+	return wrapApplication( server, { PORT: PORT || process.env.PORT || 3000, logger } );
 };

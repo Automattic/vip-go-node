@@ -13,14 +13,8 @@ const requestHandler = ( req, res ) => {
 };
 
 describe( 'Should work with an express application', () => {
-	test( 'Should raise an error if express flag is present and no request handler', () => {
-		expect( () => {
-			server( { express: true } );
-		} ).toThrow();
-	} );
-
 	test( 'Should add a /cache-healthcheck? route returning 200 OK', ( done ) => {
-		const expressServer = server( { express: true, requestHandler: expressApp } );
+		const expressServer = server( expressApp );
 		request( expressServer.app ).get( HEALTHCHECKURL ).then( ( response ) => {
 			expect( response.statusCode ).toBe( 200 );
 			expect( response.text ).toBe( 'ok' );
@@ -33,26 +27,26 @@ describe( 'Should work with an express application', () => {
 			res.status( 501 ).end();
 		} );
 
-		const expressServer = server( { express: true, requestHandler: expressApp } );
+		const expressServer = server( expressApp );
 		request( expressServer.app ).get( '/down' ).then( ( response ) => {
 			expect( response.statusCode ).toBe( 501 );
 			done();
 		} );
 	} );
 
-    test( 'Should boot up a server on the provided PORT', ( done ) => {
-        let expressServerOnPort = server( { requestHandler: expressApp, express: true, PORT: 8000 } );
-        expressServerOnPort.listen();
-        request( 'http://localhost:8000').get(HEALTHCHECKURL).then( (response) => {
-            expect(response.statusCode).toBe(200);
-            expressServerOnPort.close();
-            done();
-        })
-    } );
+	test( 'Should boot up a server on the provided PORT', ( done ) => {
+		const expressServerOnPort = server( expressApp, { PORT: 8000 } );
+		expressServerOnPort.listen();
+		request( 'http://localhost:8000' ).get( HEALTHCHECKURL ).then( ( response ) => {
+			expect( response.statusCode ).toBe( 200 );
+			expressServerOnPort.close();
+			done();
+		} );
+	} );
 } );
 
 describe( 'Should work with a custom request handler', () => {
-	const httpServer = server( { requestHandler: requestHandler } );
+	const httpServer = server( requestHandler );
 
 	test( 'Should raise an error if no request handler is passed', () => {
 		expect( () => {
@@ -83,12 +77,12 @@ describe( 'Should work with a custom request handler', () => {
 	} );
 
 	test( 'Should boot up a server on the provided PORT', ( done ) => {
-        let httpServerOnPort = server( { requestHandler: requestHandler, PORT: 8000 } );
-        httpServerOnPort.listen();
-        request( 'http://localhost:8000').get(HEALTHCHECKURL).then( (response) => {
-            expect(response.statusCode).toBe(200);
-            httpServerOnPort.close();
-            done();
-        })
-    } );
+		const httpServerOnPort = server( requestHandler, { PORT: 8000 } );
+		httpServerOnPort.listen();
+		request( 'http://localhost:8000' ).get( HEALTHCHECKURL ).then( ( response ) => {
+			expect( response.statusCode ).toBe( 200 );
+			httpServerOnPort.close();
+			done();
+		} );
+	} );
 } );
