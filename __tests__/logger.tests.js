@@ -13,7 +13,7 @@ describe( 'Logger should fail if some parameters are not initialized', () => {
 describe( 'Logger should format messages and log to the provided transport', () => {
 	test( 'Should log a simple error message', ( done ) => {
 		const transport = new winston.transports.Console();
-		const log = goLogger( { namespace: 'go:application:test', transport } );
+		const log = goLogger( 'go:application:test', { transport } );
 
 		log.info( 'A simple log' );
 
@@ -27,7 +27,7 @@ describe( 'Logger should format messages and log to the provided transport', () 
 
 	test( 'Should format an error message', ( done ) => {
 		const transport = new winston.transports.Console();
-		const log = goLogger( { namespace: 'go:application:test', transport } );
+		const log = goLogger( 'go:application:test', { transport } );
 
 		log.info( 'Should format %s message', 'this' );
 
@@ -44,7 +44,7 @@ describe( 'Logger should format messages and log to the provided transport', () 
 describe( 'Logger should add necessary labels and handle custom ones', () => {
 	test( 'Should add custom labels to the output', ( done ) => {
 		const transport = new winston.transports.Console();
-		const log = goLogger( { namespace: 'go:application:test', transport } );
+		const log = goLogger( 'go:application:test', { transport } );
 
 		log.error( 'Should add my custom label', { customLabel: 'custom value' } );
 
@@ -56,7 +56,7 @@ describe( 'Logger should add necessary labels and handle custom ones', () => {
 
 	test( 'Should format and add new labels to the output', ( done ) => {
 		const transport = new winston.transports.Console();
-		const log = goLogger( { namespace: 'go:application:test', transport } );
+		const log = goLogger( 'go:application:test', { transport } );
 
 		log.error( 'Should format %s, and add my custom label', 'this',
 			{ customLabel: 'custom value' }
@@ -73,7 +73,7 @@ describe( 'Logger should add necessary labels and handle custom ones', () => {
 
 	test( 'Should include all necessary labels', ( done ) => {
 		const transport = new winston.transports.Console();
-		const log = goLogger( { namespace: 'go:application:test', transport } );
+		const log = goLogger( 'go:application:test', { transport } );
 
 		log.error( 'Should have some necessary labels' );
 
