@@ -19,7 +19,7 @@ const wrapApplication = ( application, { PORT, logger } ) => {
 
 module.exports = ( app, { PORT, logger = console } = {} ) => {
 	if ( ! app ) {
-		throw Error( 'Please include a requestHandler and the appropriate flag' );
+		throw Error( 'Please include a requestHandler' );
 	}
 
 	let server = null;
