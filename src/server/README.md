@@ -1,8 +1,8 @@
 # VIP GO HTTP server usage
 ## Initialization
-In order to use a VIP Go HTTP server, you need to initialize it with a request handler. The request handler contains the rooting of your server and is used handle requests on your server
+In order to use a VIP Go HTTP server, you need to initialize it with a request handler. The request handler contains the rooting of your server and is used to handle requests on your server
 
-The HTTP server supports an `express` app or a `custom` handler. A custom handler is a function taking two arguments (req and res), executed against any request, and should respond to the client's request.
+The HTTP server supports an `express` app or a `custom` handler. A custom handler is a function taking two arguments (req and res), executed against every request, and sends a reponse to the client.
 
 The usage with a custom handler is as follows:
 
@@ -17,23 +17,52 @@ const myRequestHandler = ( req, res ) => {
     res.send( 'Hello from the server' );
 };
 
-const myServer = server( { requestHandler: myRequestHandler } );
+const myServer = server( myRequestHandler );
+
+myServer.listen()
 ```
-To use it with an `express` app, make sure to pass the express application as a request handler and activate the `express` flag as follows:
+
+To use it with an `express` app, make sure to pass the express application as a request handler:
 ``` js
 const { server } = require('vip-go-node');
 const app = require('express')();
 
-const myServer = server( { requestHandler: app, express: true } );
+const myServer = server( app );
+
+myServer.listen()
 ```
-The `server` module boots the server on the designed PORT and returns the created server. To test it, head to `http://localhost:3000/cache-healthcheck?`. You should receive a `200 OK` HTTP response code if everything is working. This route is **added by default** to all servers created by the module.
+
+The `.listen()` method takes a callback function as an argument and it's executed after the server is booted up. It can be used as follow:
+
+``` js
+const myServer = server( app );
+
+myServer.listen( () => {
+    console.log('Server ready!')
+} )
+```
+
+The object has a `.close()` too and can be used to stop the server without killing the process.
+
+The app (or request handler) and the server itself are accessible using `.app` and `.server`. Here is a recap of what you can access from the returned object:
+```
+const myServer = server( app );
+
+myServer
+   - .app // The application or request handler passed in the initialization
+   - .server // The server started if any (null otherwise)
+   - .listen( () => {} ) // Starts the server on the designed PORT, can take a callback
+   - .close() // Closes the started server
+```
 
 ## Configuration
-By default, the server will start on port `3000`. If you want to change the port, please include a PORT in the initialization:
+If you have an environment variable called `PORT`, your server will start on this port, otherwise it will default to `3000`. If you want to force a `PORT`, please include it in the initialization as follows:
 ``` js
-const myServer = server( { requestHandler: myRequestHandler, PORT: 8000 } );
+const myServer = server( app, { PORT: 8000 } );
 ```
+To test it, head to `http://localhost:8000/cache-healthcheck?`. You should receive a `200 OK` HTTP response code and an `ok` message if everything is working. This route is **added by default** to all servers created by the module.
+
 The module will also log to the `console` by default. If you want to include your own logger, please use:
 ``` js
-const myServer = server( { requestHandler: myRequestHandler, logger: myLogger } );
+const myServer = server( app, { logger: myLogger } );
 ```
