@@ -41,7 +41,7 @@ const prodLoggingFormat = printf( output => {
 	return `${ time } ${ app }${ type } ${ JSON.stringify( output ) }`;
 } );
 
-module.exports = ( { namespace, transport } ) => {
+module.exports = ( namespace, { transport } = { } ) => {
 	if ( ! namespace ) {
 		throw Error( 'Please include a namespace to initialize your logger.' );
 	}
