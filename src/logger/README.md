@@ -5,7 +5,7 @@ In order to use a VIP Go logger, you need to initialize it with a namespace. The
 To initialize a logger:
 ``` js
 const { logger } = require('vip-go-node');
-const log = logger( { namespace: 'application:application_type' } );
+const log = logger( 'application:application_type' );
 ```
 You can start logging now by simply using:
 ``` js
