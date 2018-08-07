@@ -31,7 +31,7 @@ module.exports = ( app, { PORT, logger = console } = {} ) => {
 			res.status( 200 ).end( 'ok' );
 		} );
 
-		server = app;
+		server = createServer( app );
 	} else {
 		// Custom request handler
 		logger.info( 'Creating an HTTP server...' );
