@@ -24,27 +24,16 @@ module.exports = ( app, { PORT, logger = console } = {} ) => {
 
 	let server = null;
 
-	if ( app.route ) {
-		// Express app
-		logger.info( 'Creating an Express server...' );
-		app.get( HEALTHCHECKURL, ( req, res ) => {
-			res.status( 200 ).end( 'ok' );
-		} );
+	logger.info( 'Creating an HTTP server...' );
 
-		server = createServer( app );
-	} else {
-		// Custom request handler
-		logger.info( 'Creating an HTTP server...' );
+	server = createServer( ( req, res ) => {
+		if ( req.url === HEALTHCHECKURL ) {
+			res.writeHead( 200 );
+			res.end( 'ok' );
+		}
 
-		server = createServer( ( req, res ) => {
-			if ( req.url === HEALTHCHECKURL ) {
-				res.writeHead( 200 );
-				res.end( 'ok' );
-			}
-
-			return app( req, res );
-		} );
-	}
+		return app( req, res );
+	} );
 
 	return wrapApplication( server, { PORT: PORT || process.env.PORT || 3000, logger } );
 };
