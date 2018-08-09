@@ -25,7 +25,9 @@
     "eslint": "^5.2.0",
     "eslint-config-wpcalypso": "^4.0.0",
     "eslint-plugin-wpcalypso": "^4.0.1",
-    "jest": "^23.4.2"
+    "express": "^4.16.3",
+    "jest": "^23.4.2",
+    "supertest": "^3.1.0"
   },
   "dependencies": {
     "winston": "^3.0.0"
