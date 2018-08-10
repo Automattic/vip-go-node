@@ -1,4 +1,5 @@
-# VIP GO logger usage
+# VIP Go Logger
+
 ## Initialization
 In order to use a VIP Go logger, you need to initialize it with a namespace. The namespace is used in error messages and help filters errors in other tools like Kibana.
 
