@@ -3,10 +3,7 @@ const { combine, timestamp, printf, splat } = format;
 
 const appProcess = process.env.NODEJS_APP_PROCESS || 'master';
 
-const isDevelopment = () => {
-	const env = process.env;
-	return ! env.VIP_GO_APP_ID && ! env.IS_VIP_GO_ENV && env.NODE_ENV !== 'production';
-};
+const isDevelopment = () => ! process.env.VIP_GO_APP_ID;
 
 const createLogEntry = ( namespace ) => {
 	return format( ( info ) => {
