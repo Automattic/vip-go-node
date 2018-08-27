@@ -2,7 +2,7 @@
   "name": "@automattic/vip-go",
   "version": "0.2.0-0",
   "description": "Node package helpers for the VIP Go platform",
-  "main": "index.js",
+  "main": "./dist/index.js",
   "scripts": {
     "test": "jest",
     "lint": "eslint ./",
