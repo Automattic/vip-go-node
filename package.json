@@ -2,12 +2,14 @@
   "name": "@automattic/vip-go",
   "version": "0.2.0-0",
   "description": "Node package helpers for the VIP Go platform",
-  "main": "index.js",
+  "main": "./dist/index.js",
   "scripts": {
     "test": "jest",
-    "lint": "eslint ./",
+    "lint": "eslint ./src",
     "publish-please": "publish-please",
-    "prepublishOnly": "publish-please guard"
+    "prepublishOnly": "publish-please guard",
+    "build": "babel src --presets babel-preset-es2015 --out-dir dist",
+    "prepublish": "npm run build"
   },
   "repository": {
     "type": "git",
@@ -24,6 +26,8 @@
   },
   "homepage": "https://github.com/Automattic/vip-go-node#readme",
   "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-es2015": "^6.24.1",
     "eslint": "^5.2.0",
     "eslint-config-wpcalypso": "^4.0.0",
     "eslint-plugin-wpcalypso": "^4.0.1",
