@@ -8,6 +8,8 @@ const requestHandler = ( req, res ) => {
 		res.end();
 	}
 
+	console.log( 'Not found' )
+
 	res.writeHead( 404 );
 	res.end();
 };
@@ -58,6 +60,19 @@ describe( 'Should work with a custom request handler', () => {
 		request( httpServer.app ).get( HEALTHCHECKURL ).then( ( response ) => {
 			expect( response.statusCode ).toBe( 200 );
 			expect( response.text ).toBe( 'ok' );
+			done();
+		} );
+	} );
+
+	test( 'Should respond to /cache-healthcheck? route and not forward the request', ( done ) => {
+		const consoleSpy = jest.spyOn( console, 'log' );
+
+		request( httpServer.app ).get( HEALTHCHECKURL ).then( ( response ) => {
+			expect( response.statusCode ).toBe( 200 );
+			expect( response.text ).toBe( 'ok' );
+			expect( consoleSpy ).not.toHaveBeenCalled();
+
+			consoleSpy.mockRestore();
 			done();
 		} );
 	} );
