@@ -8,7 +8,8 @@ const requestHandler = ( req, res ) => {
 		res.end();
 	}
 
-	console.log( 'Not found' )
+	// eslint-disable-next-line no-console
+	console.log( 'Not found' );
 
 	res.writeHead( 404 );
 	res.end();
@@ -65,6 +66,7 @@ describe( 'Should work with a custom request handler', () => {
 	} );
 
 	test( 'Should respond to /cache-healthcheck? route and not forward the request', ( done ) => {
+		// eslint-disable-next-line no-undef
 		const consoleSpy = jest.spyOn( console, 'log' );
 
 		request( httpServer.app ).get( HEALTHCHECKURL ).then( ( response ) => {
