@@ -1,12 +1,16 @@
 module.exports = ( { logger = console } = {} ) => {
 	const licenseKey = process.env.NEW_RELIC_LICENSE_KEY;
-	const noConfig = process.env.NEW_RELIC_NO_CONFIG_FILE;
-	const isProduction = () => process.env.NODE_ENV === 'production';
+	const noConfig = process.env.NEW_RELIC_NO_CONFIG_FILE === 'true';
 
-	if ( isProduction && noConfig && licenseKey ) {
-		logger.info( 'Importing New Relic library...' );
-		return require( 'newrelic' );
+	if ( ! noConfig ) {
+		throw new Error( `An environment variable is missing 
+			or not set to true: NEW_RELIC_NO_CONFIG_FILE` );
 	}
 
-	logger.error( 'New Relic could not be loaded, environment variables are not present' );
+	if ( ! licenseKey ) {
+		throw new Error( 'An environment variable is missing: NEW_RELIC_LICENSE_KEY' );
+	}
+
+	logger.info( 'Importing New Relic library...' );
+	return require( 'newrelic' );
 };
