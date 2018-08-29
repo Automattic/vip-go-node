@@ -5,5 +5,5 @@ const newrelic = require( './newrelic/' );
 module.exports = {
 	logger,
 	server,
-    newrelic,
+	newrelic,
 };
