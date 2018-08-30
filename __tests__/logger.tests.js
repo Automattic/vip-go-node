@@ -9,8 +9,6 @@ class TestTransport extends Transport {
 	}
 
 	log( info, callback ) {
-		setImmediate( () => this.emit( 'logged', info ) );
-
 		this.logs.push( info );
 
 		callback();
@@ -26,50 +24,42 @@ describe( 'Logger should fail if some parameters are not initialized', () => {
 } );
 
 describe( 'Logger should format messages and log to the provided transport', () => {
-	test( 'Should log a simple error message', ( done ) => {
+	test( 'Should log a simple error message', () => {
 		const transport = new TestTransport();
 		const log = goLogger( 'go:application:test', { transport } );
 
 		log.info( 'A simple log' );
 
-		transport.on( 'logged', function( logObject ) {
-			const isIncluded = logObject[ symbolForMessage ].includes( 'A simple log' );
+		const firstLog = transport.logs[0];
 
-			expect( isIncluded ).toBe( true );
-			done();
-		} );
+		expect( firstLog ).toHaveProperty( 'message', 'A simple log' );
 	} );
 
-	test( 'Should format an error message', ( done ) => {
+	test( 'Should format an error message', () => {
 		const transport = new TestTransport();
 		const log = goLogger( 'go:application:test', { transport } );
 
 		log.info( 'Should format %s message', 'this' );
 
-		transport.on( 'logged', function( logObject ) {
-			const isIncluded = logObject[ symbolForMessage ]
-				.includes( 'Should format this message' );
+		const firstLog = transport.logs[0];
 
-			expect( isIncluded ).toBe( true );
-			done();
-		} );
+		expect( firstLog ).toHaveProperty( 'message', 'Should format this message' );
 	} );
 } );
 
 describe( 'Logger should add necessary labels and handle custom ones', () => {
-	test( 'Should add custom labels to the output', ( done ) => {
+	test( 'Should add custom labels to the output', () => {
 		const transport = new TestTransport();
 		const log = goLogger( 'go:application:test', { transport } );
 
 		log.error( 'Should add my custom label', { customLabel: 'custom value' } );
 
-		transport.on( 'logged', function( logObject ) {
-			expect( logObject ).toHaveProperty( 'customLabel', 'custom value' );
-			done();
-		} );
+		const firstLog = transport.logs[0];
+
+		expect( firstLog ).toHaveProperty( 'customLabel', 'custom value' );
 	} );
 
-	test( 'Should format and add new labels to the output', ( done ) => {
+	test( 'Should format and add new labels to the output', () => {
 		const transport = new TestTransport();
 		const log = goLogger( 'go:application:test', { transport } );
 
@@ -77,28 +67,24 @@ describe( 'Logger should add necessary labels and handle custom ones', () => {
 			{ customLabel: 'custom value' }
 		);
 
-		transport.on( 'logged', function( logObject ) {
-			const isIncluded = logObject[ symbolForMessage ].includes( 'Should format this' );
+		const firstLog = transport.logs[0];
 
-			expect( isIncluded ).toBe( true );
-			expect( logObject ).toHaveProperty( 'customLabel', 'custom value' );
-			done();
-		} );
+		expect( firstLog ).toHaveProperty( 'message', 'Should format this, and add my custom label' );
+		expect( firstLog ).toHaveProperty( 'customLabel', 'custom value' );
 	} );
 
-	test( 'Should include all necessary labels', ( done ) => {
+	test( 'Should include all necessary labels', () => {
 		const transport = new TestTransport();
 		const log = goLogger( 'go:application:test', { transport } );
 
 		log.error( 'Should have some necessary labels' );
 
-		transport.on( 'logged', function( logObject ) {
-			expect( logObject ).toHaveProperty( 'app', 'go' );
-			expect( logObject ).toHaveProperty( 'app_type', 'application:test' );
-			expect( logObject ).toHaveProperty( 'message_type', 'error' );
-			expect( logObject ).toHaveProperty( 'app_process', 'master' );
-			expect( logObject ).toHaveProperty( 'message', 'Should have some necessary labels' );
-			done();
-		} );
+		const firstLog = transport.logs[0];
+
+		expect( firstLog ).toHaveProperty( 'message', 'Should have some necessary labels' );
+		expect( firstLog ).toHaveProperty( 'app', 'go' );
+		expect( firstLog ).toHaveProperty( 'app_type', 'application:test' );
+		expect( firstLog ).toHaveProperty( 'message_type', 'error' );
+		expect( firstLog ).toHaveProperty( 'app_process', 'master' );
 	} );
 } );
