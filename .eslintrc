@@ -5,6 +5,8 @@
     "extends": "wpcalypso",
     "globals": {
         "test": false,
+        "beforeEach": false,
+        "afterEach": false,
         "expect": false,
         "require": false,
         "module": false,

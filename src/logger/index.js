@@ -34,7 +34,7 @@ const createLogEntry = ( namespace ) => {
 // Logging format for local
 const localLoggingFormat = printf( output => {
 	const { timestamp: time, app, app_type: type, level, message } = output;
-	return `${ time } ${ app }${ type } [${ level }] ${ message }`;
+	return `${ time } ${ app }:${ type } [${ level }] ${ message }`;
 } );
 
 // Logging format for production
@@ -44,7 +44,7 @@ const prodLoggingFormat = printf( output => {
 	// Can't include the timestamp in the JSON
 	delete output.timestamp;
 
-	return `${ time } ${ app }${ type } ${ JSON.stringify( output ) }`;
+	return `${ time } ${ app }:${ type } ${ JSON.stringify( output ) }`;
 } );
 
 module.exports = ( namespace, { transport } = { } ) => {
