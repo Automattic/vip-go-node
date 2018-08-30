@@ -1,7 +1,7 @@
 #!/bin/sh
 printf "\nYou're about to push to a remote repository, running tests first:\n"
 
-./node_modules/.bin/jest
+exec npm test
 jest_exit_code=$?
 
 if [ ! 0 = "$jest_exit_code" ]

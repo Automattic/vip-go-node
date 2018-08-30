@@ -13,7 +13,7 @@ printf '%s\n' "${jsfiles[@]}"
 
 printf "\nValidating .js:\n"
 
-./node_modules/.bin/eslint ./
+exec npm run lint
 linter_exit_code=$?
 
 if [ ! 0 = "$linter_exit_code" ]
