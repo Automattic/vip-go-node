@@ -3,7 +3,7 @@ const { combine, timestamp, printf, splat } = format;
 
 const appProcess = process.env.NODEJS_APP_PROCESS || 'master';
 
-const isDevelopment = () => ! process.env.VIP_GO_APP_ID;
+const isLocal = () => ! process.env.VIP_GO_APP_ID;
 
 const createLogEntry = ( namespace ) => {
 	return format( ( info ) => {
@@ -46,7 +46,7 @@ module.exports = ( namespace, { transport } = { } ) => {
 		throw Error( 'Please include a namespace to initialize your logger.' );
 	}
 
-	const consoleLogging = isDevelopment() ? localLoggingFormat : prodLoggingFormat;
+	const consoleLogging = isLocal() ? localLoggingFormat : prodLoggingFormat;
 
 	const formatLogEntry = createLogEntry( namespace );
 
