@@ -1,6 +1,5 @@
 const goLogger = require( '../src/logger/' );
 const Transport = require( 'winston-transport' );
-const symbolForMessage = Symbol.for( 'message' );
 
 class TestTransport extends Transport {
 	constructor( opts ) {
@@ -30,7 +29,7 @@ describe( 'Logger should format messages and log to the provided transport', () 
 
 		log.info( 'A simple log' );
 
-		const firstLog = transport.logs[0];
+		const firstLog = transport.logs[ 0 ];
 
 		expect( firstLog ).toHaveProperty( 'message', 'A simple log' );
 	} );
@@ -41,7 +40,7 @@ describe( 'Logger should format messages and log to the provided transport', () 
 
 		log.info( 'Should format %s message', 'this' );
 
-		const firstLog = transport.logs[0];
+		const firstLog = transport.logs[ 0 ];
 
 		expect( firstLog ).toHaveProperty( 'message', 'Should format this message' );
 	} );
@@ -54,7 +53,7 @@ describe( 'Logger should add necessary labels and handle custom ones', () => {
 
 		log.error( 'Should add my custom label', { customLabel: 'custom value' } );
 
-		const firstLog = transport.logs[0];
+		const firstLog = transport.logs[ 0 ];
 
 		expect( firstLog ).toHaveProperty( 'customLabel', 'custom value' );
 	} );
@@ -67,9 +66,10 @@ describe( 'Logger should add necessary labels and handle custom ones', () => {
 			{ customLabel: 'custom value' }
 		);
 
-		const firstLog = transport.logs[0];
+		const firstLog = transport.logs[ 0 ];
+		const expectedMessage = 'Should format this, and add my custom label';
 
-		expect( firstLog ).toHaveProperty( 'message', 'Should format this, and add my custom label' );
+		expect( firstLog ).toHaveProperty( 'message', expectedMessage );
 		expect( firstLog ).toHaveProperty( 'customLabel', 'custom value' );
 	} );
 
@@ -79,7 +79,7 @@ describe( 'Logger should add necessary labels and handle custom ones', () => {
 
 		log.error( 'Should have some necessary labels' );
 
-		const firstLog = transport.logs[0];
+		const firstLog = transport.logs[ 0 ];
 
 		expect( firstLog ).toHaveProperty( 'message', 'Should have some necessary labels' );
 		expect( firstLog ).toHaveProperty( 'app', 'go' );
