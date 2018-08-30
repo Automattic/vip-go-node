@@ -8,6 +8,8 @@
         "beforeEach": false,
         "afterEach": false,
         "test": false,
+        "beforeEach": false,
+        "afterEach": false,
         "expect": false,
         "require": false,
         "module": false,
