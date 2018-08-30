@@ -1,5 +1,6 @@
 const goLogger = require( '../src/logger/' );
 const Transport = require( 'winston-transport' );
+const symbolForMessage = Symbol.for( 'message' );
 
 class TestTransport extends Transport {
 	constructor( opts ) {
@@ -43,6 +44,39 @@ describe( 'Logger should format messages and log to the provided transport', () 
 		const firstLog = transport.logs[ 0 ];
 
 		expect( firstLog ).toHaveProperty( 'message', 'Should format this message' );
+	} );
+
+	describe( 'local logging', () => {
+		test( 'should format output correctly', () => {
+			const transport = new TestTransport();
+			const log = goLogger( 'go:app', { transport } );
+
+			log.info( 'my message' );
+
+			const firstLog = transport.logs[ 0 ];
+
+			const message = firstLog[ symbolForMessage ];
+			expect( message ).toEqual( expect.stringMatching( /^\w{3}, \d{2} \w{3} \d{4} \d{2}:\d{2}:\d{2} GMT go:app \[info\] my message$/ ) );
+		} );
+	} );
+
+	describe( 'production logging', () => {
+		const ORIGINAL_VIP_GO_APP_ID = process.env.VIP_GO_APP_ID;
+
+		beforeEach( () => process.env.VIP_GO_APP_ID = true );
+		afterEach( () => process.env.VIP_GO_APP_ID = ORIGINAL_VIP_GO_APP_ID );
+
+		test( 'should format output correctly', () => {
+			const transport = new TestTransport();
+			const log = goLogger( 'go:app', { transport } );
+
+			log.info( 'my message' );
+
+			const firstLog = transport.logs[ 0 ];
+
+			const message = firstLog[ symbolForMessage ];
+			expect( message ).toEqual( expect.stringMatching( /^\w{3}, \d{2} \w{3} \d{4} \d{2}:\d{2}:\d{2} GMT go:app {"message":"my message","level":"info","app":"go","app_type":"app","message_type":"info","app_process":"master"}$/ ) );
+		} );
 	} );
 } );
 
