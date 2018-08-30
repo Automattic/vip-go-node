@@ -4,6 +4,9 @@
     ],
     "extends": "wpcalypso",
     "globals": {
+        "jest": false,
+        "beforeEach": false,
+        "afterEach": false,
         "test": false,
         "expect": false,
         "require": false,
