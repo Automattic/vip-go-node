@@ -1,4 +1,5 @@
 # Tests
+__mocks__
 __tests__
 .travis.yml
 .circleci
