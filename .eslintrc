@@ -10,6 +10,7 @@
         "module": false,
         "process": false,
         "console": false,
-        "describe": false
+        "describe": false,
+        "setImmediate": false
     }
 }
