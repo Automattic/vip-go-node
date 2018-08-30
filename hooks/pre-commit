@@ -1,0 +1,24 @@
+#!/bin/sh
+jsfile_grep_cmd="git diff --cached --name-only ./ | grep '.js'"
+jsfiles=$( eval $jsfile_grep_cmd)
+
+if [ "$jsfiles" = "" ]; then
+	echo "\033[0;32m \nNo JS files changed in this commit, skipping linting... \033[0m"
+    exit 0
+fi
+
+printf "\nJavaScript files changed:\n"
+printf '%s\n' "${jsfiles[@]}"
+
+
+printf "\nValidating .js:\n"
+
+./node_modules/.bin/eslint ./
+linter_exit_code=$?
+
+if [ ! 0 = "$linter_exit_code" ]
+then
+	printf "\033[0;31m \nCommit aborted, your .js files have some linting errors, please fix them before commiting...\033[0m \n"
+fi
+
+exit $linter_exit_code
