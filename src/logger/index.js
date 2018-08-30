@@ -9,11 +9,13 @@ const createLogEntry = ( namespace ) => {
 	return format( ( info ) => {
 		const { level, message } = info;
 
+		// Given a namespace like `my-app:module:sub-module`
+		// `app` is `my-app`; `app_type` is `module:sub-module`
 		const firstSeparator = namespace.indexOf( ':' );
 		const output = {
 			app: namespace.substring( 0, firstSeparator ),
 			// eslint-disable-next-line camelcase
-			app_type: namespace.substring( firstSeparator, namespace.length ),
+			app_type: namespace.substring( firstSeparator + 1, namespace.length ),
 			// eslint-disable-next-line camelcase
 			message_type: level,
 			message: message,

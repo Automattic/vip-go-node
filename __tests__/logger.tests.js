@@ -79,7 +79,7 @@ describe( 'Logger should add necessary labels and handle custom ones', () => {
 
 		transport.on( 'logged', function( logObject ) {
 			expect( logObject ).toHaveProperty( 'app', 'go' );
-			expect( logObject ).toHaveProperty( 'app_type', ':application:test' );
+			expect( logObject ).toHaveProperty( 'app_type', 'application:test' );
 			expect( logObject ).toHaveProperty( 'message_type', 'error' );
 			expect( logObject ).toHaveProperty( 'app_process', 'master' );
 			expect( logObject ).toHaveProperty( 'message', 'Should have some necessary labels' );
