@@ -40,6 +40,10 @@ const localLoggingFormat = printf( output => {
 // Logging format for production
 const prodLoggingFormat = printf( output => {
 	const { timestamp: time, app, app_type: type } = output;
+
+	// Can't include the timestamp in the JSON
+	delete output.timestamp;
+
 	return `${ time } ${ app }${ type } ${ JSON.stringify( output ) }`;
 } );
 
