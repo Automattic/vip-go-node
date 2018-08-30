@@ -1,5 +1,6 @@
 const goLogger = require( '../src/logger/' );
 const Transport = require( 'winston-transport' );
+const symbolForMessage = Symbol.for( 'message' );
 
 class TestTransport extends Transport {
 	constructor( opts ) {
@@ -53,8 +54,10 @@ describe( 'Logger should format messages and log to the provided transport', () 
 			log.info( 'my message' );
 
 			const firstLog = transport.logs[ 0 ];
+
+			const message = firstLog[ symbolForMessage ];
 			// eslint-disable-next-line max-len
-			expect( firstLog.message ).toEqual( expect.stringMatching( /^\w{3}, \d{2} \w{3} \d{4} \d{2}:\d{2}:\d{2} GMT go:app \[info\] my message$/ ) );
+			expect( message ).toEqual( expect.stringMatching( /^\w{3}, \d{2} \w{3} \d{4} \d{2}:\d{2}:\d{2} GMT go:app \[info\] my message$/ ) );
 		} );
 	} );
 
@@ -71,8 +74,10 @@ describe( 'Logger should format messages and log to the provided transport', () 
 			log.info( 'my message' );
 
 			const firstLog = transport.logs[ 0 ];
+
+			const message = firstLog[ symbolForMessage ];
 			// eslint-disable-next-line max-len
-			expect( firstLog.message ).toEqual( expect.stringMatching( /^\w{3}, \d{2} \w{3} \d{4} \d{2}:\d{2}:\d{2} GMT go:app {"message":"my message","level":"info","app":"go","app_type":"app","message_type":"info","app_process":"master"}$/ ) );
+			expect( message ).toEqual( expect.stringMatching( /^\w{3}, \d{2} \w{3} \d{4} \d{2}:\d{2}:\d{2} GMT go:app {"message":"my message","level":"info","app":"go","app_type":"app","message_type":"info","app_process":"master"}$/ ) );
 		} );
 	} );
 } );
