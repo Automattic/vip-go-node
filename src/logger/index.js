@@ -61,7 +61,7 @@ module.exports = ( namespace, { transport } = { } ) => {
 			// Format log messages
 			splat(),
 			// Add a timestamp to each log
-			timestamp(),
+			timestamp( { format: () => new Date().toUTCString() } ),
 			// Add necessary labels to JSON log
 			formatLogEntry(),
 			// Log to console depending on environment
