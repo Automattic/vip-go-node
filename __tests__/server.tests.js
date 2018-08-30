@@ -2,15 +2,6 @@ const server = require( '../src/server/' );
 const expressApp = require( 'express' )();
 const request = require( 'supertest' );
 const HEALTHCHECKURL = '/cache-healthcheck?';
-const requestHandler = ( req, res ) => {
-	if ( req.url === '/custom' ) {
-		res.writeHead( 201 );
-		res.end();
-	}
-
-	res.writeHead( 404 );
-	res.end();
-};
 
 describe( 'Should work with an express application', () => {
 	test( 'Should add a /cache-healthcheck? route returning 200 OK', ( done ) => {
@@ -46,7 +37,20 @@ describe( 'Should work with an express application', () => {
 } );
 
 describe( 'Should work with a custom request handler', () => {
-	const httpServer = server( requestHandler );
+	const mock = jest.fn();
+	const requestHandler = ( req, res ) => {
+		if ( req.url === '/custom' ) {
+			res.writeHead( 201 );
+			res.end();
+		}
+
+		mock();
+
+		res.writeHead( 404 );
+		res.end();
+	};
+
+	afterEach( () => mock.mockClear() );
 
 	test( 'Should raise an error if no request handler is passed', () => {
 		expect( () => {
@@ -55,6 +59,8 @@ describe( 'Should work with a custom request handler', () => {
 	} );
 
 	test( 'Should add a /cache-healthcheck? route returning 200 OK', ( done ) => {
+		const httpServer = server( requestHandler );
+
 		request( httpServer.app ).get( HEALTHCHECKURL ).then( ( response ) => {
 			expect( response.statusCode ).toBe( 200 );
 			expect( response.text ).toBe( 'ok' );
@@ -62,7 +68,21 @@ describe( 'Should work with a custom request handler', () => {
 		} );
 	} );
 
+	test( 'Should respond to /cache-healthcheck? route and not forward the request', ( done ) => {
+		const httpServer = server( requestHandler );
+
+		request( httpServer.app ).get( HEALTHCHECKURL ).then( ( response ) => {
+			expect( response.statusCode ).toBe( 200 );
+			expect( response.text ).toBe( 'ok' );
+			expect( mock ).not.toHaveBeenCalled();
+
+			done();
+		} );
+	} );
+
 	test( 'Should match defined routes', ( done ) => {
+		const httpServer = server( requestHandler );
+
 		request( httpServer.app ).get( '/custom' ).then( ( response ) => {
 			expect( response.statusCode ).toBe( 201 );
 			done();
@@ -70,6 +90,8 @@ describe( 'Should work with a custom request handler', () => {
 	} );
 
 	test( 'Should return default response if no route is matched', ( done ) => {
+		const httpServer = server( requestHandler );
+
 		request( httpServer.app ).get( '/notfound' ).then( ( response ) => {
 			expect( response.statusCode ).toBe( 404 );
 			done();

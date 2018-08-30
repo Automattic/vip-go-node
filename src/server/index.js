@@ -29,7 +29,7 @@ module.exports = ( app, { PORT, logger = console } = {} ) => {
 	server = createServer( ( req, res ) => {
 		if ( req.url === HEALTHCHECKURL ) {
 			res.writeHead( 200 );
-			res.end( 'ok' );
+			return res.end( 'ok' );
 		}
 
 		return app( req, res );
