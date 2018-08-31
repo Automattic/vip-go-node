@@ -24,3 +24,6 @@ node_modules/
 
 # ES6 source folder
 src
+
+# Hooks
+hooks
