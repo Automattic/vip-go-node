@@ -1,0 +1,12 @@
+#!/bin/sh
+printf "\nYou're about to push to a remote repository, running tests first:\n"
+
+exec npm test
+jest_exit_code=$?
+
+if [ ! 0 = "$jest_exit_code" ]
+then
+    printf "\033[0;31m \nPush aborted, some tests are failing, please fix them before pushing...\033[0m \n"
+fi
+
+exit $jest_exit_code
