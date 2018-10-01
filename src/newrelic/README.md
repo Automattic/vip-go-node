@@ -1,7 +1,9 @@
 # VIP Go New Relic integration
 
 ## Initialization
-In order to use the New Relic integration, you need to call it before starting your application (preferably the first line of your main `app.js` or `index.js`). New Relic needs to bootstrap itself before your application in order to work properly.
+New Relic's package (`newrelic`) is a peer dependency of this module. This means, in order to use it, you need to install it manually. This ensures we're not obliging you to use a specific version, but will use whatever version you're using already.
+
+Once installed, you need to call our `newrelic` module before starting your application (preferably the first line of your main `app.js` or `index.js`). New Relic needs to bootstrap itself before your application in order to work properly.
 
 To initialize the integration:
 ``` js
