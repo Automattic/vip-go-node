@@ -2,16 +2,16 @@ const newrelic = require( '../src/newrelic/' );
 
 describe( 'src/newrelic', () => {
 	const OLD_ENV_VARS = process.env;
+
 	beforeEach( () => {
+		jest.resetModules();
+
 		jest.doMock( 'newrelic', () => ( {
 			value: 'newrelic',
 		} ) );
 	} );
 
-	// eslint-disable-next-line no-undef
 	afterEach( () => {
-		jest.resetModules();
-
 		process.env = OLD_ENV_VARS;
 	} );
 
