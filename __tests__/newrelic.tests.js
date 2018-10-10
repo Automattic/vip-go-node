@@ -6,7 +6,7 @@ describe( 'src/newrelic', () => {
 	beforeEach( () => {
 		jest.resetModules();
 
-		jest.doMock( 'newrelic', () => ( {
+		jest.mock( 'newrelic', () => ( {
 			value: 'newrelic',
 		} ) );
 	} );
@@ -41,7 +41,7 @@ describe( 'src/newrelic', () => {
 
 	describe( 'Environment variables are present', () => {
 		test( 'Should fail if `newrelic` module errors out', () => {
-			jest.doMock( 'newrelic', () => {
+			jest.mock( 'newrelic', () => {
 				throw new Error( 'Module does not exist.' );
 			} );
 
