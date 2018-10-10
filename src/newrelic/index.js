@@ -12,5 +12,14 @@ module.exports = ( { logger = console } = {} ) => {
 	}
 
 	logger.info( 'Importing New Relic library...' );
-	return require( 'newrelic' );
+
+	let newrelic;
+	try {
+		newrelic = require( 'newrelic' );
+	} catch ( err ) {
+		throw new Error( `The 'newrelic' package could not be imported.
+			Please make sure the package is installed and available.
+			Details: ${ err.message }` );
+	}
+	return newrelic;
 };
