@@ -16,13 +16,13 @@ describe( 'src/newrelic', () => {
 	} );
 
 	describe( 'Environment variables are missing', () => {
-		test( 'Should fail if NEW_RELIC_NO_CONFIG_FILE is not set', () => {
+		it( 'Should fail if NEW_RELIC_NO_CONFIG_FILE is not set', () => {
 			expect( () => {
 				newrelic();
 			} ).toThrowError( /NEW_RELIC_NO_CONFIG_FILE/ );
 		} );
 
-		test( 'Should fail if NEW_RELIC_NO_CONFIG_FILE is set to false', () => {
+		it( 'Should fail if NEW_RELIC_NO_CONFIG_FILE is set to false', () => {
 			process.env.NEW_RELIC_NO_CONFIG_FILE = false;
 
 			expect( () => {
@@ -30,7 +30,7 @@ describe( 'src/newrelic', () => {
 			} ).toThrowError( /NEW_RELIC_NO_CONFIG_FILE/ );
 		} );
 
-		test( 'Should fail if NEW_RELIC_LICENSE_KEY is not set', () => {
+		it( 'Should fail if NEW_RELIC_LICENSE_KEY is not set', () => {
 			process.env.NEW_RELIC_NO_CONFIG_FILE = true;
 
 			expect( () => {
@@ -40,7 +40,7 @@ describe( 'src/newrelic', () => {
 	} );
 
 	describe( 'Environment variables are present', () => {
-		test( 'Should fail if `newrelic` module errors out', () => {
+		it( 'Should fail if `newrelic` module errors out', () => {
 			jest.mock( 'newrelic', () => {
 				throw new Error( 'Module does not exist.' );
 			} );
@@ -53,7 +53,7 @@ describe( 'src/newrelic', () => {
 			} ).toThrowError( /could not be imported/ );
 		} );
 
-		test( 'Should return newrelic module when config correct set', () => {
+		it( 'Should return newrelic module when config correct set', () => {
 			process.env.NEW_RELIC_NO_CONFIG_FILE = true;
 			process.env.NEW_RELIC_LICENSE_KEY = 'ABC';
 			const returnedValue = newrelic();
