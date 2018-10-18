@@ -5,8 +5,8 @@ const appProcess = process.env.NODEJS_APP_PROCESS || 'master';
 
 const isLocal = () => ! process.env.VIP_GO_APP_ID;
 
-const createLogEntry = ( namespace ) => {
-	return format( ( info ) => {
+const createLogEntry = namespace => {
+	return format( info => {
 		const { level, message } = info;
 
 		// Given a namespace like `my-app:module:sub-module`

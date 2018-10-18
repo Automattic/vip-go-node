@@ -7,7 +7,7 @@ const wrapApplication = ( application, { PORT, logger } ) => {
 	return {
 		app,
 		server,
-		listen: ( connected ) => {
+		listen: connected => {
 			logger.info( 'Starting server on ' + PORT );
 			server = app.listen( PORT, connected );
 		},

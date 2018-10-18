@@ -16,7 +16,7 @@ class TestTransport extends Transport {
 }
 
 describe( 'Logger should fail if some parameters are not initialized', () => {
-	test( 'Should fail if not initialized with a namespace', () => {
+	it( 'Should fail if not initialized with a namespace', () => {
 		expect( () => {
 			goLogger.debug( 'This should fail as namespace is not provided' );
 		} ).toThrow();
@@ -24,7 +24,7 @@ describe( 'Logger should fail if some parameters are not initialized', () => {
 } );
 
 describe( 'Logger should format messages and log to the provided transport', () => {
-	test( 'Should log a simple error message', () => {
+	it( 'Should log a simple error message', () => {
 		const transport = new TestTransport();
 		const log = goLogger( 'go:application:test', { transport } );
 
@@ -35,7 +35,7 @@ describe( 'Logger should format messages and log to the provided transport', () 
 		expect( firstLog ).toHaveProperty( 'message', 'A simple log' );
 	} );
 
-	test( 'Should format an error message', () => {
+	it( 'Should format an error message', () => {
 		const transport = new TestTransport();
 		const log = goLogger( 'go:application:test', { transport } );
 
@@ -47,7 +47,7 @@ describe( 'Logger should format messages and log to the provided transport', () 
 	} );
 
 	describe( 'local logging', () => {
-		test( 'should format output correctly', () => {
+		it( 'should format output correctly', () => {
 			const transport = new TestTransport();
 			const log = goLogger( 'go:app', { transport } );
 
@@ -67,7 +67,7 @@ describe( 'Logger should format messages and log to the provided transport', () 
 		beforeEach( () => process.env.VIP_GO_APP_ID = true );
 		afterEach( () => process.env.VIP_GO_APP_ID = ORIGINAL_VIP_GO_APP_ID );
 
-		test( 'should format output correctly', () => {
+		it( 'should format output correctly', () => {
 			const transport = new TestTransport();
 			const log = goLogger( 'go:app', { transport } );
 
@@ -83,7 +83,7 @@ describe( 'Logger should format messages and log to the provided transport', () 
 } );
 
 describe( 'Logger should add necessary labels and handle custom ones', () => {
-	test( 'Should add custom labels to the output', () => {
+	it( 'Should add custom labels to the output', () => {
 		const transport = new TestTransport();
 		const log = goLogger( 'go:application:test', { transport } );
 
@@ -94,7 +94,7 @@ describe( 'Logger should add necessary labels and handle custom ones', () => {
 		expect( firstLog ).toHaveProperty( 'customLabel', 'custom value' );
 	} );
 
-	test( 'Should format and add new labels to the output', () => {
+	it( 'Should format and add new labels to the output', () => {
 		const transport = new TestTransport();
 		const log = goLogger( 'go:application:test', { transport } );
 
@@ -109,7 +109,7 @@ describe( 'Logger should add necessary labels and handle custom ones', () => {
 		expect( firstLog ).toHaveProperty( 'customLabel', 'custom value' );
 	} );
 
-	test( 'Should include all necessary labels', () => {
+	it( 'Should include all necessary labels', () => {
 		const transport = new TestTransport();
 		const log = goLogger( 'go:application:test', { transport } );
 
