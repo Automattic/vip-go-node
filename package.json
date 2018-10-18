@@ -4,7 +4,8 @@
   "description": "Node package helpers for the VIP Go platform",
   "main": "./dist/index.js",
   "scripts": {
-    "test": "jest",
+    "test": "npm run lint && npm run jest",
+    "jest": "jest",
     "lint": "eslint .",
     "publish-please": "publish-please",
     "prepublishOnly": "publish-please guard",
