@@ -48,8 +48,5 @@
   },
   "peerDependencies": {
     "newrelic": "^4.8.0"
-  },
-  "eslintConfig": {
-    "extends": "wpvip"
   }
 }
