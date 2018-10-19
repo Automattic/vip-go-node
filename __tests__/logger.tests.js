@@ -39,7 +39,7 @@ describe( 'Logger should format messages and log to the provided transport', () 
 		const transport = new TestTransport();
 		const log = goLogger( 'go:application:test', { transport } );
 
-		log.info( 'Should format %s message', 'this' );
+		log.debug( 'Should format %s message', 'this' );
 
 		const firstLog = transport.logs[ 0 ];
 
