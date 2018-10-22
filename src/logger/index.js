@@ -53,6 +53,7 @@ module.exports = ( namespace, { transport } = { } ) => {
 	}
 
 	const consoleLogging = isLocal() ? localLoggingFormat : prodLoggingFormat;
+	const level = isLocal() ? 'debug' : 'info';
 
 	const formatLogEntry = createLogEntry( namespace );
 
@@ -69,6 +70,7 @@ module.exports = ( namespace, { transport } = { } ) => {
 		),
 		// Allow the user to define a transport (used for tests too)
 		transports: [ transport || new transports.Console ],
+		level,
 	} );
 
 	return winstonLogger;
