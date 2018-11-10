@@ -31,7 +31,7 @@
     "babel-cli": "^6.26.0",
     "babel-preset-es2015": "^6.24.1",
     "eslint": "^4.6.1",
-    "eslint-config-wpvip": "github:automattic/eslint-config-wpvip#6b5993b",
+    "eslint-config-wpvip": "github:automattic/eslint-config-wpvip#a316edf",
     "eslint-plugin-flowtype": "^3.0.0",
     "eslint-plugin-import": "^2.14.0",
     "eslint-plugin-json": "^1.2.1",
