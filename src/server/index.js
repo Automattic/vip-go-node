@@ -11,7 +11,10 @@ const wrapApplication = ( application, { PORT, logger } ) => {
 			logger.info( 'Starting server on ' + PORT );
 			server = app.listen( PORT, () => {
 				logger.info( 'Server listening on port ' + PORT );
-				connected && connected();
+
+				if ( typeof connected === 'function' ) {
+					connected();
+				}
 			} );
 		},
 		close: () => {
