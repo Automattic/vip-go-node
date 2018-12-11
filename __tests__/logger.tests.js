@@ -125,3 +125,23 @@ describe( 'Logger should add necessary labels and handle custom ones', () => {
 		expect( firstLog ).toHaveProperty( 'app_worker', 'master' );
 	} );
 } );
+
+describe( 'Logger should work in a cluster environments', () => {
+	it( 'Should add worker info', () => {
+		const mockedCluster = {
+			isWorker: true,
+			worker: {
+				id: 1234,
+			},
+		};
+
+		const transport = new TestTransport();
+		const log = goLogger( 'go:application:test', { transport, cluster: mockedCluster } );
+
+		log.info( 'Logging from worker' );
+
+		const firstLog = transport.logs[ 0 ];
+
+		expect( firstLog ).toHaveProperty( 'app_worker', 'worker_1234' );
+	} );
+} );

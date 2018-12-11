@@ -1,12 +1,12 @@
 const { createLogger, format, transports } = require( 'winston' );
-const cluster = require( 'cluster' );
+const nodeCluster = require( 'cluster' );
 const { combine, timestamp, printf, splat } = format;
 
 const appProcess = process.env.NODEJS_APP_PROCESS || 'master';
 
 const isLocal = () => ! process.env.VIP_GO_APP_ID;
 
-const createLogEntry = namespace => {
+const createLogEntry = ( namespace, cluster ) => {
 	return format( info => {
 		const { level, message } = info;
 
@@ -60,7 +60,7 @@ const prodLoggingFormat = printf( output => {
 	return `${ time } ${ app }:${ type } ${ JSON.stringify( output ) }`;
 } );
 
-module.exports = ( namespace, { transport } = { } ) => {
+module.exports = ( namespace, { transport, cluster } ) => {
 	if ( ! namespace ) {
 		throw Error( 'Please include a namespace to initialize your logger.' );
 	}
@@ -68,7 +68,7 @@ module.exports = ( namespace, { transport } = { } ) => {
 	const consoleLogging = isLocal() ? localLoggingFormat : prodLoggingFormat;
 	const level = isLocal() ? 'debug' : 'info';
 
-	const formatLogEntry = createLogEntry( namespace );
+	const formatLogEntry = createLogEntry( namespace, cluster || nodeCluster );
 
 	const winstonLogger = createLogger( {
 		format: combine(
