@@ -1,4 +1,5 @@
 const { createLogger, format, transports } = require( 'winston' );
+const cluster = require( 'cluster' );
 const { combine, timestamp, printf, splat } = format;
 
 const appProcess = process.env.NODEJS_APP_PROCESS || 'master';
@@ -12,6 +13,16 @@ const createLogEntry = namespace => {
 		// Given a namespace like `my-app:module:sub-module`
 		// `app` is `my-app`; `app_type` is `module:sub-module`
 		const firstSeparator = namespace.indexOf( ':' );
+
+		// Add app worker info for cluster support
+		let appWorker = 'none';
+
+		if ( cluster.isMaster ) {
+			appWorker = 'master';
+		} else if ( cluster.isWorker ) {
+			appWorker = `worker_${ cluster.worker.id }`;
+		}
+
 		const output = {
 			app: namespace.substring( 0, firstSeparator ),
 			// eslint-disable-next-line camelcase
@@ -21,6 +32,8 @@ const createLogEntry = namespace => {
 			message: message,
 			// eslint-disable-next-line camelcase
 			app_process: appProcess,
+			// eslint-disable-next-line camelcase
+			app_worker: appWorker,
 		};
 
 		// TODO: Add an error stack handler

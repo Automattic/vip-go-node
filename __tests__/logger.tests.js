@@ -77,7 +77,7 @@ describe( 'Logger should format messages and log to the provided transport', () 
 
 			const message = firstLog[ symbolForMessage ];
 			// eslint-disable-next-line max-len
-			expect( message ).toEqual( expect.stringMatching( /^\w{3}, \d{2} \w{3} \d{4} \d{2}:\d{2}:\d{2} GMT go:app {"message":"my message","level":"info","app":"go","app_type":"app","message_type":"info","app_process":"master"}$/ ) );
+			expect( message ).toEqual( expect.stringMatching( /^\w{3}, \d{2} \w{3} \d{4} \d{2}:\d{2}:\d{2} GMT go:app {"message":"my message","level":"info","app":"go","app_type":"app","message_type":"info","app_process":"master","app_worker":"master"}$/ ) );
 		} );
 	} );
 } );
@@ -122,5 +122,6 @@ describe( 'Logger should add necessary labels and handle custom ones', () => {
 		expect( firstLog ).toHaveProperty( 'app_type', 'application:test' );
 		expect( firstLog ).toHaveProperty( 'message_type', 'error' );
 		expect( firstLog ).toHaveProperty( 'app_process', 'master' );
+		expect( firstLog ).toHaveProperty( 'app_worker', 'master' );
 	} );
 } );
