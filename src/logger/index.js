@@ -86,5 +86,9 @@ module.exports = ( namespace, { transport, cluster } ) => {
 		level,
 	} );
 
+	process.on( 'uncaughtException', err => {
+		winstonLogger.error( `Uncaught exception: ${ err }` );
+	} );
+
 	return winstonLogger;
 };
