@@ -1,17 +1,28 @@
 const { createLogger, format, transports } = require( 'winston' );
+const nodeCluster = require( 'cluster' );
 const { combine, timestamp, printf, splat } = format;
 
 const appProcess = process.env.NODEJS_APP_PROCESS || 'master';
 
 const isLocal = () => ! process.env.VIP_GO_APP_ID;
 
-const createLogEntry = namespace => {
+const createLogEntry = ( namespace, cluster ) => {
 	return format( info => {
 		const { level, message } = info;
 
 		// Given a namespace like `my-app:module:sub-module`
 		// `app` is `my-app`; `app_type` is `module:sub-module`
 		const firstSeparator = namespace.indexOf( ':' );
+
+		// Add app worker info for cluster support
+		let appWorker = 'none';
+
+		if ( cluster.isMaster ) {
+			appWorker = 'master';
+		} else if ( cluster.isWorker ) {
+			appWorker = `worker_${ cluster.worker.id }`;
+		}
+
 		const output = {
 			app: namespace.substring( 0, firstSeparator ),
 			// eslint-disable-next-line camelcase
@@ -21,6 +32,8 @@ const createLogEntry = namespace => {
 			message: message,
 			// eslint-disable-next-line camelcase
 			app_process: appProcess,
+			// eslint-disable-next-line camelcase
+			app_worker: appWorker,
 		};
 
 		// TODO: Add an error stack handler
@@ -47,7 +60,7 @@ const prodLoggingFormat = printf( output => {
 	return `${ time } ${ app }:${ type } ${ JSON.stringify( output ) }`;
 } );
 
-module.exports = ( namespace, { transport } = { } ) => {
+module.exports = ( namespace, { transport, cluster } ) => {
 	if ( ! namespace ) {
 		throw Error( 'Please include a namespace to initialize your logger.' );
 	}
@@ -55,7 +68,7 @@ module.exports = ( namespace, { transport } = { } ) => {
 	const consoleLogging = isLocal() ? localLoggingFormat : prodLoggingFormat;
 	const level = isLocal() ? 'debug' : 'info';
 
-	const formatLogEntry = createLogEntry( namespace );
+	const formatLogEntry = createLogEntry( namespace, cluster || nodeCluster );
 
 	const winstonLogger = createLogger( {
 		format: combine(
