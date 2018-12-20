@@ -60,11 +60,6 @@ const prodLoggingFormat = printf( output => {
 	return `${ time } ${ app }:${ type } ${ JSON.stringify( output ) }`;
 } );
 
-// Add Uncaught exception handler
-process.on( 'uncaughtException', err => {
-	winstonLogger.error( `Uncaught exception: ${ err }` );
-} );
-
 module.exports = ( namespace, { transport, cluster } ) => {
 	if ( ! namespace ) {
 		throw Error( 'Please include a namespace to initialize your logger.' );
