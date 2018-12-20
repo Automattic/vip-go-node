@@ -8,10 +8,23 @@ To initialize a logger:
 const { logger } = require( '@automattic/vip-go' );
 const log = logger( 'application:application_type' );
 ```
+
 You can start logging now by simply using:
 ``` js
 log.info( 'This is a log from my application' );
 ```
+
+We recommand you add an `uncaughtException` logger with a unique namespace so you can filter exceptions easily afterwards:
+
+``` js
+const { logger } = require( '@automattic/vip-go' );
+const log = logger( 'application:uncaughtException' );
+
+process.on( 'uncaughtException', err => {
+	log.error( `Uncaught exception: ${ err }` );
+} );
+```
+
 ## Logging levels
 This logger is based on `winston`, so expect to find all [logging levels](https://github.com/winstonjs/winston#logging-levels) provided by it. This means: `debug`, `info`, `notice`, `warning`, `error`, `crit`, `alert` and `emerg` can all be used.
 
@@ -21,6 +34,7 @@ log.debug( 'This is a log from my application' );
 log.error( 'This is a log from my application' );
 // etc
 ```
+
 ## Formatting messages
 This logger supports formatting messages by default. You can use it as follows:
 ``` js
