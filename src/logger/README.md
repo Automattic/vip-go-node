@@ -14,11 +14,13 @@ You can start logging now by simply using:
 log.info( 'This is a log from my application' );
 ```
 
+## Uncaught Exceptions
+
 We recommand you add an `uncaughtException` logger with a unique namespace so you can filter exceptions easily afterwards:
 
 ``` js
 const { logger } = require( '@automattic/vip-go' );
-const log = logger( 'application:uncaughtException' );
+const log = logger( 'my-application:uncaughtException' );
 
 process.on( 'uncaughtException', err => {
 	log.error( `Uncaught exception: ${ err }` );
