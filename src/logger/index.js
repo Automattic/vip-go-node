@@ -60,7 +60,7 @@ const prodLoggingFormat = printf( output => {
 	return `${ time } ${ app }:${ type } ${ JSON.stringify( output ) }`;
 } );
 
-module.exports = ( namespace, { transport, cluster } ) => {
+module.exports = ( namespace, { transport, cluster, silent = false } ) => {
 	if ( ! namespace ) {
 		throw Error( 'Please include a namespace to initialize your logger.' );
 	}
@@ -84,6 +84,7 @@ module.exports = ( namespace, { transport, cluster } ) => {
 		// Allow the user to define a transport (used for tests too)
 		transports: [ transport || new transports.Console ],
 		level,
+		silent,
 	} );
 
 	return winstonLogger;
