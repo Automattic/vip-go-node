@@ -101,7 +101,7 @@ const log = logger( 'myapplication:namespace', {
 ```
 
 ### Silent logging
-If you want to silence the events you log from a logger, please use a `silent` option as follow:
+If you want to silence the events from a logger, please use a `silent` option as follow:
 
 ``` js
 const { logger } = require( '@automattic/vip-go' );
