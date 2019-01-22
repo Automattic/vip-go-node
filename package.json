@@ -42,7 +42,7 @@
     "express": "4.16.4",
     "jest": "23.6.0",
     "publish-please": "5.4.3",
-    "supertest": "3.4.1"
+    "supertest": "3.4.2"
   },
   "dependencies": {
     "winston": "^3.0.0"
