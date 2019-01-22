@@ -66,3 +66,46 @@ Please note that this can be used with other properties like formatting:
 ``` js
 log.info( 'This is a log from my sub application: %s', 'sub_application', { 'my_label': 'my_value' } );
 ```
+
+## Advanced configuration
+All this advanced configuration is per-logger basis. If you want to apply a configuration for all your loggers, please wrap the library and include your general configuration. Here is an example on how to silence logging when running tests:
+
+``` js
+// your ./logger.js file
+const { logger } = require( '@automattic/vip-go' );
+const isTests = process.env.NODE_ENV === 'test';
+
+export default ( namespace ) => {
+	return logger( namespace, { silent: isTests } );
+};
+```
+
+### Custom transport
+By default, the logs are sent to the console. If you want use a file, a third party logging service, etc. Please pass a `transport` option as follow:
+
+``` js
+const { logger } = require( '@automattic/vip-go' );
+const log = logger( 'myapplication:namespace', {
+	transport: myTransport
+} );
+```
+
+### Cluster logging
+By default, we support cluster logging from different workers and we use the default `cluster` library in Node. If you want to change this behaviour, please pass your library in the `cluster` option as follow:
+
+``` js
+const { logger } = require( '@automattic/vip-go' );
+const log = logger( 'myapplication:namespace', {
+	cluster: myCluster
+} );
+```
+
+### Silent logging
+If you want to silence the events you log from a logger, please use a `silent` option as follow:
+
+``` js
+const { logger } = require( '@automattic/vip-go' );
+const log = logger( 'myapplication:namespace', {
+	silent: true
+} );
+```
