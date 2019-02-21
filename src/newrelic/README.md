@@ -1,7 +1,7 @@
 # VIP Go New Relic integration
 
 ## Initialization
-If your app requires New Relic, you can run the following to install the `newrelic` package:
+New Relic is no longer a peer dependency for this module. If your app requires New Relic, you can run the following command to install the `newrelic` package:
 
 ```
 npm install --save newrelic@^4.8.0
