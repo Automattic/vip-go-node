@@ -1,9 +1,7 @@
 # VIP Go New Relic integration
 
 ## Initialization
-New Relic's package (`newrelic`) is a peer dependency of this module. This means, in order to use it, you need to install it manually. This ensures we're not obliging you to use a specific version, but will use whatever version you're using already.
-
-If you don't have the New Relic package installed, you can run the following:
+If your app requires New Relic, you can run the following to install the `newrelic` package:
 
 ```
 npm install --save newrelic@^4.8.0

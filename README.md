@@ -18,6 +18,8 @@ const { server, logger, newrelic } = require( '@automattic/vip-go' );
 
 Please refer the documentation for each module ([`server`](https://github.com/Automattic/vip-go-node/blob/master/src/server/README.md) | [`logger`](https://github.com/Automattic/vip-go-node/blob/master/src/logger/README.md) | [`newrelic`](https://github.com/Automattic/vip-go-node/blob/master/src/newrelic/README.md)) to learn more about how to use it.
 
+Also remember to install [New Relic](https://docs.newrelic.com/docs/agents/manage-apm-agents/installation/install-agent) if your app requires it.
+
 ## Development
 
 ### Using hooks
