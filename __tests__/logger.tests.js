@@ -146,4 +146,15 @@ describe( 'src/logger', () => {
 			expect( firstLog ).toHaveProperty( 'app_worker', 'worker_1234' );
 		} );
 	} );
+
+	describe( 'Logger should not log if silent flag is true', () => {
+		it( 'Should add worker info', () => {
+			const transport = new TestTransport();
+			const log = goLogger( 'go:application:test', { transport, silent: true } );
+
+			log.error( 'This should not be logged!' );
+
+			expect( transport.logs ).toHaveLength( 0 );
+		} );
+	} );
 } );
