@@ -30,7 +30,7 @@
     "@babel/cli": "7.2.3",
     "@babel/preset-env": "7.3.4",
     "babel-eslint": "10.0.1",
-    "eslint": "5.14.1",
+    "eslint": "5.15.1",
     "eslint-config-wpvip": "github:automattic/eslint-config-wpvip#84eabbf",
     "eslint-plugin-flowtype": "3.4.2",
     "eslint-plugin-import": "2.16.0",
