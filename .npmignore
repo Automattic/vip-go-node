@@ -28,3 +28,6 @@ src
 
 # Hooks
 hooks
+
+# Preflight checks folder (deployed on its own)
+preflight-checks
