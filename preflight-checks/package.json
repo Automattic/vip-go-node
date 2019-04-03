@@ -1,0 +1,11 @@
+{
+  "name": "vip-go-preflight-checks",
+  "version": "0.0.1",
+  "description": "Know if your Node application is ready for VIP Go",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "author": "",
+  "license": "ISC"
+}
