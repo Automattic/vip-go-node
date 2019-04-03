@@ -2,7 +2,7 @@
   "name": "vip-go-preflight-checks",
   "version": "0.0.1",
   "description": "Know if your Node application is ready for VIP Go",
-  "main": "index.js",
+  "main": "./dist/index.js",
   "scripts": {
     "test": "jest",
     "build": "babel src --presets @babel/preset-env --out-dir dist"
