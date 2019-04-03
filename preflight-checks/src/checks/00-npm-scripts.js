@@ -1,10 +1,40 @@
 import chalk from 'chalk';
+import packageJson from '../package';
+
+const chalkNpmStart = chalk.yellow( 'npm start' );
+const chalkNpmBuild = chalk.yellow( 'npm build' );
+const chalkPackageJson = chalk.yellow( 'package.json' );
 
 module.exports = {
 	name: 'Checking npm scripts in the project...',
-	excerpt: `Checking your ${ chalk.yellow( 'package.json' ) } for ${ chalk.yellow( 'npm build' ) } and ${ chalk.yellow( 'npm start' ) }`,
+	excerpt: `Checking your ${ chalkPackageJson } for ${ chalkNpmBuild } and ${ chalkNpmStart }`,
 	description: 'In VIP Go, we want each application to have an npm build and npm start scripts',
 	run: () => {
-		// Do work and return result
+		const scripts = packageJson.scripts;
+		const start = scripts.start;
+		const build = scripts.build;
+		const serve = scripts.serve;
+
+		if ( ! start ) {
+			console.log( chalk.red( '  Error:' ), `Looks like your ${ chalkPackageJson } is missing an ${ chalkNpmStart } script` );
+			return -1;
+		}
+
+		if ( ! build ) {
+			console.log( chalk.red( '  Error:' ), `Looks like your ${ chalkPackageJson } is missing an ${ chalkNpmBuild } script` );
+			return -1;
+		}
+
+		if ( serve ) {
+			console.log(
+				chalk.yellow( '  Warning:' ),
+				`Looks like your ${ chalkPackageJson } have an ${ chalk.yellow( 'npm serve' ) } script. ` +
+				`Please make sure this is not the script running your application. Your application must be served ` +
+				`using ${ chalkNpmStart }.`
+			 );
+			return 0;
+		}
+
+		return 1;
 	}
 }
