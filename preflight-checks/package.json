@@ -1,5 +1,5 @@
 {
-  "name": "vip-go-preflight-checks",
+  "name": "@automattic/vip-go-preflight-checks",
   "version": "0.0.1",
   "description": "Know if your Node application is ready for VIP Go",
   "main": "./dist/index.js",
