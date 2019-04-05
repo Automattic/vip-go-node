@@ -10,12 +10,39 @@ console.log( '  | |/ // // ____/  / /_/ / /_/ /' );
 console.log( '  |___/___/_/       \\____/\\____/' );
 console.log( '  Preflight Checks for Node Apps' );
 console.log();
+console.log( '  Running checks for the current repository...' );
+console.log();
 console.log();
 
-const results = checks.map( check => {
-	console.log( check.name );
-	console.log( check.excerpt );
-	return check.run();
+const results = checks.map( ( check, index ) => {
+	console.log( `  [ Step ${ index + 1 }/${ checks.length } ] ${ check.name }` );
+	console.log( `  [ Step ${ index + 1 }/${ checks.length } ] Step details: ${ check.excerpt }` );
+
+	const result = check.run();
+
+	// Success
+	if ( result === 1 ) {
+		const message = `[ Step ${ index + 1 }/${ checks.length } ] ${ chalk.green( 'Step successful' ) } 👍`;
+		console.log( `  ${ message }` );
+	}
+
+	// Warning
+	if ( result === 0 ) {
+		const message = `[ Step ${ index + 1 }/${ checks.length } ] ${ chalk.yellow( 'Step finished with a warning' ) } ⚠️`;
+		console.log( `  ${ message }` );
+	}
+
+	// Error: Print extra information
+	if ( result === -1 ) {
+		const message = `[ Step ${ index + 1 }/${ checks.length } ] ${ chalk.red( 'Step failed' ) } 😱`;
+		console.log( `  ${ message }` );
+		console.log( `  Failure details: ${ check.description }` );
+	}
+
+	console.log();
+	console.log();
+
+	return result;
 } );
 
 // All checks are good
