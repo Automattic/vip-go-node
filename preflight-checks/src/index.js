@@ -1,6 +1,17 @@
 import chalk from 'chalk';
 import checks from './checks';
 
+console.log();
+console.log( '  Welcome to' );
+console.log( '   _    __________     ______' );
+console.log( '  | |  / /  _/ __ \\   / ____/___' );
+console.log( '  | | / // // /_/ /  / / __/ __ \\' );
+console.log( '  | |/ // // ____/  / /_/ / /_/ /' );
+console.log( '  |___/___/_/       \\____/\\____/' );
+console.log( '  Preflight Checks for Node Apps' );
+console.log();
+console.log();
+
 const results = checks.map( check => {
 	console.log( check.name );
 	console.log( check.excerpt );
