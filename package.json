@@ -40,7 +40,7 @@
     "eslint-plugin-react": "7.12.4",
     "eslint-plugin-wpcalypso": "4.0.2",
     "express": "4.16.4",
-    "jest": "24.7.0",
+    "jest": "24.7.1",
     "publish-please": "5.4.3",
     "supertest": "4.0.2"
   },
