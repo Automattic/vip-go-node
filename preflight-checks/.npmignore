@@ -18,6 +18,9 @@ node_modules/
 .eslintcache
 .eslintrc.json
 
+# Babel files
+.babelrc
+
 # Other helper files
 .nvmrc
 .ackrc
