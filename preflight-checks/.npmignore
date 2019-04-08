@@ -1,0 +1,27 @@
+# Tests
+__mocks__
+__tests__
+.travis.yml
+.circleci
+appveyor.yml
+coverage
+
+# Logs
+logs
+*.log
+npm-debug.log*
+
+# Dependency directories
+node_modules/
+
+# eslint files
+.eslintcache
+.eslintrc.json
+
+# Other helper files
+.nvmrc
+.ackrc
+.publishrc
+
+# ES6 source folder
+src
