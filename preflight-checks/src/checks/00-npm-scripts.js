@@ -17,12 +17,12 @@ module.exports = {
 
 		if ( ! start ) {
 			console.log( chalk.red( '  Error:' ), `Looks like your ${ chalkPackageJson } is missing an ${ chalkNpmStart } script` );
-			return -1;
+			return 'failed';
 		}
 
 		if ( ! build ) {
 			console.log( chalk.red( '  Error:' ), `Looks like your ${ chalkPackageJson } is missing an ${ chalkNpmBuild } script` );
-			return -1;
+			return 'failed';
 		}
 
 		if ( serve ) {
@@ -32,9 +32,9 @@ module.exports = {
 				`Please make sure this is not the script running your application. Your application must be served ` +
 				`using ${ chalkNpmStart }.`
 			 );
-			return 0;
+			return 'warning';
 		}
 
-		return 1;
+		return 'success';
 	}
 }

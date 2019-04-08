@@ -14,9 +14,9 @@ module.exports = {
 
 		if ( ! VIPGoDependency ) {
 			console.log( chalk.red( '  Error:' ), `Looks like your ${ chalkPackageJson } is missing our ${ chalkVIPGo } helper in the production dependencies.` );
-			return -1;
+			return 'failed';
 		}
 
-		return 1;
+		return 'success';
 	}
 }

@@ -21,19 +21,19 @@ const results = checks.map( ( check, index ) => {
 	const result = check.run();
 
 	// Success
-	if ( result === 1 ) {
+	if ( result === 'success' ) {
 		const message = `[ Step ${ index + 1 }/${ checks.length } ] ${ chalk.green( 'Step successful' ) } 👍`;
 		console.log( `  ${ message }` );
 	}
 
 	// Warning
-	if ( result === 0 ) {
+	if ( result === 'warning' ) {
 		const message = `[ Step ${ index + 1 }/${ checks.length } ] ${ chalk.yellow( 'Step finished with a warning' ) } ⚠️`;
 		console.log( `  ${ message }` );
 	}
 
 	// Error: Print extra information
-	if ( result === -1 ) {
+	if ( result === 'failed' ) {
 		const message = `[ Step ${ index + 1 }/${ checks.length } ] ${ chalk.red( 'Step failed' ) } 😱`;
 		console.log( `  ${ message }` );
 		console.log( `  Failure details: ${ check.description }` );
@@ -45,21 +45,26 @@ const results = checks.map( ( check, index ) => {
 	return result;
 } );
 
-// All checks are good
-const isSuccess = results.every( result => result > 0 );
+const successSteps = results.filter( result => result === 'success' );
+const warningSteps = results.filter( result => result === 'warning' );
+const failedSteps = results.filter( result => result === 'failed' );
+const skippedSteps = results.filter( result => result === 'skipped' );
+
+const isSuccess = successSteps.length + skippedSteps.length === checks.length;
+const isWarning = warningSteps.length > 0 && warningSteps.length + successSteps.length + skippedSteps.length === checks.length;
+const isFailed = failedSteps.length > 0;
 
 if ( isSuccess ) {
 	console.log( chalk.green( 'Congratulations! Your application is ready for VIP Go' ) );
 	process.exit();
 }
 
-// At least a warning
-const isWarning = results.every( result => result >= 0 );
-
 if ( isWarning ) {
 	console.log( chalk.yellow( 'You are close! Please manually review the warnings above' ) );
 	process.exit();
 }
 
-// There was an error
-console.log( chalk.red( 'Oups! Looks like you need to fix some steps to make your app ready' ) );
+if ( isFailed ) {
+	console.log( chalk.red( 'Oups! Looks like you need to fix some steps to make your app ready' ) );
+	process.exit( 1 );
+}
