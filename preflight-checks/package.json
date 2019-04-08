@@ -15,6 +15,9 @@
     "jest": "^24.7.0"
   },
   "dependencies": {
-    "chalk": "^2.4.2"
+    "chalk": "^2.4.2",
+    "execa": "^1.0.0",
+    "isomorphic-fetch": "^2.2.1",
+    "waait": "^1.0.4"
   }
 }
