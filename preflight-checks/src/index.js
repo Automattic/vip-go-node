@@ -1,5 +1,8 @@
 import chalk from 'chalk';
 import checks from './checks';
+import packageJson from './package';
+
+const appName = packageJson.name;
 
 console.log();
 console.log( '  Welcome to' );
@@ -10,7 +13,7 @@ console.log( '  | |/ // // ____/  / /_/ / /_/ /' );
 console.log( '  |___/___/_/       \\____/\\____/' );
 console.log( '  Preflight Checks for Node Apps' );
 console.log();
-console.log( '  Running checks for the current repository...' );
+console.log( `  Running checks for the ${ appName } app...` );
 console.log();
 console.log();
 
