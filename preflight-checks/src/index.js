@@ -36,7 +36,6 @@ const results = checks.map( ( check, index ) => {
 	if ( result === 'failed' ) {
 		const message = `[ Step ${ index + 1 }/${ checks.length } ] ${ chalk.red( 'Step failed' ) } 😱`;
 		console.log( `  ${ message }` );
-		console.log( `  Failure details: ${ check.description }` );
 	}
 
 	console.log();

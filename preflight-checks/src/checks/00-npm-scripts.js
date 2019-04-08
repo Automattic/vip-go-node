@@ -8,7 +8,6 @@ const chalkPackageJson = chalk.yellow( 'package.json' );
 module.exports = {
 	name: 'Checking npm scripts in the project...',
 	excerpt: `Checking your ${ chalkPackageJson } for ${ chalkNpmBuild } and ${ chalkNpmStart }`,
-	description: 'In VIP Go, we want each application to have an npm build and npm start scripts',
 	run: () => {
 		const scripts = packageJson.scripts;
 		const start = scripts.start;
