@@ -10,12 +10,15 @@ module.exports = ( { logger = console } = {} ) => {
 	}
 
 	if ( ! noConfig ) {
-		throw new Error( `An environment variable is missing 
-			or not set to true: NEW_RELIC_NO_CONFIG_FILE` );
+		logger.error( `An environment variable is missing 
+			or not set to true: NEW_RELIC_NO_CONFIG_FILE. Skipping NewRelic initialization...` );
+		return;
 	}
 
 	if ( ! licenseKey ) {
-		throw new Error( 'An environment variable is missing: NEW_RELIC_LICENSE_KEY' );
+		logger.error( `An environment variable is missing: 
+			NEW_RELIC_LICENSE_KEY. Skipping NewRelic initialization...` );
+		return;
 	}
 
 	logger.info( 'Importing New Relic library...' );
