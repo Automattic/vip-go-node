@@ -45,6 +45,7 @@
     "supertest": "4.0.2"
   },
   "dependencies": {
+    "ioredis": "^4.9.0",
     "winston": "^3.0.0"
   }
 }
