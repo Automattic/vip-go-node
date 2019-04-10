@@ -2,6 +2,10 @@
  * External dependencies
  */
 const redis = require( 'ioredis' );
+
+/**
+ * Internal dependencies
+ */
 const { logger } = require( '../logger/index' );
 
 //allow clients to set # of queues or default to 3
