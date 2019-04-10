@@ -22,7 +22,6 @@ class Redis {
 			password: process.env.REDIS_PASSWORD,
 			retryStrategy: this.retry.bind( this ),
 			enableOfflineQueue: true,
-			maxRetriesPerRequest: process.env.REDIS_MAX_RETRIES,
 		} );
 
 		this.handleEvents();
