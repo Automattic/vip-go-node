@@ -39,7 +39,7 @@ describe( 'src/newrelic', () => {
 			const transport = new TestTransport();
 			newrelic( { logger: transport } );
 
-			expect( transport.logs[ 0 ] ).toMatch( 'skipping Newrelic' );
+			expect( transport.logs[ 0 ] ).toMatch( 'skipping New Relic' );
 		} );
 
 		it( 'Should fail if NEW_RELIC_NO_CONFIG_FILE is not set', () => {
