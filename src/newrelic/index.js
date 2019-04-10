@@ -5,19 +5,19 @@ module.exports = ( { logger = console } = {} ) => {
 	const isLocal = ! process.env.VIP_GO_APP_ID;
 
 	if ( isLocal ) {
-		logger.log( 'Local development, skipping Newrelic initialization...' );
+		logger.log( 'Local development, skipping New Relic initialization...' );
 		return;
 	}
 
 	if ( ! noConfig ) {
 		logger.error( `An environment variable is missing 
-			or not set to true: NEW_RELIC_NO_CONFIG_FILE. Skipping NewRelic initialization...` );
+			or not set to true: NEW_RELIC_NO_CONFIG_FILE. Skipping New Relic initialization...` );
 		return;
 	}
 
 	if ( ! licenseKey ) {
 		logger.error( `An environment variable is missing: 
-			NEW_RELIC_LICENSE_KEY. Skipping NewRelic initialization...` );
+			NEW_RELIC_LICENSE_KEY. Skipping New Relic initialization...` );
 		return;
 	}
 
