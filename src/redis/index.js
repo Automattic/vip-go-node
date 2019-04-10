@@ -3,6 +3,26 @@
  */
 const redis = require( 'ioredis' );
 const { logger } = require( '../logger/index' );
+log
 
-//allow clients to set # of queues or default to 3
-const MAX_CONNECTION_RETRIES_FOR_OFFLINE_QUEUE = process.env.MAX_CONNECTIONS_OFFLINE_QUEUE || 3;
+//create a class in case we need to scale the connections
+class Redis {
+	constructor() {
+		const [ host, port ] = ( process.env.REDIS_MASTER || '' ).split( ':' );
+
+		this.client = new Redis( {
+			port,
+			host,
+			password: process.env.REDIS_PASSWORD,
+			retryStrategy: this.retry.bind( this ),
+			maxRetriesPerRequest: process.env.REDIS_MAX_RETRIES,
+		} );
+
+		this.handleEvents();
+	}
+
+	retry( attempts ) {
+		return Math.min( attempts * 250 * 1.6, 5000 );
+	}
+
+module.exports = new Redis();
