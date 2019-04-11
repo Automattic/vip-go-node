@@ -9,7 +9,7 @@ const redis = require( 'ioredis' );
 const { logger } = require( '../logger/index' );
 
 //allow clients to set # of queues or default to 3
-const MAX_CONNECTION_RETRIES_FOR_OFFLINE_QUEUE = process.env.MAX_CONNECTIONS_OFFLINE_QUEUE || 3;
+const QUEUED_CONNECTION_ATTEMPTS = process.env.QUEUED_CONNECTION_ATTEMPTS || 3;
 
 //create a class in case we need to scale the connections
 class Redis {
@@ -27,15 +27,15 @@ class Redis {
 		this.handleEvents();
 	}
 
-	retry( attempts ) {
-		return Math.min( attempts * 250 * 1.6, 5000 );
+	retry( times ) {
+		return Math.min( times * 250 * 1.6, 5000 );
 	}
 
 	//handle offline queue limits
 	handleEvents() {
 		this.client.on( 'reconnecting', info => {
 			logger.info( 'Redis is attempting to reconnect' );
-			if ( MAX_CONNECTION_RETRIES_FOR_OFFLINE_QUEUE === ( info.attempt + 1 ) ) {
+			if ( QUEUED_CONNECTION_ATTEMPTS === ( info.attempt + 1 ) ) {
 				logger.warn( 'There is a problem with the Redis server- disabling offline Redis queue and calling client.flush_and_error()' );
 
 				this.client.enableOfflineQueue = false;
@@ -44,8 +44,8 @@ class Redis {
 				// This is kinda hacky as node_redis doesn't expose a way to flush the queue
 				// only, so this will emit an error event
 				this.client.flush_and_error( {
-					message: `Max of ${ MAX_CONNECTION_RETRIES_FOR_OFFLINE_QUEUE } Redis connection attempts reached - flushing queued requests.`,
-					code: 'MAX_CONNECTION_RETRIES_FOR_OFFLINE_QUEUE',
+					message: `Max of ${ QUEUED_CONNECTION_ATTEMPTS } Redis connection attempts reached - flushing queued requests.`,
+					code: 'QUEUED_CONNECTION_ATTEMPTS',
 				} );
 			}
 		} );
