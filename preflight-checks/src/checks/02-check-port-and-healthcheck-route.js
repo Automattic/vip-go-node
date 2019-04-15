@@ -16,18 +16,24 @@ module.exports = {
 	run: async () => {
 		const scripts = packageJson.scripts;
 		const PORT = Math.floor( Math.random() * ( 4000 - 3000 ) + 3000 ); // Get a PORT between 3000 and 4000
-		let buildingCommand = 'npm run build';
-
-		if ( scripts[ 'build-ci' ] ) {
-			buildingCommand = 'npm run build-ci';
-			console.log( chalk.blue( '  Info:' ), `Building the project with ${ chalk.yellow( 'npm run build-ci' ) }...` );
-		} else {
-			console.log( chalk.blue( '  Info:' ), `Building the project using ${ chalk.yellow( 'npm run build' ) }...` );
-		}
 
 		let subprocess;
 
-		return execa.shell( buildingCommand )
+		console.log( chalk.blue( '  Info:' ), `Installing dependencies with ${ chalk.yellow( 'npm install' ) }...` );
+
+		return execa.shell( 'npm install' )
+			.then( () => {
+				let buildingCommand = 'npm run build';
+
+				if ( scripts[ 'build-ci' ] ) {
+					buildingCommand = 'npm run build-ci';
+					console.log( chalk.blue( '  Info:' ), `Building the project with ${ chalk.yellow( 'npm run build-ci' ) }...` );
+				} else {
+					console.log( chalk.blue( '  Info:' ), `Building the project using ${ chalk.yellow( 'npm run build' ) }...` );
+				}
+
+				return execa.shell( buildingCommand );
+			} )
 			.then( () => {
 				console.log( chalk.blue( '  Info:' ), `Launching your app on PORT:${ PORT }...` );
 				subprocess = execa.shell( `PORT=${ PORT } npm start` );
