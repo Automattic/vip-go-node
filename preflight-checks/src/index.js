@@ -65,17 +65,17 @@ result.then( () => {
 	const isFailed = failedSteps.length > 0;
 
 	if ( isSuccess ) {
-		console.log( chalk.green( 'Congratulations! Your application is ready for VIP Go' ) );
+		console.log( chalk.green( 'Congratulations! Your application is ready for VIP Go!' ) );
 		process.exit();
 	}
 
 	if ( isWarning ) {
-		console.log( chalk.yellow( 'You are close! Please manually review the warnings above' ) );
+		console.log( chalk.yellow( 'Your application is close! Please review the warnings above to ensure best compatibility with VIP Go.' ) );
 		process.exit();
 	}
 
 	if ( isFailed ) {
-		console.log( chalk.red( 'Oups! Looks like you need to fix some steps to make your app ready' ) );
+		console.log( chalk.red( 'Oups! Looks like you need to fix some steps to make your app ready for VIP Go.' ) );
 		process.exit( 1 );
 	}
 } )

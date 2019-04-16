@@ -7,7 +7,7 @@ let packageJson;
 try {
 	packageJson = require( packageFile );
 } catch( e ) {
-	console.error( chalk.red( 'Error:' ), `Could not find a ${ chalk.yellow( 'package.json' ) } in the current folder.` );
+	console.error( chalk.red( 'Error:' ), `Could not find a ${ chalk.yellow( 'package.json' ) } in the current folder (${ currentWorkingDirectory }).` );
 	process.exit( 1 );
 }
 

@@ -49,7 +49,7 @@ module.exports = {
 
 				if ( ! is200 ) {
 					throw `Could not get a ${ chalk.yellow( '200 - OK' ) } response from ${ chalkHealthCheckRoute }. ` +
-					`Make sure you are accepting a ${ chalkPORT } environment variable and using our ${ chalkVIPGo } package.`;
+					`Make sure your application accepts a ${ chalkPORT } environment variable. You can simplify this using our ${ chalkVIPGo } package.`;
 				}
 
 				subprocess.kill();

@@ -27,7 +27,7 @@ module.exports = {
 		if ( serve ) {
 			console.log(
 				chalk.yellow( '  Warning:' ),
-				`Looks like your ${ chalkPackageJson } have an ${ chalk.yellow( 'npm serve' ) } script. ` +
+				`Looks like your ${ chalkPackageJson } has an ${ chalk.yellow( 'npm serve' ) } script. ` +
 				`Please make sure this is not the script running your application. Your application must be served ` +
 				`using ${ chalkNpmStart }.`
 			 );
