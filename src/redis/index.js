@@ -1,7 +1,7 @@
 /**
  * External dependencies
  */
-const redis = require( 'ioredis' );
+const IORedis = require( 'ioredis' );
 
 /**
  * Internal dependencies
@@ -16,7 +16,7 @@ class Redis {
 	constructor() {
 		const [ host, port ] = ( process.env.REDIS_MASTER || '' ).split( ':' );
 
-		this.client = new Redis( {
+		this.client = new IORedis( {
 			port,
 			host,
 			password: process.env.REDIS_PASSWORD,
