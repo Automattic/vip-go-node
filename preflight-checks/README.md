@@ -1,6 +1,6 @@
 # VIP Go - Preflight Checks for Node Apps
 
-This package runs preflight checks on your repo
+This package runs preflight checks on your Node application to make sure it's ready for VIP Go.
 
 ## Usage
 
@@ -14,14 +14,28 @@ npx @automattic/vip-go-preflight-checks
 
 ### 1. `npm` scripts
 
-In VIP Go, every time you push a new change, we run the following commands: `npm install`, `npm run build`, and `npm start`. This step checks that your `package.json` have these commands in order to build and start your application correctly.
+This step checks that your `package.json` has these commands configured and can build and start your application correctly.
+
+On VIP Go, every time you push a new change to your application, we `git pull` the latest code and then run the following commands:
+
+- `npm install --production`;
+- `npm run build`; and
+- `npm start`.
+
+If any of these commands are missing or fail, the application may not work correctly.
 
 **Note:** Some packages like `create-react-app` use `npm start` to start a dev server and `npm serve` to start a production server. You'll get a warning if we detect a `serve` script in your `package.json`.
 
 ### 2. `@automattic/vip-go` package usage
 
-Our helper libraries living in [`@automattic/vip-go`](https://github.com/Automattic/vip-go-node) will help you integrate easily with VIP Go. Especially the `server` helper which exposes some critical routes used internally for health checking. This step checks `@automattic/vip-go` is used in your production dependencies.
+This step checks that the `@automattic/vip-go` package is used in your production `dependencies`.
+
+Our helper package ([`@automattic/vip-go`](https://github.com/Automattic/vip-go-node)) simplifies some of the boilerplate (e.g. the `server` helper automatically handles the route used internally for health checks) and makes it easier to integrate with platform features like logging.
 
 ### 3. Checking `PORT` and `/cache-healthcheck?` route
 
-In VIP Go, the `PORT` in which your application will start isn't fixed and shouldn't be hardcoded. Instead, we pass an environment variable called `PORT` to your application to indicate in which port it should start. This step install dependencies, build your app, and start it on a random `PORT`. It also checks the `/cache-healthcheck?` route we use internally for health checking, and verify it responding with a `200` HTTP status code. If you're using the `@automattic/vip-go` this is added automatically for you.
+This step verifies that your application boots up correctly and responds to the appropriate HTTP requests.
+
+On VIP Go, the port used by your application is dynamic and shouldn't be hardcoded. We pass it in via an environment variable called `PORT`. This step install dependencies, build your app, and starts on a random `PORT`. It also checks the `/cache-healthcheck?` route we use internally for health checking, and verifies that it responds  with a `200` HTTP status code.
+
+If you're using the `@automattic/vip-go` this is added automatically for you.
