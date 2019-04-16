@@ -12,8 +12,8 @@
     "publish-please": "publish-please",
     "prepublishOnly": "publish-please guard"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "Automattic",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/Automattic/vip-go-node/issues"
   },
