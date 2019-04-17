@@ -11,6 +11,10 @@ const chalkHealthCheckRoute = chalk.yellow( CACHE_HEALTHCHECK_ROUTE );
 const chalkVIPGo = chalk.yellow( '@automattic/vip-go' );
 const rmfr = require('rmfr');
 
+const currentWorkingDirectory = process.cwd();
+const path = require( 'path' );
+const node_modules = path.join( currentWorkingDirectory, 'node_modules' );
+
 module.exports = {
 	name: `Building the app and running ${ chalkNpmStart }...`,
 	excerpt: `Checking if your app accepts a ${ chalkPORT } and responds to ${ chalkHealthCheckRoute }`,
@@ -22,7 +26,7 @@ module.exports = {
 
 		console.log( chalk.blue( '  Info:' ), `Removing ${ chalk.yellow( 'node_modules' ) } folder...` );
 
-		return rmfr( 'node_modules' )
+		return rmfr( node_modules )
 			.then( () => {
 				console.log( chalk.blue( '  Info:' ), `Installing dependencies with ${ chalk.yellow( 'npm install --production' ) }...` );
 				return execa.shell( 'npm install --production' );
