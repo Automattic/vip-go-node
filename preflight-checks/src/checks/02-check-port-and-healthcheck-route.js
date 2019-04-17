@@ -2,7 +2,7 @@ import chalk from 'chalk';
 import packageJson from '../package';
 const execa = require( 'execa' );
 const waait = require( 'waait' );
-const fetch = require( 'isomorphic-fetch' );
+const fetch = require( 'node-fetch' );
 
 const CACHE_HEALTHCHECK_ROUTE = '/cache-healthcheck?';
 const chalkNpmStart = chalk.yellow( 'npm start' );
