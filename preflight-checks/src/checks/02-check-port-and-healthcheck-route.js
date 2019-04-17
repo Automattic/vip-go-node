@@ -9,6 +9,7 @@ const chalkNpmStart = chalk.yellow( 'npm start' );
 const chalkPORT = chalk.yellow( 'PORT' );
 const chalkHealthCheckRoute = chalk.yellow( CACHE_HEALTHCHECK_ROUTE );
 const chalkVIPGo = chalk.yellow( '@automattic/vip-go' );
+const rmfr = require('rmfr');
 
 module.exports = {
 	name: `Building the app and running ${ chalkNpmStart }...`,
@@ -19,9 +20,13 @@ module.exports = {
 
 		let subprocess;
 
-		console.log( chalk.blue( '  Info:' ), `Installing dependencies with ${ chalk.yellow( 'npm install --production' ) }...` );
+		console.log( chalk.blue( '  Info:' ), `Removing ${ chalk.yellow( 'node_modules' ) } folder...` );
 
-		return execa.shell( 'npm install --production' )
+		return rmfr( 'node_modules' )
+			.then( () => {
+				console.log( chalk.blue( '  Info:' ), `Installing dependencies with ${ chalk.yellow( 'npm install --production' ) }...` );
+				return execa.shell( 'npm install --production' );
+			} )
 			.then( () => {
 				let buildingCommand = 'npm run build';
 
