@@ -24,13 +24,9 @@ module.exports = {
 
 		let subprocess;
 
-		console.log( chalk.blue( '  Info:' ), `Removing ${ chalk.yellow( 'node_modules' ) } folder...` );
+		console.log( chalk.blue( '  Info:' ), `Installing dependencies with ${ chalk.yellow( 'npm install' ) }...` );
 
-		return rmfr( node_modules )
-			.then( () => {
-				console.log( chalk.blue( '  Info:' ), `Installing dependencies with ${ chalk.yellow( 'npm install --production' ) }...` );
-				return execa.shell( 'npm install --production' );
-			} )
+		return execa.shell( 'npm install' )
 			.then( () => {
 				let buildingCommand = 'npm run build';
 
@@ -42,6 +38,16 @@ module.exports = {
 				}
 
 				return execa.shell( buildingCommand );
+			} )
+			.then( () => {
+				console.log( chalk.blue( '  Info:' ), `Removing ${ chalk.yellow( 'node_modules' ) } folder...` );
+
+				return rmfr( node_modules );
+
+			} )
+			.then( () => {
+				console.log( chalk.blue( '  Info:' ), `Installing production dependencies with ${ chalk.yellow( 'npm install --production' ) }...` );
+				return execa.shell( 'npm install --production' );
 			} )
 			.then( () => {
 				console.log( chalk.blue( '  Info:' ), `Launching your app on PORT:${ PORT }...` );
