@@ -27,8 +27,8 @@
   },
   "homepage": "https://github.com/Automattic/vip-go-node#readme",
   "devDependencies": {
-    "@babel/cli": "7.4.3",
-    "@babel/preset-env": "7.4.3",
+    "@babel/cli": "7.4.4",
+    "@babel/preset-env": "7.4.4",
     "babel-eslint": "10.0.1",
     "eslint": "5.16.0",
     "eslint-config-wpvip": "github:automattic/eslint-config-wpvip#84eabbf",
