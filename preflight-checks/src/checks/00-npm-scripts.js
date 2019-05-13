@@ -8,8 +8,8 @@ const chalkPackageJson = chalk.yellow( 'package.json' );
 module.exports = {
 	name: 'Checking npm scripts in the project...',
 	excerpt: `Checking your ${ chalkPackageJson } for ${ chalkNpmBuild } and ${ chalkNpmStart }`,
-	run: async () => {
-		const scripts = packageJson.scripts;
+	run: async ( applicationPackage = packageJson ) => {
+		const scripts = applicationPackage.scripts;
 		const start = scripts.start;
 		const build = scripts.build;
 		const serve = scripts.serve;
