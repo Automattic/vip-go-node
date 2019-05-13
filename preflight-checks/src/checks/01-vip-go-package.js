@@ -7,8 +7,8 @@ const chalkPackageJson = chalk.yellow( 'package.json' );
 module.exports = {
 	name: 'Checking usage of @automattic/vip-go...',
 	excerpt: `Checking if the project is using our helper ${ chalkVIPGo }`,
-	run: async () => {
-		const dependencies = packageJson.dependencies;
+	run: async ( applicationPackage = packageJson ) => {
+		const dependencies = applicationPackage.dependencies;
 		const VIPGoDependency = dependencies[ '@automattic/vip-go' ];
 
 		if ( ! VIPGoDependency ) {
