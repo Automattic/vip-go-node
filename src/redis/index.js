@@ -44,7 +44,7 @@ class Redis {
 				// This is kinda hacky as node_redis doesn't expose a way to flush the queue
 				// only, so this will emit an error event
 				this.client.flush_and_error( {
-					message: `Max of ${ MAX_CONNECTION_RETRIES_FOR_OFFLINE_QUEUE } Redis connection attempts reached - flushing queued requests.`,
+					message: 'Max of ' + MAX_CONNECTION_RETRIES_FOR_OFFLINE_QUEUE + ' Redis connection attempts reached - flushing queued requests.',
 					code: 'MAX_CONNECTION_RETRIES_FOR_OFFLINE_QUEUE',
 				} );
 			}
