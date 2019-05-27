@@ -3,6 +3,7 @@ module.exports = function( api ) {
 
 	const config = {
 		presets: [ [ '@babel/env' ] ],
+		plugins: [ [ '@babel/plugin-transform-runtime' ] ],
 	};
 
 	return config;
