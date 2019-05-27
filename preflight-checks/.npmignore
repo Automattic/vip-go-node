@@ -18,6 +18,9 @@ node_modules/
 .eslintcache
 .eslintrc.json
 
+# Babel files
+.babelrc
+
 # Other helper files
 .nvmrc
 .ackrc
@@ -25,9 +28,3 @@ node_modules/
 
 # ES6 source folder
 src
-
-# Hooks
-hooks
-
-# Preflight checks folder (deployed on its own)
-preflight-checks
