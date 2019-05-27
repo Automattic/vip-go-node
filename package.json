@@ -28,8 +28,8 @@
   "homepage": "https://github.com/Automattic/vip-go-node#readme",
   "devDependencies": {
     "@babel/cli": "7.4.4",
-    "@babel/plugin-transform-runtime": "^7.4.4",
-    "@babel/runtime": "^7.4.5",
+    "@babel/plugin-transform-runtime": "7.4.4",
+    "@babel/runtime": "7.4.5",
     "@babel/preset-env": "7.4.5",
     "babel-eslint": "10.0.1",
     "eslint": "5.16.0",
