@@ -1,6 +1,6 @@
-# VIP Go - Preflight Checks for Node Apps
+# VIP - Preflight Checks for Node Apps
 
-This package runs preflight checks on your Node application to make sure it's ready for VIP Go.
+This package runs preflight checks on your Node application to make sure it's ready for VIP.
 
 ## Usage
 
@@ -16,7 +16,7 @@ npx @automattic/vip-go-preflight-checks
 
 This step checks that your `package.json` has these commands configured and can build and start your application correctly.
 
-On VIP Go, every time you push a new change to your application, we `git pull` the latest code and then run the following commands:
+On VIP, every time you push a new change to your application, we `git pull` the latest code and then run the following commands:
 
 - `npm install --production`;
 - `npm run build`; and
@@ -36,6 +36,6 @@ Our helper package ([`@automattic/vip-go`](https://github.com/Automattic/vip-go-
 
 This step verifies that your application boots up correctly and responds to the appropriate HTTP requests.
 
-On VIP Go, the port used by your application is dynamic and shouldn't be hardcoded. We pass it in via an environment variable called `PORT`. This step install dependencies, build your app, and starts on a random `PORT`. It also checks the `/cache-healthcheck?` route we use internally for health checking, and verifies that it responds  with a `200` HTTP status code.
+On VIP, the port used by your application is dynamic and shouldn't be hardcoded. We pass it in via an environment variable called `PORT`. This step install dependencies, build your app, and starts on a random `PORT`. It also checks the `/cache-healthcheck?` route we use internally for health checking, and verifies that it responds  with a `200` HTTP status code.
 
 If you're using the `@automattic/vip-go` this is added automatically for you.
