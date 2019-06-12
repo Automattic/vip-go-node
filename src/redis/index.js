@@ -1,7 +1,7 @@
 /**
  * External dependencies
  */
-const redis = require( 'ioredis' );
+const IORedis = require( 'ioredis' );
 
 /**
  * Internal dependencies
@@ -16,7 +16,7 @@ class Redis {
 	constructor() {
 		const [ host, port ] = ( process.env.REDIS_MASTER || '' ).split( ':' );
 
-		this.client = new Redis( {
+		this.client = new IORedis( {
 			port,
 			host,
 			password: process.env.REDIS_PASSWORD,
@@ -44,8 +44,8 @@ class Redis {
 				// This is kinda hacky as node_redis doesn't expose a way to flush the queue
 				// only, so this will emit an error event
 				this.client.flush_and_error( {
-					message: `Max of ${ QUEUED_CONNECTION_ATTEMPTS } Redis connection attempts reached - flushing queued requests.`,
-					code: 'QUEUED_CONNECTION_ATTEMPTS',
+					message: 'Max of ' + MAX_CONNECTION_RETRIES_FOR_OFFLINE_QUEUE + ' Redis connection attempts reached - flushing queued requests.',
+					code: 'MAX_CONNECTION_RETRIES_FOR_OFFLINE_QUEUE',
 				} );
 			}
 		} );
