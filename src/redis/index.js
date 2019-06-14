@@ -69,4 +69,4 @@ class Redis {
 	}
 }
 
-module.exports = new Redis({ logger = console } = {});
+module.exports = new Redis( { logger = console } = {} );
