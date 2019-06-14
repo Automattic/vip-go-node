@@ -25,11 +25,20 @@ class Redis {
 			maxOfflineQueueSize: Infinity,
 		}, { logger = console } = {} );
 
+		this.connect();
 		this.handleEvents();
 	}
 
 	retry( times ) {
 		return Math.min( times * 250 * 1.6, 5000 );
+	}
+
+	// Connect to the Redis client
+	connectToClient() {
+		this.client.on( 'connect', () => {
+			logger.info( 'Connected to Redis client' );
+			this.client.enableOfflineQueue = true;
+		} );
 	}
 
 	//handle offline queue limits
