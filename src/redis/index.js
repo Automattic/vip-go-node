@@ -50,7 +50,7 @@ class Redis {
 			logger.info( 'Redis is attempting to reconnect' );
 
 			if ( this.client.maxRetriesPerRequest ) {
-				logger.error( `Max retries reached (max: ${ this.client.maxRetriesPerRequest }). Flushing all pending commands and disabling the offline queue` );
+				logger.error( 'Max retries reached (max:' + this.client.maxRetriesPerRequest + '). Flushing all pending commands and disabling the offline queue' );
 
 				this.client.enableOfflineQueue = false;
 			}
@@ -59,14 +59,14 @@ class Redis {
 
 	onError() {
 		this.client.on( 'error', error => {
-			log.error( `Error: ${ error.message }: ${ JSON.stringify( error ) }` );
-			err instanceof IORedis.ReplyError;
+			logger.error( 'Error: ' + error.message + ': ' + JSON.stringify( error ) );
+			error instanceof IORedis.ReplyError;
 		} );
 	}
 
 	disconnect() {
 		this.client.on( 'disconnect', () => {
-			log.info( 'Disconnected from Redis client' );
+			logger.info( 'Disconnected from Redis client' );
 		} );
 	}
 }
