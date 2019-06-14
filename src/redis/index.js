@@ -20,11 +20,12 @@ class Redis {
 			retryStrategy: this.reconnect.bind( this ),
 			enableOfflineQueue: true,
 			maxRetriesPerRequest: process.env.QUEUED_CONNECTION_ATTEMPTS || 3,
-		}, { logger = console } = {} );
+		} );
 
 		this.connect();
 		this.reconnectToClient();
 		this.onError();
+		this.disconnect();
 	}
 
 	// Wait 2 seconds maximum before attempting reconnection
@@ -60,6 +61,12 @@ class Redis {
 			err instanceof IORedis.ReplyError;
 		} );
 	}
+
+	disconnect() {
+		this.client.on( 'disconnect', () => {
+			log.info( 'Disconnected from Redis client' );
+		} );
+	}
 }
 
-module.exports = new Redis();
+module.exports = new Redis({ logger = console } = {});
