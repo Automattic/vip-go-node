@@ -24,6 +24,7 @@ class Redis {
 
 		this.connect();
 		this.reconnectToClient();
+		this.onError();
 	}
 
 	// Wait 2 seconds maximum before attempting reconnection
@@ -50,6 +51,13 @@ class Redis {
 
 				this.client.enableOfflineQueue = false;
 			}
+		} );
+	}
+
+	onError() {
+		this.client.on( 'error', error => {
+			log.error( `Error: ${ error.message }: ${ JSON.stringify( error ) }` );
+			err instanceof IORedis.ReplyError;
 		} );
 	}
 }
