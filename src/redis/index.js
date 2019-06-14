@@ -8,7 +8,7 @@ const IORedis = require( 'ioredis' );
  */
 let { logger } = require( '../logger/index' );
 
-//create a class in case we need to scale the connections
+// Create a class in case we need to scale the connections
 class Redis {
 	constructor() {
 		const [ host, port ] = ( process.env.REDIS_MASTER || '' ).split( ':' );
@@ -57,6 +57,7 @@ class Redis {
 		} );
 	}
 
+	// If an error occurs, log the error and expose the error returned from the Redis server
 	onError() {
 		this.client.on( 'error', error => {
 			logger.error( 'Error: ' + error.message + ': ' + JSON.stringify( error ) );
@@ -64,6 +65,7 @@ class Redis {
 		} );
 	}
 
+	// Disconnect from Redis
 	disconnect() {
 		this.client.on( 'disconnect', () => {
 			logger.info( 'Disconnected from Redis client' );
