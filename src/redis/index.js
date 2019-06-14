@@ -6,7 +6,7 @@ const IORedis = require( 'ioredis' );
 /**
  * Internal dependencies
  */
-const { logger } = require( '../logger/index' );
+let { logger } = require( '../logger/index' );
 
 //allow clients to set # of queues or default to 3
 const QUEUED_CONNECTION_ATTEMPTS = process.env.QUEUED_CONNECTION_ATTEMPTS || 3;
@@ -22,7 +22,8 @@ class Redis {
 			password: process.env.REDIS_PASSWORD,
 			retryStrategy: this.retry.bind( this ),
 			enableOfflineQueue: true,
-		} );
+			maxOfflineQueueSize: Infinity,
+		}, { logger = console } = {} );
 
 		this.handleEvents();
 	}
