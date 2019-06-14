@@ -26,6 +26,8 @@ class Redis {
 		this.reconnectToClient();
 		this.onError();
 		this.disconnect();
+
+		return this.client;
 	}
 
 	// Wait 2 seconds maximum before attempting reconnection
