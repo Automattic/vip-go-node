@@ -13,21 +13,25 @@ class Redis {
 	constructor() {
 		const [ host, port ] = ( process.env.REDIS_MASTER || '' ).split( ':' );
 
-		this.client = new IORedis( {
-			port,
-			host,
-			password: process.env.REDIS_PASSWORD,
-			retryStrategy: this.reconnect.bind( this ),
-			enableOfflineQueue: true,
-			maxRetriesPerRequest: process.env.QUEUED_CONNECTION_ATTEMPTS || 3,
-		} );
+		if ( ! process.env.REDIS_MASTER ) {
+			logger.warn( 'Missing host and port of Redis server' );
+		} else {
+			this.client = new IORedis( {
+				port,
+				host,
+				password: process.env.REDIS_PASSWORD,
+				retryStrategy: this.reconnect.bind( this ),
+				enableOfflineQueue: true,
+				maxRetriesPerRequest: process.env.QUEUED_CONNECTION_ATTEMPTS || 3,
+			} );
 
-		this.connect();
-		this.reconnectToClient();
-		this.onError();
-		this.disconnect();
+			this.connectToClient();
+			this.reconnectToClient();
+			this.onError();
+			this.disconnect();
 
-		return this.client;
+			return this.client;
+		}
 	}
 
 	// Wait 2 seconds maximum before attempting reconnection
