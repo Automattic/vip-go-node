@@ -3,10 +3,7 @@
  */
 const IORedis = require( 'ioredis' );
 
-/**
- * Internal dependencies
- */
-let { logger } = require( '../logger/index' );
+let logger = console;
 
 // Create a class in case we need to scale the connections
 class Redis {
