@@ -8,11 +8,11 @@ let logger = console;
 // Create a class in case we need to scale the connections
 class Redis {
 	constructor() {
-		const [ host, port ] = ( process.env.REDIS_MASTER || '' ).split( ':' );
-
 		if ( ! process.env.REDIS_MASTER ) {
 			logger.warn( 'Missing host and port of Redis server' );
 		} else {
+			const [ host, port ] = ( process.env.REDIS_MASTER ).split( ':' );
+
 			this.client = new IORedis( {
 				port,
 				host,
