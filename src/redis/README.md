@@ -8,10 +8,10 @@ Instantiate a new Redis client:
 const { redis } = require( '@automattic/vip-go' );
 const redis = new Redis();
 ```
-By default, this helper library logs to the console. Pass in your own logger like so:
+By default, this helper library logs to the `console`. If you prefer, you can set your own logger:
 
 ```js
-redis( { logger: yourLogger } );
+const redis = new Redis( { logger: yourLogger } );
 ```
 
 ## Configuration
@@ -23,5 +23,5 @@ If you require a password, please set the `REDIS_PASSWORD` environment variable 
 ## Reconnecting to Redis
 If the connection to the Redis server is lost, offline queuing for commands will be disabled.
 
-After x amount of reconnection attempts, all pending commands will be flushed so that there are no stale commands.
-You may set the number of attempts with the `QUEUED_CONNECTION_ATTEMPTS` environment variable, or it will default to three reconnection attempts.
+After three reconnection attempts, all pending commands will be flushed so that there are no stale commands.
+You can change this number by using the `QUEUED_CONNECTION_ATTEMPTS` environment variable.
