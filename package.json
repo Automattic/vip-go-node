@@ -43,7 +43,7 @@
     "eslint-plugin-wpcalypso": "4.1.0",
     "express": "4.17.1",
     "jest": "24.8.0",
-    "publish-please": "5.5.0",
+    "publish-please": "5.5.1",
     "supertest": "4.0.2"
   },
   "dependencies": {
