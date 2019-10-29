@@ -2,6 +2,12 @@
 
 This package provides modules to help run Node.js applications on VIP Go.
 
+## Install
+
+```
+npm install --save @automattic/vip-go
+```
+
 ## Modules
 
 The following is a list of modules included in this package:
