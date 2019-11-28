@@ -30,12 +30,7 @@ module.exports = {
 			.then( () => {
 				let buildingCommand = 'npm run build';
 
-				if ( scripts[ 'build-ci' ] ) {
-					buildingCommand = 'npm run build-ci';
-					console.log( chalk.blue( '  Info:' ), `Building the project with ${ chalk.yellow( 'npm run build-ci' ) }...` );
-				} else {
-					console.log( chalk.blue( '  Info:' ), `Building the project using ${ chalk.yellow( 'npm run build' ) }...` );
-				}
+				console.log( chalk.blue( '  Info:' ), `Building the project using ${ chalk.yellow( buildingCommand ) }...` );
 
 				return execa.shell( buildingCommand );
 			} )
