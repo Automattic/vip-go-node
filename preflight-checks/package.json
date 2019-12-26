@@ -17,7 +17,7 @@
   "bugs": {
     "url": "https://github.com/Automattic/vip-go-node/issues"
   },
-  "homepage": "https://github.com/Automattic/vip-go-node/preflight-checks#readme",
+  "homepage": "https://github.com/Automattic/vip-go-node/blob/master/preflight-checks/README.md",
   "devDependencies": {
     "@babel/cli": "7.5.5",
     "@babel/preset-env": "7.5.5",
