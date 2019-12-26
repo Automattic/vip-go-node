@@ -28,7 +28,7 @@ module.exports = {
 
 		return execa.shell( 'npm install' )
 			.then( () => {
-				let buildingCommand = 'npm run build';
+				let buildingCommand = 'VIP_GO_APP_ID=123 npm run build';
 
 				console.log( chalk.blue( '  Info:' ), `Building the project using ${ chalk.yellow( buildingCommand ) }...` );
 
