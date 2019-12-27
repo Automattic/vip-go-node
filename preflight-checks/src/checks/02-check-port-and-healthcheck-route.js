@@ -15,6 +15,10 @@ const currentWorkingDirectory = process.cwd();
 const path = require( 'path' );
 const node_modules = path.join( currentWorkingDirectory, 'node_modules' );
 
+const envVariables = {
+	'VIP_GO_APP_ID': '123',
+}
+
 module.exports = {
 	name: `Building the app and running ${ chalkNpmStart }...`,
 	excerpt: `Checking if your app accepts a ${ chalkPORT } and responds to ${ chalkHealthCheckRoute }`,
