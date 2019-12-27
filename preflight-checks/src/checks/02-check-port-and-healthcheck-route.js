@@ -21,7 +21,7 @@ const envVariables = {
 
 const executeShell = ( command, envVars = {} ) => {
 	return execa.command( command, {
-		env: Object.assign( envVariables, envVars )
+		env: Object.assign( {}, envVariables, envVars )
 	} );
 }
 
