@@ -72,13 +72,13 @@ module.exports = {
 					`Make sure your application accepts a ${ chalkPORT } environment variable. You can simplify this using our ${ chalkVIPGo } package.`;
 				}
 
-				subprocess.kill();
+				subprocess.cancel();
 
 				return 'success';
 			} )
 			.catch( err => {
 				console.log( chalk.red( '  Error:' ), `${ err }` );
-				subprocess.kill();
+				subprocess.cancel();
 				return 'failed';
 			} );
 	}
