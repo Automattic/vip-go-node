@@ -54,12 +54,13 @@ module.exports = {
 				console.log( chalk.blue( '  Info:' ), `Installing production dependencies with ${ chalk.yellow( 'npm install --production' ) }...` );
 				return executeShell( 'npm install --production' );
 			} )
-			.then( () => {
+			.then( async () => {
 				console.log( chalk.blue( '  Info:' ), `Launching your app on PORT:${ PORT }...` );
-				subprocess = execa.shell( `PORT=${ PORT } npm start` );
-				return waait( 3000 ); // Wait a little before resolving, giving time for the server to boot up
-			} )
-			.then( () => {
+				subprocess = executeShell( 'npm start', {
+					PORT: PORT
+				} );
+				await waait( 3000 ); // Wait a little before resolving, giving time for the server to boot up
+
 				const cacheUrl = `http://localhost:${ PORT }${ CACHE_HEALTHCHECK_ROUTE }`;
 				console.log( chalk.blue( '  Info:' ), `Sending a GET request to ${ cacheUrl }...` );
 				return fetch( cacheUrl );
