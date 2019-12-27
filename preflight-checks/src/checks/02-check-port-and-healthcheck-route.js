@@ -36,13 +36,13 @@ module.exports = {
 
 		console.log( chalk.blue( '  Info:' ), `Installing dependencies with ${ chalk.yellow( 'npm install' ) }...` );
 
-		return execa.shell( 'npm install' )
+		return executeShell( 'npm install' )
 			.then( () => {
 				let buildingCommand = 'VIP_GO_APP_ID=123 npm run build';
 
 				console.log( chalk.blue( '  Info:' ), `Building the project using ${ chalk.yellow( buildingCommand ) }...` );
 
-				return execa.shell( buildingCommand );
+				return executeShell( buildingCommand );
 			} )
 			.then( () => {
 				console.log( chalk.blue( '  Info:' ), `Removing ${ chalk.yellow( 'node_modules' ) } folder...` );
@@ -52,7 +52,7 @@ module.exports = {
 			} )
 			.then( () => {
 				console.log( chalk.blue( '  Info:' ), `Installing production dependencies with ${ chalk.yellow( 'npm install --production' ) }...` );
-				return execa.shell( 'npm install --production' );
+				return executeShell( 'npm install --production' );
 			} )
 			.then( () => {
 				console.log( chalk.blue( '  Info:' ), `Launching your app on PORT:${ PORT }...` );
