@@ -19,6 +19,12 @@ const envVariables = {
 	'VIP_GO_APP_ID': '123',
 }
 
+const executeShell = ( command, envVars = {} ) => {
+	return execa.command( command, {
+		env: Object.assign( envVariables, envVars )
+	} );
+}
+
 module.exports = {
 	name: `Building the app and running ${ chalkNpmStart }...`,
 	excerpt: `Checking if your app accepts a ${ chalkPORT } and responds to ${ chalkHealthCheckRoute }`,
