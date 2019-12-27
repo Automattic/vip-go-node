@@ -38,7 +38,7 @@ module.exports = {
 
 		return executeShell( 'npm install' )
 			.then( () => {
-				let buildingCommand = 'VIP_GO_APP_ID=123 npm run build';
+				let buildingCommand = 'npm run build';
 
 				console.log( chalk.blue( '  Info:' ), `Building the project using ${ chalk.yellow( buildingCommand ) }...` );
 
