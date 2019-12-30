@@ -15,6 +15,16 @@ const currentWorkingDirectory = process.cwd();
 const path = require( 'path' );
 const node_modules = path.join( currentWorkingDirectory, 'node_modules' );
 
+const envVariables = {
+	'VIP_GO_APP_ID': '123',
+}
+
+const executeShell = ( command, envVars = {} ) => {
+	return execa.command( command, {
+		env: Object.assign( {}, envVariables, envVars )
+	} );
+}
+
 module.exports = {
 	name: `Building the app and running ${ chalkNpmStart }...`,
 	excerpt: `Checking if your app accepts a ${ chalkPORT } and responds to ${ chalkHealthCheckRoute }`,
@@ -26,13 +36,13 @@ module.exports = {
 
 		console.log( chalk.blue( '  Info:' ), `Installing dependencies with ${ chalk.yellow( 'npm install' ) }...` );
 
-		return execa.shell( 'npm install' )
+		return executeShell( 'npm install' )
 			.then( () => {
 				let buildingCommand = 'npm run build';
 
 				console.log( chalk.blue( '  Info:' ), `Building the project using ${ chalk.yellow( buildingCommand ) }...` );
 
-				return execa.shell( buildingCommand );
+				return executeShell( buildingCommand );
 			} )
 			.then( () => {
 				console.log( chalk.blue( '  Info:' ), `Removing ${ chalk.yellow( 'node_modules' ) } folder...` );
@@ -42,14 +52,15 @@ module.exports = {
 			} )
 			.then( () => {
 				console.log( chalk.blue( '  Info:' ), `Installing production dependencies with ${ chalk.yellow( 'npm install --production' ) }...` );
-				return execa.shell( 'npm install --production' );
+				return executeShell( 'npm install --production' );
 			} )
-			.then( () => {
+			.then( async () => {
 				console.log( chalk.blue( '  Info:' ), `Launching your app on PORT:${ PORT }...` );
-				subprocess = execa.shell( `PORT=${ PORT } npm start` );
-				return waait( 3000 ); // Wait a little before resolving, giving time for the server to boot up
-			} )
-			.then( () => {
+				subprocess = executeShell( 'npm start', {
+					PORT: PORT
+				} );
+				await waait( 3000 ); // Wait a little before resolving, giving time for the server to boot up
+
 				const cacheUrl = `http://localhost:${ PORT }${ CACHE_HEALTHCHECK_ROUTE }`;
 				console.log( chalk.blue( '  Info:' ), `Sending a GET request to ${ cacheUrl }...` );
 				return fetch( cacheUrl );
@@ -62,13 +73,13 @@ module.exports = {
 					`Make sure your application accepts a ${ chalkPORT } environment variable. You can simplify this using our ${ chalkVIPGo } package.`;
 				}
 
-				subprocess.kill();
+				subprocess.cancel();
 
 				return 'success';
 			} )
 			.catch( err => {
 				console.log( chalk.red( '  Error:' ), `${ err }` );
-				subprocess.kill();
+				subprocess.cancel();
 				return 'failed';
 			} );
 	}
