@@ -1,0 +1,34 @@
+{
+  "name": "@automattic/vip-go-preflight-checks",
+  "version": "1.0.0",
+  "description": "Know if your Node application is ready for VIP Go",
+  "main": "./dist/index.js",
+  "bin": {
+    "vip-go-preflight-checks": "./dist/index.js"
+  },
+  "scripts": {
+    "test": "jest",
+    "build": "babel src --out-dir dist",
+    "publish-please": "publish-please",
+    "prepublishOnly": "publish-please guard"
+  },
+  "author": "Automattic",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Automattic/vip-go-node/issues"
+  },
+  "homepage": "https://github.com/Automattic/vip-go-node/blob/master/preflight-checks/README.md",
+  "devDependencies": {
+    "@babel/cli": "7.5.5",
+    "@babel/preset-env": "7.5.5",
+    "jest": "24.9.0",
+    "publish-please": "5.5.1"
+  },
+  "dependencies": {
+    "chalk": "^3.0.0",
+    "execa": "^4.0.0",
+    "node-fetch": "^2.3.0",
+    "rmfr": "^2.0.0",
+    "waait": "^1.0.4"
+  }
+}

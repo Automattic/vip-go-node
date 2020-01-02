@@ -4,7 +4,6 @@ workflows:
   build:
     jobs:
       - node-base
-      - node-6
       - node-8
       - node-10
 
