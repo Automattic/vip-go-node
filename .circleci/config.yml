@@ -35,6 +35,7 @@ jobs:
       - run:
           name: "Wait for redis to become available"
           command: |
+            docker start
             docker-compose up
             while ! redis-cli ping; do
               echo "Waiting for redis to become available"
