@@ -35,7 +35,7 @@ jobs:
       - run:
           name: "Wait for redis to become available"
           command: |
-            dockerize -wait tcp://127.0.0.1:6379 -timeout 120s
+            docker-compose up
             while ! redis-cli ping; do
               echo "Waiting for redis to become available"
               sleep 1
