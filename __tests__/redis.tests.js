@@ -46,3 +46,21 @@ describe( 'src/redis', () => {
 			expect( transport.errors[ 0 ] ).toMatch( `Couldn't get the host and port from the REDIS_MASTER`);
 		} );
 	} );
+
+	describe( 'Environment variable REDIS_MASTER is present', () => {
+		it( 'Should connect succesfully and return the redis client back', async () => {
+			process.env.REDIS_MASTER = DEFAULT_REDIS_LOCAL_IP;
+			const transport = new TestTransport();
+			const redisClient = redis( { logger: transport } );
+
+			expect( transport.logs[ 0 ] ).toMatch( 'Initializing a new redis client...' );
+
+			// Wait for connection
+			await wait( 7 );
+
+			expect( transport.logs[ 1 ] ).toMatch( 'Connected to Redis client...' );
+
+			redisClient.disconnect();
+		} );
+	} );
+} );
