@@ -32,6 +32,15 @@ jobs:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
 
+      - run:
+          name: "Wait for redis to become available"
+          command: |
+            dockerize -wait tcp://127.0.0.1:6379 -timeout 120s
+            while ! mysqladmin ping -h 127.0.0.1:6379 --silent; do
+              echo "Waiting for redis to become available"
+              sleep 1
+            done
+
       # Lint + Test
       - run: npm run test
 
