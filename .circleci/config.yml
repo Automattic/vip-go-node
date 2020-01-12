@@ -11,6 +11,7 @@ jobs:
   node-base: &build-and-test
     docker:
       - image: circleci/node:latest
+      - image: redis
 
     working_directory: ~/repo
 
