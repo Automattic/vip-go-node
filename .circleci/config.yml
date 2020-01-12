@@ -34,13 +34,7 @@ jobs:
 
       - run:
           name: "Wait for redis to become available"
-          command: |
-            docker start
-            docker-compose up
-            while ! redis-cli ping; do
-              echo "Waiting for redis to become available"
-              sleep 1
-            done
+          command: dockerize -wait tcp://localhost:6379 -timeout 1m
 
       # Lint + Test
       - run: npm run test
