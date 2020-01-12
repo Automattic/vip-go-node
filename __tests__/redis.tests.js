@@ -37,7 +37,7 @@ describe( 'src/redis', () => {
 			expect( transport.errors[ 0 ] ).toMatch( 'Missing REDIS_MASTER environment variable' );
 		} );
 
-		it( 'Should log an error if REDIS_MASTER environment variable is missing', () => {
+		it( 'Should log an error if REDIS_MASTER environment variable has incorrect format', () => {
 			process.env.REDIS_MASTER = 'abcdef'; // Expected is 123.123.123.123:4567
 			const transport = new TestTransport();
 			redis( { logger: transport } );
