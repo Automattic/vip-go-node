@@ -21,6 +21,8 @@ Configuring a Redis client compatible with the VIP Go platform requires a `REDIS
 
 If you require a password, please set the `REDIS_PASSWORD` environment variable as well.
 
+Please note **this is only required if you want to run redis locally**. On VIP Go, these variables are **automatically set**.
+
 ## Reconnecting to Redis
 
 If the connection to the Redis server is lost, offline queuing for commands will be disabled.
