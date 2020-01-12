@@ -1,5 +1,7 @@
 # VIP Go Redis Helper Library
 
+Our Redis helper is based on the [ioredis](https://github.com/luin/ioredis) project.
+
 ## Initialization
 
 Instantiate a new Redis client:
