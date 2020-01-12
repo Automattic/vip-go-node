@@ -1,6 +1,6 @@
 const redis = require( '../src/redis/' );
 const Transport = require( 'winston-transport' );
-const wait =require( 'waait' );
+const wait = require( 'waait' );
 
 class TestTransport extends Transport {
 	constructor( opts ) {
@@ -10,7 +10,6 @@ class TestTransport extends Transport {
 	}
 
 	info( info ) {
-		console.log( 'received:', info );
 		this.logs.push( info );
 	}
 
@@ -43,7 +42,7 @@ describe( 'src/redis', () => {
 			const transport = new TestTransport();
 			redis( { logger: transport } );
 
-			expect( transport.errors[ 0 ] ).toMatch( `Couldn't get the host and port from the REDIS_MASTER`);
+			expect( transport.errors[ 0 ] ).toMatch( 'Couldn\'t get the host and port from the REDIS_MASTER' );
 		} );
 	} );
 

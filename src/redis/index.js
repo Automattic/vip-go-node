@@ -8,10 +8,10 @@ let redisClient = null;
 const retryStrategy = times => {
 	// Wait 2 seconds maximum before attempting reconnection
 	return Math.min( times * 50, 2000 );
-}
+};
 
 module.exports = ( { logger = console } = {} ) => {
-	if( redisClient ) {
+	if ( redisClient ) {
 		// Client already defined and initialized
 		return redisClient;
 	}
@@ -71,4 +71,4 @@ module.exports = ( { logger = console } = {} ) => {
 	} );
 
 	return redisClient;
-}
+};
