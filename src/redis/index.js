@@ -39,7 +39,7 @@ module.exports = ( { logger = console } = {} ) => {
 		host,
 		port,
 		password: process.env.REDIS_PASSWORD,
-		retryStrategy: retryStrategy,
+		retryStrategy,
 		enableOfflineQueue: true,
 		maxRetriesPerRequest: process.env.QUEUED_CONNECTION_ATTEMPTS || 3,
 	} );
