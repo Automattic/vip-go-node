@@ -54,8 +54,8 @@ describe( 'src/redis', () => {
 
 			expect( transport.logs[ 0 ] ).toMatch( 'Initializing a new redis client...' );
 
-			// Wait for connection
-			await wait( 7 );
+			// Wait 5 ticks for the connection to redis server, triggering the connection listener and writing the logs
+			await wait( 5 );
 
 			expect( transport.logs[ 1 ] ).toMatch( 'Connected to Redis client...' );
 
