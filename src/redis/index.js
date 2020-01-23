@@ -10,21 +10,27 @@ const retryStrategy = times => {
 	return Math.min( times * 50, 2000 );
 };
 
+const getConnectionInfo = () => {
+	const hostAndPort = process.env.REDIS_MASTER || '';
+	const password = process.env.REDIS_PASSWORD || null;
+
+	let host = null;
+	let port = null;
+	// Must be in the format `host:port`
+	if ( hostAndPort && hostAndPort.match( /^[\w\-\_\.]+:\d+$/ ) ) {
+		[ host, port ] = hostAndPort.split( ':' );
+	}
+
+	return { host, port, password };
+};
+
 module.exports = ( { logger = console } = {} ) => {
 	if ( redisClient ) {
 		// Client already defined and initialized
 		return redisClient;
 	}
 
-	const redisMasterIP = process.env.REDIS_MASTER;
-
-	if ( ! redisMasterIP ) {
-		logger.error( `Missing REDIS_MASTER environment variable. Please provide a 
-			REDIS_MASTER environment variable in the form of a host:port string.` );
-		return;
-	}
-
-	const [ host, port ] = redisMasterIP.split( ':' );
+	const { host, port, password } = getConnectionInfo();
 
 	if ( ! host || ! port ) {
 		logger.error( `Couldn't get the host and port from the REDIS_MASTER 
@@ -38,7 +44,7 @@ module.exports = ( { logger = console } = {} ) => {
 	redisClient = new IORedis( {
 		host,
 		port,
-		password: process.env.REDIS_PASSWORD,
+		password,
 		retryStrategy,
 		enableOfflineQueue: true,
 		maxRetriesPerRequest: process.env.QUEUED_CONNECTION_ATTEMPTS || 3,
@@ -72,3 +78,5 @@ module.exports = ( { logger = console } = {} ) => {
 
 	return redisClient;
 };
+
+module.exports.getConnectionInfo = getConnectionInfo;
