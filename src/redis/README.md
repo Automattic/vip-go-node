@@ -30,3 +30,12 @@ Please note **this is only required if you want to run redis locally**. On VIP G
 If the connection to the Redis server is lost, offline queuing for commands will be disabled.
 
 After three reconnection attempts, all pending commands will be flushed so that there are no stale commands. You can change this number by using the `QUEUED_CONNECTION_ATTEMPTS` environment variable.
+
+## Bring Your Own Client
+
+If you would prefer to use your own client, we expose the connection details via a helper function:
+
+```
+const { redis } = require( '@automattic/vip-go' );
+const { host, port, password } = redis.getConnectionInfo();
+```
