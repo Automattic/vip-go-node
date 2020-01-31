@@ -36,3 +36,11 @@ For development, we have some hooks running before each commit/push. To use them
 ```
 git config core.hooksPath hooks
 ```
+
+### Running tests
+
+To run tests locally, make sure the Docker container is up and running:
+
+```
+docker-compose up
+```
