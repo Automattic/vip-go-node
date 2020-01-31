@@ -4,12 +4,19 @@ Our Redis helper is based on the [ioredis](https://github.com/luin/ioredis) proj
 
 ## Initialization
 
+To start, install the `ioredis` package:
+
+```
+npm install --save ioredis@4.14.1
+```
+
 Instantiate a new Redis client:
 
 ``` js
 const { redis } = require( '@automattic/vip-go' );
 const client = redis();
 ```
+
 By default, this library logs to the `console`. If you prefer, you can set your own logger:
 
 ```js
@@ -18,12 +25,14 @@ const redis = redis( { logger: yourLogger } );
 
 ## Configuration
 
-Configuring a Redis client compatible with the VIP Go platform requires a `REDIS_MASTER` environment variable. This is the host and port of your Redis server, which might look something like this:
-`REDIS_MASTER = 123.456.789.123:3000`
+On VIP Go servers, we automatically set two env vars with connection details: `REDIS_MASTER` (host and port separated by a colon) and `REDIS_PASSWORD`.
 
-If you require a password, please set the `REDIS_PASSWORD` environment variable as well.
+For consistency in local environments, we recommend creating and using these variables as well.
 
-Please note **this is only required if you want to run redis locally**. On VIP Go, these variables are **automatically set**.
+```
+REDIS_MASTER=123.456.789.123:3000
+REDIS_PASSWORD=password
+```
 
 ## Reconnecting to Redis
 

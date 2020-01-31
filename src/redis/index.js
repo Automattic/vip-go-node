@@ -1,9 +1,17 @@
-/**
- * External dependencies
- */
-const IORedis = require( 'ioredis' );
-
 let redisClient = null;
+
+const getIORedis = () => {
+	let IORedis;
+	try {
+		IORedis = require( 'ioredis' );
+	} catch ( err ) {
+		throw new Error( `The 'ioredis' package could not be imported.
+			Please make sure the package is installed and available.
+			Details: ${ err.message }` );
+	}
+
+	return IORedis;
+};
 
 const retryStrategy = times => {
 	// Wait 2 seconds maximum before attempting reconnection
@@ -40,6 +48,8 @@ module.exports = ( { logger = console } = {} ) => {
 	}
 
 	logger.info( 'Initializing a new redis client...' );
+
+	const IORedis = getIORedis();
 
 	redisClient = new IORedis( {
 		host,
