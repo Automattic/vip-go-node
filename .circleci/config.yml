@@ -11,6 +11,7 @@ jobs:
   node-base: &build-and-test
     docker:
       - image: circleci/node:latest
+      - image: redis
 
     working_directory: ~/repo
 
@@ -32,6 +33,10 @@ jobs:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
 
+      - run:
+          name: "Wait for redis to become available"
+          command: dockerize -wait tcp://localhost:6379 -timeout 1m
+
       # Lint + Test
       - run: npm run test
 
@@ -39,13 +44,16 @@ jobs:
     <<: *build-and-test
     docker:
       - image: circleci/node:6
+      - image: redis
 
   node-8:
     <<: *build-and-test
     docker:
       - image: circleci/node:8
+      - image: redis
 
   node-10:
     <<: *build-and-test
     docker:
       - image: circleci/node:10
+      - image: redis
