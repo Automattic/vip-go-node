@@ -21,7 +21,7 @@
   "devDependencies": {
     "@babel/cli": "7.5.5",
     "@babel/preset-env": "7.5.5",
-    "jest": "24.9.0",
+    "jest": "25.1.0",
     "publish-please": "5.5.1"
   },
   "dependencies": {
