@@ -39,7 +39,7 @@
     "eslint-plugin-json": "2.0.1",
     "eslint-plugin-jsx-a11y": "6.2.3",
     "eslint-plugin-no-async-foreach": "0.1.1",
-    "eslint-plugin-react": "7.14.3",
+    "eslint-plugin-react": "7.18.3",
     "eslint-plugin-wpcalypso": "4.1.0",
     "express": "4.17.1",
     "ioredis": "4.14.1",
