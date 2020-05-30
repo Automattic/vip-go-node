@@ -19,8 +19,8 @@
   },
   "homepage": "https://github.com/Automattic/vip-go-node/blob/master/preflight-checks/README.md",
   "devDependencies": {
-    "@babel/cli": "7.8.4",
-    "@babel/preset-env": "7.8.4",
+    "@babel/cli": "7.10.1",
+    "@babel/preset-env": "7.10.2",
     "jest": "25.1.0",
     "publish-please": "5.5.1"
   },
