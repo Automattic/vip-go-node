@@ -26,7 +26,9 @@ const getConnectionInfo = () => {
 	let port = null;
 	// Must be in the format `host:port`
 	if ( hostAndPort && hostAndPort.match( /^[\w\-\_\.]+:\d+$/ ) ) {
-		[ host, port ] = hostAndPort.split( ':' );
+		const splitted = hostAndPort.split( ':' );
+		host = splitted[ 0 ];
+		port = splitted[ 1 ];
 	}
 
 	return { host, port, password };
