@@ -49,6 +49,6 @@
     "waait": "1.0.5"
   },
   "dependencies": {
-    "winston": "^3.0.0"
+    "winston": "3.3.3"
   }
 }
