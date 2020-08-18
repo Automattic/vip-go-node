@@ -34,9 +34,9 @@ module.exports = {
 
 		let subprocess;
 
-		console.log( chalk.blue( '  Info:' ), `Installing dependencies with ${ chalk.yellow( 'npm install' ) }...` );
+		console.log( chalk.blue( '  Info:' ), `Installing dependencies with ${ chalk.yellow( 'npm install --production' ) }...` );
 
-		return executeShell( 'npm install' )
+		return executeShell( 'npm install --production' )
 			.then( () => {
 				let buildingCommand = 'npm run build';
 
