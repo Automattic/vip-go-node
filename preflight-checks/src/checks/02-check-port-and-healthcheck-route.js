@@ -34,30 +34,22 @@ module.exports = {
 
 		let subprocess;
 
-		console.log( chalk.blue( '  Info:' ), `Installing dependencies with ${ chalk.yellow( 'npm install' ) }...` );
+		console.log( chalk.blue( '  Info:' ), `Installing production dependencies with ${ chalk.yellow( 'npm install --production' ) }...` );
 
-		return executeShell( 'npm install' )
+		return executeShell( 'npm install --production' )
 			.then( () => {
 				let buildingCommand = 'npm run build';
 
 				console.log( chalk.blue( '  Info:' ), `Building the project using ${ chalk.yellow( buildingCommand ) }...` );
 
-				return executeShell( buildingCommand );
-			} )
-			.then( () => {
-				console.log( chalk.blue( '  Info:' ), `Removing ${ chalk.yellow( 'node_modules' ) } folder...` );
-
-				return rmfr( node_modules );
-
-			} )
-			.then( () => {
-				console.log( chalk.blue( '  Info:' ), `Installing production dependencies with ${ chalk.yellow( 'npm install --production' ) }...` );
-				return executeShell( 'npm install --production' );
+				return executeShell( buildingCommand, {
+					VIP_GO_APP_ID: '20030527',
+				} );
 			} )
 			.then( async () => {
-				console.log( chalk.blue( '  Info:' ), `Launching your app on PORT:${ PORT }...` );
+				console.log( chalk.blue( '  Info:' ), `Running ${ chalk.yellow( 'npm start' ) } to launch your app on PORT: ${ PORT }...` );
 				subprocess = executeShell( 'npm start', {
-					PORT: PORT
+					PORT: PORT,
 				} );
 				await waait( 3000 ); // Wait a little before resolving, giving time for the server to boot up
 
