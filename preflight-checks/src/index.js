@@ -36,13 +36,13 @@ const optionsSections = [
 				alias: 'w',
 				typeLabel: '{underline Number}',
 				defaultOption: '3000',
-				description: 'Configure wait time for server boot up'
+				description: 'Configure time to wait (in milliseconds) for command to execute'
 			},
 			{
 				name: 'verbose',
 				typeLabel: '{underline Boolean}',
 				defaultOption: 'false',
-				description: 'Print application server build and boot-up messages'
+				description: 'Increase logging level to include app build and server boot up messages'
 			},
 			{
 				name: 'help',
