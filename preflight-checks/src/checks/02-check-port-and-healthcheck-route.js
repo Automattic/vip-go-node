@@ -1,6 +1,4 @@
 import chalk from 'chalk';
-import packageJson from '../package';
-import commandLineArgs from 'command-line-args';
 const execa = require( 'execa' );
 const waait = require( 'waait' );
 const fetch = require( 'node-fetch' );
@@ -21,17 +19,10 @@ const executeShell = ( command, envVars = {} ) => {
 	} );
 }
 
-const optionDefinitions = [
-	{ name: 'wait', alias: 'w', type: Number, defaultOption: 3000 },
-	{ name: 'verbose', type: Boolean, defaultOption: false },
-];
-
-const options = commandLineArgs( optionDefinitions );
-
 module.exports = {
 	name: `Building the app and running ${ chalkNpmStart }...`,
 	excerpt: `Checking if your app accepts a ${ chalkPORT } and responds to ${ chalkHealthCheckRoute }`,
-	run: async () => {
+	run: async ( packageJson, { wait, verbose } ) => {
 		const PORT = Math.floor( Math.random() * ( 4000 - 3000 ) + 3000 ); // Get a PORT between 3000 and 4000
 
 		let subprocess;
@@ -48,7 +39,7 @@ module.exports = {
 					VIP_GO_APP_ID: '20030527',
 				} );
 
-				if ( options.verbose ) {
+				if ( verbose ) {
 					subprocess.stdout.pipe( process.stdout );
 				}
 
@@ -60,11 +51,11 @@ module.exports = {
 					PORT: PORT,
 				} );
 
-				if ( options.verbose ) {
+				if ( verbose ) {
 					subprocess.stdout.pipe( process.stdout );
 				}
 
-				await waait( options.wait ); // Wait a little before resolving, giving time for the server to boot up
+				await waait( wait ); // Wait a little before resolving, giving time for the server to boot up
 
 				const cacheUrl = `http://localhost:${ PORT }${ CACHE_HEALTHCHECK_ROUTE }`;
 				console.log( chalk.blue( '  Info:' ), `Sending a GET request to ${ cacheUrl }...` );

@@ -2,8 +2,8 @@
 import chalk from 'chalk';
 import checks from './checks';
 import packageJson from './package';
-
-const appName = packageJson.name;
+import commandLineArgs from 'command-line-args';
+import commandLineUsage from 'command-line-usage';
 
 console.log();
 console.log( '  Welcome to' );
@@ -14,7 +14,50 @@ console.log( '  | |/ // // ____/  / /_/ / /_/ /' );
 console.log( '  |___/___/_/       \\____/\\____/' );
 console.log( '  Preflight Checks for Node Apps' );
 console.log();
-console.log( `  Running checks for the ${ appName } app...` );
+
+const optionDefinitions = [
+	{ name: 'wait', alias: 'w', type: Number, defaultOption: 3000 },
+	{ name: 'verbose', type: Boolean, defaultOption: false },
+	{ name: 'help', alias: 'h', type: Boolean },
+];
+
+const options = commandLineArgs( optionDefinitions );
+
+const optionsSections = [
+	{
+		header: 'VIP Go Node Preflight Checks',
+		content: 'Run preflight checks on Node applications on VIP Go Cloud'
+	},
+	{
+		header: 'Options',
+		optionList: [
+			{
+				name: 'wait',
+				alias: 'w',
+				typeLabel: '{underline Number}',
+				defaultOption: '3000',
+				description: 'Configure wait time for server boot up'
+			},
+			{
+				name: 'verbose',
+				typeLabel: '{underline Boolean}',
+				defaultOption: 'false',
+				description: 'Print application server build and boot-up messages'
+			},
+			{
+				name: 'help',
+				description: 'Print this usage guide'
+			}
+		]
+	}
+];
+
+if ( options.help ) {
+	console.log( commandLineUsage( optionsSections ) );
+	process.exit();
+}
+
+console.log( `  Running checks for the ${ packageJson.name } app...` );
 console.log();
 console.log();
 
@@ -27,7 +70,7 @@ const result = checks.reduce( async ( priorCheck, check, index ) => {
 	console.log( `  [ Step ${ index + 1 }/${ checks.length } ] ${ check.name }` );
 	console.log( `  [ Step ${ index + 1 }/${ checks.length } ] Step details: ${ check.excerpt }` );
 
-	const currentCheck = await check.run().then( result => {
+	const currentCheck = await check.run( packageJson, options ).then( result => {
 		// Success
 		if ( result === 'success' ) {
 			const message = `[ Step ${ index + 1 }/${ checks.length } ] ${ chalk.green( 'Step successful' ) } 👍`;

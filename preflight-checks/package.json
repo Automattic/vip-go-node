@@ -21,7 +21,6 @@
   "devDependencies": {
     "@babel/cli": "^7.12.1",
     "@babel/preset-env": "7.8.4",
-    "command-line-args": "^5.1.1",
     "jest": "25.1.0",
     "publish-please": "^5.5.2"
   },
@@ -30,6 +29,8 @@
     "execa": "^4.0.0",
     "node-fetch": "^2.6.1",
     "rmfr": "^2.0.0",
-    "waait": "^1.0.4"
+    "waait": "^1.0.4",
+    "command-line-args": "^5.1.1",
+    "command-line-usage": "^6.1.1"
   }
 }
