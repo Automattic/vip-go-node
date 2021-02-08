@@ -23,6 +23,7 @@ const executeShell = ( command, envVars = {} ) => {
 
 const optionDefinitions = [
 	{ name: 'wait', alias: 'w', type: Number, defaultOption: 3000 },
+	{ name: 'verbose', type: Boolean, defaultOption: false },
 ];
 
 const options = commandLineArgs( optionDefinitions );
@@ -43,15 +44,25 @@ module.exports = {
 
 				console.log( chalk.blue( '  Info:' ), `Building the project using ${ chalk.yellow( buildingCommand ) }...` );
 
-				return executeShell( buildingCommand, {
+				subprocess = executeShell( buildingCommand, {
 					VIP_GO_APP_ID: '20030527',
 				} );
+
+				if ( options.verbose ) {
+					subprocess.stdout.pipe( process.stdout );
+				}
+
+				return subprocess;
 			} )
 			.then( async () => {
 				console.log( chalk.blue( '  Info:' ), `Running ${ chalk.yellow( 'npm start' ) } to launch your app on PORT: ${ PORT }...` );
 				subprocess = executeShell( 'npm start', {
 					PORT: PORT,
 				} );
+
+				if ( options.verbose ) {
+					subprocess.stdout.pipe( process.stdout );
+				}
 
 				await waait( options.wait ); // Wait a little before resolving, giving time for the server to boot up
 
