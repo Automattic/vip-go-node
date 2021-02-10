@@ -4,6 +4,10 @@ const { combine, timestamp, printf, splat } = format;
 
 const appProcess = process.env.NODEJS_APP_PROCESS || 'master';
 
+// Allow globally silencing logs by setting the env var to 1.
+// Defaults to not silent.
+const DEFAULT_SILENCE_LOGS = process.env.VIP_GO_SILENCE_LOGS && '1' === process.env.VIP_GO_SILENCE_LOGS;
+
 const isLocal = () => ! process.env.VIP_GO_APP_ID;
 
 const createLogEntry = ( namespace, cluster ) => {
@@ -60,7 +64,7 @@ const prodLoggingFormat = printf( output => {
 	return `${ time } ${ app }:${ type } ${ JSON.stringify( output ) }`;
 } );
 
-module.exports = ( namespace, { transport, cluster, silent = false } = {} ) => {
+module.exports = ( namespace, { transport, cluster, silent = DEFAULT_SILENCE_LOGS } = {} ) => {
 	if ( ! namespace ) {
 		throw Error( 'Please include a namespace to initialize your logger.' );
 	}
