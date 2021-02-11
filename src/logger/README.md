@@ -101,6 +101,19 @@ const log = logger( 'myapplication:namespace', {
 ```
 
 ### Silent logging
+
+#### Globally
+
+If you want to silence all log output (e.g. when running tests or during development when debug logs can be noisy), you can set the following environment variable:
+
+```
+VIP_GO_SILENCE_LOGS=1
+```
+
+Note: this will not impact libs that explicitly set the `silent` param to `false` when instantiating the logger.
+
+#### Per-Logger
+
 If you want to silence the events from a logger, please use a `silent` option as follow:
 
 ``` js
