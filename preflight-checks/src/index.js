@@ -16,8 +16,8 @@ console.log( '  Preflight Checks for Node Apps' );
 console.log();
 
 const optionDefinitions = [
-	{ name: 'wait', alias: 'w', type: Number, defaultOption: 3000 },
-	{ name: 'verbose', type: Boolean, defaultOption: false },
+	{ name: 'wait', alias: 'w', type: Number, defaultValue: 3000 },
+	{ name: 'verbose', type: Boolean, defaultValue: false },
 	{ name: 'help', alias: 'h', type: Boolean },
 ];
 
@@ -26,7 +26,7 @@ const options = commandLineArgs( optionDefinitions );
 const optionsSections = [
 	{
 		header: 'VIP Go Node Preflight Checks',
-		content: 'Run preflight checks on Node applications on VIP Go Cloud'
+		content: 'Run preflight checks on Node.js applications on VIP Go'
 	},
 	{
 		header: 'Options',
@@ -70,7 +70,7 @@ const result = checks.reduce( async ( priorCheck, check, index ) => {
 	console.log( `  [ Step ${ index + 1 }/${ checks.length } ] ${ check.name }` );
 	console.log( `  [ Step ${ index + 1 }/${ checks.length } ] Step details: ${ check.excerpt }` );
 
-	const currentCheck = await check.run( packageJson, options ).then( result => {
+	return check.run( packageJson, options ).then( result => {
 		// Success
 		if ( result === 'success' ) {
 			const message = `[ Step ${ index + 1 }/${ checks.length } ] ${ chalk.green( 'Step successful' ) } 👍`;
@@ -94,7 +94,6 @@ const result = checks.reduce( async ( priorCheck, check, index ) => {
 		console.log();
 		console.log();
 	} );
-	return currentCheck;
 }, Promise.resolve() );
 
 result.then( () => {
