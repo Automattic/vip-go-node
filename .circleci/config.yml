@@ -43,17 +43,17 @@ jobs:
   node-6:
     <<: *build-and-test
     docker:
-      - image: circleci/node:6
+      - image: circleci/node:16
       - image: redis
 
   node-8:
     <<: *build-and-test
     docker:
-      - image: circleci/node:8
+      - image: circleci/node:16
       - image: redis
 
   node-10:
     <<: *build-and-test
     docker:
-      - image: circleci/node:10
+      - image: circleci/node:16
       - image: redis
