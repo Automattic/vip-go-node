@@ -29,7 +29,7 @@
     "chalk": "^3.0.0",
     "command-line-args": "^5.1.1",
     "command-line-usage": "^6.1.1",
-    "execa": "^4.0.0",
+    "execa": "^5.0.0",
     "node-fetch": "^2.6.1",
     "waait": "^1.0.4"
   }
