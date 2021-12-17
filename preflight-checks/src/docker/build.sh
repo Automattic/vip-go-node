@@ -2,18 +2,9 @@
 
 set -ex;
 
-echo $(pwd);
-
-if [ -z "$REPO_NAME" ] || [ -z "$REPO_ORG" ] || [ -z "$NODE_VERSION" ]; then
-  exit 42
-fi
-
-# Lowercase REPO references. Requires Bash 4 (macOS ships with 3.2).
-IMAGE="${REPO_ORG,,}/${REPO_NAME,,}"
-
 # Tag images with the current commit SHA.
 COMMIT="$(git rev-parse HEAD)"
-IMAGE_TAG="$IMAGE:$COMMIT"
+IMAGE_TAG="vip-preflight-checks:$COMMIT"
 
 # Create .dockerignore to prevent .git and scripts from being baked into image.
 # Note that this will overwrite any .dockerignore already in the repo. However,

@@ -16,6 +16,7 @@ console.log( '  Preflight Checks for Node Apps' );
 console.log();
 
 const optionDefinitions = [
+	{ name: 'node-version', alias: 'n', type: Number, defaultValue: 0 },
 	{ name: 'wait', alias: 'w', type: Number, defaultValue: 3000 },
 	{ name: 'verbose', type: Boolean, defaultValue: false },
 	{ name: 'help', alias: 'h', type: Boolean },
@@ -31,6 +32,13 @@ const optionsSections = [
 	{
 		header: 'Options',
 		optionList: [
+			{
+				name: 'node-version',
+				alias: 'n',
+				typeLabel: '{underline Version}',
+				defaultOption: 'false',
+				description: 'Select a specific target Node.JS major version (16, 14, 12)'
+			},
 			{
 				name: 'wait',
 				alias: 'w',

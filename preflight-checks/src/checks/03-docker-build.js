@@ -1,16 +1,15 @@
 import chalk from 'chalk';
 import packageJson from '../package';
 import execa from "execa";
-import findUp from 'find-up';
-
-import fs from 'fs';
+import inquirer from 'inquirer';
 import process from 'process';
 
-const chalkVIPGo = chalk.yellow( '@automattic/vip-go' );
-const chalkPackageJson = chalk.yellow( 'package.json' );
+const ALLOWED_NODEJS_VERSIONS = [ '16', '14', '12' ];
 
 const envVariables = {
-	'VIP_GO_APP_ID': '123',
+	'VIP_GO_APP_ID': 'unknown',
+	'VIP_GO_APP_NAME': 'unknown',
+	'VIP_GO_APP_ENVIRONMENT': 'local',
 }
 
 function executeShell( command, envVars = {} ) {
@@ -19,30 +18,10 @@ function executeShell( command, envVars = {} ) {
 	} );
 }
 
-async function findNodeVersion() {
-	// Try to fetch a .nvmrc file
-	const nvmrcPath = await findUp('.nvmrc');
-
-	if ( nvmrcPath ) {
-		let nvmrcFile = fs.openSync( nvmrcPath, 'r' );
-		if ( nvmrcFile ) {
-			let nodeVersion = fs.readFileSync( nvmrcFile );
-
-			// Validate the version format
-			const versionMatch = nodeVersion.toString().match( /([0-9]+\.[0-9]+(?:\.[0-9]+)?)/ );
-			if ( versionMatch ) {
-				return versionMatch[ 1 ];
-			}
-		}
-	}
-
-	return false;
-}
-
 module.exports = {
 	name: 'Building Docker image...',
 	excerpt: `Trying to build a Docker image for the project, using a production-like build script`,
-	run: async ( applicationPackage = packageJson ) => {
+	run: async ( applicationPackage = packageJson, options ) => {
 		// Check if Docker is installed
 		try {
 			const dockerShell = await executeShell('docker -v' );
@@ -59,35 +38,40 @@ module.exports = {
 			return 'warning';
 		}
 
-		// Check for Node version
-		let nodeVersion = await findNodeVersion();
-		if ( ! nodeVersion ) {
-			console.log( chalk.yellow( '  Warning:' ), `Couldn't infer a valid Node.JS from .nvmrc file. Falling back to local node version.` );
-			nodeVersion = process.versions.node;
+
+		// Get the NodeJS version
+		let nodeVersion = process.versions.node;
+
+		// Check for the CLI parameter
+		if ( options['node-version'] && ALLOWED_NODEJS_VERSIONS.includes( options['node-version'].toString() ) ) {
+			nodeVersion = options['node-version'];
+		} else {
+			if ( 0 !== options['node-version'] ) {
+				console.log( chalk.yellow( '  Warning:' ), `The Node.JS version picked with`, chalk.bold( '--node-version' ) , `is not valid. Please pick a supported major version.` );
+			}
+
+			try {
+				// Ask for Node version
+				const nodeVersionPrompt = await inquirer.prompt( {
+					type: 'list',
+					name: 'nodeVersion',
+					message: 'Please select a major Node.JS version:',
+					choices: ALLOWED_NODEJS_VERSIONS,
+				} );
+
+				nodeVersion = nodeVersionPrompt['nodeVersion'];
+			} catch( error ) {
+				console.log( chalk.yellow( '  Warning:' ), `There was an error selecting the version you specified. Defaulting to ${ nodeVersion }.` );
+				console.log( `  You can also select a specific Node version using the`, chalk.bold('--node-version <VERSION>') ,`argument.`)
+			}
 		}
+
 		console.log( chalk.blue( '  Info:' ), `Using Node.js ${ chalk.yellow(nodeVersion) } to build the image` );
-
-		// Get REPO_NAME and REPO_ORG
-		const gitConfigPath = await findUp( ".git/config" );
-		const gitConfig = fs.openSync( gitConfigPath, 'r' );
-
-		if ( ! gitConfig ) {
-			console.log( chalk.red( '  Error:' ), `Couldn't find a valid git repository in the current path.` );
-			return "failed";
-		}
-
-		const gitOrgRepo = fs.readFileSync( gitConfig ).toString().match(/(wpcomvip\/[\w\d\-_]+)(?:\.git)?/)[ 1 ];
-		const gitOrg = gitOrgRepo.split("/")[0];
-		const gitRepo = gitOrgRepo.split("/")[1];
-
-		console.log( chalk.blue( '  Info:' ), 'Using GitHub repository', chalk.yellow( `${ gitOrg }/${ gitRepo }` ));
 
 		// Try to build the docker image
 		try {
 			console.log( chalk.blue( '  Info:' ), 'Building Docker image...' );
 			await executeShell( `bash ${ __dirname }/../docker/build.sh`, {
-				'REPO_NAME': gitRepo,
-				'REPO_ORG': gitOrg,
 				'NODE_VERSION': nodeVersion,
 			} );
 		} catch ( error ) {
