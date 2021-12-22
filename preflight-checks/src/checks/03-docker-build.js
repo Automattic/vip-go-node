@@ -1,6 +1,5 @@
 import chalk from 'chalk';
 import packageJson from '../package';
-import inquirer from 'inquirer';
 import process from 'process';
 
 import {executeShell} from "../utils/shell";
@@ -44,14 +43,14 @@ module.exports = {
 
 			try {
 				// Ask for Node version
-				const nodeVersionPrompt = await inquirer.prompt( {
-					type: 'list',
+				const SelectPrompt = require('enquirer')['Select'];
+				const versionsPrompt = new SelectPrompt( {
 					name: 'nodeVersion',
 					message: 'Please select a major Node.JS version:',
 					choices: ALLOWED_NODEJS_VERSIONS,
 				} );
 
-				nodeVersion = nodeVersionPrompt['nodeVersion'];
+				nodeVersion = await versionsPrompt.run();
 			} catch( error ) {
 				console.log( chalk.yellow( '  Warning:' ), `There was an error selecting the version you specified. Defaulting to ${ nodeVersion }.` );
 				console.log( `  You can also select a specific Node version using the`, chalk.bold('--node-version <VERSION>') ,`argument.`)
