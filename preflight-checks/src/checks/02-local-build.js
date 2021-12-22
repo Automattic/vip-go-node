@@ -22,6 +22,9 @@ module.exports = {
 	run: ( packageJson, { wait, verbose, port } ) => {
 		const PORT = port;
 
+		console.log( chalk.yellow( '\n  Warning:' ), `Looks like your building the application without Docker. To ensure the best`,
+			`compatibility with VIP Go, we recommend running the checks on an environment with Docker installed.\n` );
+
 		let subprocess;
 
 		console.log( chalk.blue( '  Info:' ), `Installing dependencies using ${ chalkNpmInstall }...` );

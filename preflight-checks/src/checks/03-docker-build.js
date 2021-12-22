@@ -26,7 +26,7 @@ module.exports = {
 			console.log( chalk.blue( '  Info:' ), `Found Docker Engine ${ chalk.yellow(dockerVersion) }` );
 		} catch ( error ) {
 			console.log( chalk.yellow( '  Warning:' ), `Looks like your environment is missing Docker. To ensure the best`,
-				`compatibility with VIP Go, we recommend running the tests on an environment with Docker installed.` );
+				`compatibility with VIP Go, we recommend running the checks on an environment with Docker installed.` );
 			return 'warning';
 		}
 
