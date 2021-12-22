@@ -1,27 +1,19 @@
 import chalk from 'chalk';
 import packageJson from '../package';
-import execa from "execa";
 import inquirer from 'inquirer';
 import process from 'process';
 
+import {executeShell} from "../utils/shell";
+import waait from "waait";
+
 const ALLOWED_NODEJS_VERSIONS = [ '16', '14', '12' ];
-
-const envVariables = {
-	'VIP_GO_APP_ID': 'unknown',
-	'VIP_GO_APP_NAME': 'unknown',
-	'VIP_GO_APP_ENVIRONMENT': 'local',
-}
-
-function executeShell( command, envVars = {} ) {
-	return execa.command( command, {
-		env: Object.assign( {}, envVariables, envVars )
-	} );
-}
 
 module.exports = {
 	name: 'Building Docker image...',
 	excerpt: `Trying to build a Docker image for the project, using a production-like build script`,
 	run: async ( applicationPackage = packageJson, options ) => {
+		const PORT = options.port;
+
 		// Check if Docker is installed
 		try {
 			const dockerShell = await executeShell('docker -v' );
@@ -66,18 +58,45 @@ module.exports = {
 			}
 		}
 
-		console.log( chalk.blue( '  Info:' ), `Using Node.js ${ chalk.yellow(nodeVersion) } to build the image` );
-
 		// Try to build the docker image
+		console.log( chalk.blue( '  Info:' ), `Using Node.js ${ chalk.yellow(nodeVersion) } to build the image` );
 		try {
 			console.log( chalk.blue( '  Info:' ), 'Building Docker image...' );
-			await executeShell( `bash ${ __dirname }/../docker/build.sh`, {
+			const subprocess = executeShell( `bash ${ __dirname }/../docker/build.sh`, {
 				'NODE_VERSION': nodeVersion,
 			} );
+
+			if ( options.verbose ) {
+				subprocess.stdout.pipe( process.stdout );
+			}
+
+			await subprocess; // Wait for the Promise to finish.
 		} catch ( error ) {
-			console.log( chalk.red( '  Error:' ), `There was an error building the Docker image. Build error output below: ` );
+			console.log( chalk.red( '  Error:' ), `There was an error building the Docker image.` );
 			console.log( chalk.red( error.shortMessage ) );
-			console.log( error.stderr );
+			return "failed";
+		}
+
+		// Execute the docker image
+		const commitSHA = ( await executeShell( 'git rev-parse HEAD' ) ).stdout;
+		const imageTag = `vip-preflight-checks:${ commitSHA }`;
+		console.log( chalk.blue( '  Info:' ), `Running Docker image on PORT ${ chalk.yellow( PORT ) } for image ${ chalk.yellow(imageTag) }...` );
+
+		try {
+			const subprocess = executeShell( `docker run -t -e PORT -p ${ PORT }:${ PORT } ${ imageTag }`, {
+				'NODE_VERSION': nodeVersion,
+				'PORT': PORT,
+			})
+
+			if ( options.verbose ) {
+				subprocess.stdout.pipe( process.stdout );
+			}
+
+			await waait( options.wait ); // Wait a little, giving time for the server to boot up
+
+		} catch ( error ) {
+			console.log( chalk.red( '  Error:' ), `There was an error starting the Docker image.` );
+			console.log( chalk.red( error.shortMessage ) );
 			return "failed";
 		}
 

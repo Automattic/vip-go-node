@@ -1,6 +1,6 @@
 ARG NODE_IMAGE_TAG
 
-FROM node:$NODE_IMAGE_TAG AS build
+FROM node:$NODE_IMAGE_TAG
 
 WORKDIR /app
 
@@ -24,7 +24,7 @@ RUN echo 'printf "%b" "$NODE_BUILD_DOCKER_ENV"' > /export-env.sh
 
 RUN true # ====== START: VIP NODE BUILD ======
 
-COPY package*.json npm-shrinkwrap*.json /app/
+COPY package*.json npm-shrinkwrap*.json ./
 
 ARG NPMRC_FILE
 
@@ -40,3 +40,5 @@ RUN eval "$(sh /export-env.sh)" && \
     npm run build --no-color
 
 RUN true # ====== END: VIP NODE BUILD ======
+
+CMD [ "npm", "start" ]

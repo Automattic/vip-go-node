@@ -4,6 +4,7 @@ import checks from './checks';
 import packageJson from './package';
 import commandLineArgs from 'command-line-args';
 import commandLineUsage from 'command-line-usage';
+import {cleanUp} from "./utils/shell";
 
 console.log();
 console.log( '  Welcome to' );
@@ -15,8 +16,11 @@ console.log( '  |___/___/_/       \\____/\\____/' );
 console.log( '  Preflight Checks for Node Apps' );
 console.log();
 
+const randomPort = Math.floor( Math.random() * 1000 ) + 3001; // Get a PORT from 3001 and 3999
+
 const optionDefinitions = [
 	{ name: 'node-version', alias: 'n', type: Number, defaultValue: 0 },
+	{ name: 'port', alias: 'p', type: Number, defaultValue: randomPort },
 	{ name: 'wait', alias: 'w', type: Number, defaultValue: 3000 },
 	{ name: 'verbose', type: Boolean, defaultValue: false },
 	{ name: 'help', alias: 'h', type: Boolean },
@@ -45,6 +49,13 @@ const optionsSections = [
 				typeLabel: '{underline Number}',
 				defaultOption: '3000',
 				description: 'Configure time to wait (in milliseconds) for command to execute'
+			},
+			{
+				name: 'port',
+				alias: 'p',
+				typeLabel: '{underline Number}',
+				defaultOption: 'random port between 3001 and 3999',
+				description: 'Port to be used for the application server. Defaults to a random port between 3001 and 3999'
 			},
 			{
 				name: 'verbose',
@@ -128,4 +139,7 @@ result.then( () => {
 		console.log( chalk.red( 'Oups! Looks like you need to fix some steps to make your app ready for VIP Go.' ) );
 		process.exit( 1 );
 	}
-} )
+} ).then( () => {
+	// Clean-up any running processes
+	cleanUp();
+} );

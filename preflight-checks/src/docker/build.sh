@@ -60,6 +60,6 @@ docker build \
   -t "$IMAGE_TAG" .
 
 # Clean up
-docker rmi -f "$IMAGE_TAG" || :
+# docker rmi -f "$IMAGE_TAG" || :
 rm -f .dockerignore
 
