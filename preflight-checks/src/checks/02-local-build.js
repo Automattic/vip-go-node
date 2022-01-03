@@ -1,7 +1,5 @@
 import chalk from 'chalk';
-const execa = require( 'execa' );
 const waait = require( 'waait' );
-const fetch = require( 'node-fetch' );
 
 const CACHE_HEALTHCHECK_ROUTE = '/cache-healthcheck?';
 
@@ -9,30 +7,23 @@ const CACHE_HEALTHCHECK_ROUTE = '/cache-healthcheck?';
 const npmPrune = 'npm prune --production'; // Make sure no extra dependencies are installed
 const npmInstall = 'npm install --production';
 const npmBuild = 'npm run build';
-const npmStart = 'npm start';
 
 const chalkNpmInstall = chalk.yellow( npmInstall );
 const chalkNpmBuild = chalk.yellow( npmBuild );
-const chalkNpmStart = chalk.yellow( npmStart );
+const chalkNpmStart = chalk.yellow( "npm start" );
 const chalkPORT = chalk.yellow( 'PORT' );
 const chalkHealthCheckRoute = chalk.yellow( CACHE_HEALTHCHECK_ROUTE );
-const chalkVIPGo = chalk.yellow( '@automattic/vip-go' );
 
-const envVariables = {
-	'VIP_GO_APP_ID': '123',
-}
-
-const executeShell = ( command, envVars = {} ) => {
-	return execa.command( command, {
-		env: Object.assign( {}, envVariables, envVars )
-	} );
-}
+const { executeShell } = require('../utils/shell' );
 
 module.exports = {
 	name: 'Installing dependencies, building, and starting your app',
-	excerpt: `Checking if your app accepts a ${ chalkPORT } and responds to ${ chalkHealthCheckRoute }`,
-	run: ( packageJson, { wait, verbose } ) => {
-		const PORT = Math.floor( Math.random() * 1000 ) + 3001; // Get a PORT from 3001 and 3999
+	excerpt: `Building and starting the application locally on ${ chalkPORT } and responds to ${ chalkHealthCheckRoute }`,
+	run: ( packageJson, { wait, verbose, port } ) => {
+		const PORT = port;
+
+		console.log( chalk.yellow( '\n  Warning:' ), `Looks like your building the application without Docker. To ensure the best`,
+			`compatibility with VIP Go, we recommend running the checks on an environment with Docker installed.\n` );
 
 		let subprocess;
 
@@ -56,6 +47,12 @@ module.exports = {
 			} )
 			.then( async () => {
 				console.log( chalk.blue( '  Info:' ), `Running your app with ${ chalkNpmStart } on PORT: ${ PORT }...` );
+
+				// Instead of calling `npm start`, fetch the command from the package.json and run it directly.
+				// This allows the child_process to be killed later on, since it was spawned by this script instead
+				// of npm. Using the `npm start` would leave behind a zombie process.
+				const npmStart = packageJson.scripts.start;
+
 				subprocess = executeShell( npmStart, {
 					NODE_ENV: 'production',
 					PORT: PORT,
@@ -65,23 +62,9 @@ module.exports = {
 					subprocess.stdout.pipe( process.stdout );
 				}
 
-				await waait( wait ); // Wait a little before resolving, giving time for the server to boot up
+				await waait( wait ); // Wait a little, giving time for the server to boot up
 
-				const cacheUrl = `http://localhost:${ PORT }${ CACHE_HEALTHCHECK_ROUTE }`;
-				console.log( chalk.blue( '  Info:' ), `Sending a GET request to ${ cacheUrl }...` );
-				return fetch( cacheUrl );
-			} )
-			.then( response => {
-				const is200 = response.status === 200;
-
-				if ( ! is200 ) {
-					throw `Could not get a ${ chalk.yellow( '200 - OK' ) } response from ${ chalkHealthCheckRoute }. ` +
-					`Make sure your application accepts a ${ chalkPORT } environment variable. You can simplify this using our ${ chalkVIPGo } package.`;
-				}
-
-				subprocess.cancel();
-
-				return 'success';
+				return "success";
 			} )
 			.catch( err => {
 				console.log( chalk.red( '  Error:' ), `${ err }` );

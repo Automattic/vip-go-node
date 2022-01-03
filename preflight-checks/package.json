@@ -8,7 +8,7 @@
   },
   "scripts": {
     "test": "jest",
-    "build": "babel src --out-dir dist",
+    "build": "babel src --out-dir dist --copy-files --no-copy-ignored",
     "publish-please": "publish-please",
     "publish-please:dry-run": "publish-please --dry-run",
     "prepublishOnly": "publish-please guard"
@@ -29,6 +29,7 @@
     "chalk": "^3.0.0",
     "command-line-args": "^5.1.1",
     "command-line-usage": "^6.1.1",
+    "enquirer": "^2.3.6",
     "execa": "^4.0.0",
     "node-fetch": "^2.6.1",
     "waait": "^1.0.4"
