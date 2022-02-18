@@ -33,7 +33,7 @@
     "@babel/runtime": "7.8.4",
     "babel-eslint": "10.0.3",
     "eslint": "6.8.0",
-    "eslint-config-wpvip": "github:automattic/eslint-config-wpvip#84eabbf",
+    "eslint-config-wpvip": "github:automattic/eslint-config-wpvip#984b8a8",
     "eslint-plugin-flowtype": "4.6.0",
     "eslint-plugin-import": "2.20.1",
     "eslint-plugin-json": "2.0.1",
