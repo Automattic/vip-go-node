@@ -1,6 +1,8 @@
 const redis = require( '../src/redis/' );
+const IORedis = require( 'ioredis' );
 const Transport = require( 'winston-transport' );
-const wait = require( 'waait' );
+
+jest.mock( 'ioredis' );
 
 class TestTransport extends Transport {
 	constructor( opts ) {
@@ -17,8 +19,6 @@ class TestTransport extends Transport {
 		this.errors.push( info );
 	}
 }
-
-const DEFAULT_REDIS_LOCAL_IP = '127.0.0.1:6379';
 
 describe( 'src/redis', () => {
 	const OLD_ENV_VARS = process.env;
@@ -99,18 +99,18 @@ describe( 'src/redis', () => {
 
 	describe( 'Environment variable REDIS_MASTER is present', () => {
 		it( 'Should connect succesfully and return the redis client back', async () => {
-			process.env.REDIS_MASTER = DEFAULT_REDIS_LOCAL_IP;
-			const transport = new TestTransport();
-			const redisClient = redis( { logger: transport } );
+			process.env.REDIS_MASTER = 'neverneverland:9876';
+			process.env.REDIS_PASSWORD = 'secret123';
+			redis();
 
-			expect( transport.logs[ 0 ] ).toMatch( 'Initializing a new redis client...' );
-
-			// Wait 5 ticks for the connection to redis server, triggering the connection listener and writing the logs
-			await wait( 5 );
-
-			expect( transport.logs[ 1 ] ).toMatch( 'Connected to Redis client...' );
-
-			redisClient.disconnect();
+			expect( IORedis ).toHaveBeenCalledWith( {
+				enableOfflineQueue: true,
+				host: 'neverneverland',
+				maxRetriesPerRequest: 3,
+				password: 'secret123',
+				port: '9876',
+				retryStrategy: expect.any( Function ),
+			} );
 		} );
 	} );
 } );
