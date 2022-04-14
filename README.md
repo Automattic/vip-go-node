@@ -12,10 +12,10 @@ npm install --save @automattic/vip-go
 
 The following is a list of modules included in this package:
 
-+ [server](https://github.com/Automattic/vip-go-node/tree/master/src/server): a server that wraps your request handler or `express` app behind an easy to use interface
-+ [logger](https://github.com/Automattic/vip-go-node/tree/master/src/logger): a ready to use logger for your node applications with Kibana integration out of the box
-+ [newrelic](https://github.com/Automattic/vip-go-node/tree/master/src/newrelic): New Relic integration for applications on VIP Go
-+ [redis](https://github.com/Automattic/vip-go-node/tree/master/src/redis): a helper library to instantiate a Redis client compatible with VIP Go
++ [server](https://github.com/Automattic/vip-go-node/tree/trunk/src/server): a server that wraps your request handler or `express` app behind an easy to use interface
++ [logger](https://github.com/Automattic/vip-go-node/tree/trunk/src/logger): a ready to use logger for your node applications with Kibana integration out of the box
++ [newrelic](https://github.com/Automattic/vip-go-node/tree/trunk/src/newrelic): New Relic integration for applications on VIP Go
++ [redis](https://github.com/Automattic/vip-go-node/tree/trunk/src/redis): a helper library to instantiate a Redis client compatible with VIP Go
 
 ## Usage
 
@@ -23,7 +23,7 @@ The following is a list of modules included in this package:
 const { server, logger, newrelic, redis } = require( '@automattic/vip-go' );
 ```
 
-Please refer the documentation for each module ([`server`](https://github.com/Automattic/vip-go-node/blob/master/src/server/README.md) | [`logger`](https://github.com/Automattic/vip-go-node/blob/master/src/logger/README.md) | [`newrelic`](https://github.com/Automattic/vip-go-node/blob/master/src/newrelic/README.md)) | [redis](https://github.com/Automattic/vip-go-node/tree/master/src/redis)) to learn more about how to use it.
+Please refer the documentation for each module ([`server`](https://github.com/Automattic/vip-go-node/blob/trunk/src/server/README.md) | [`logger`](https://github.com/Automattic/vip-go-node/blob/trunk/src/logger/README.md) | [`newrelic`](https://github.com/Automattic/vip-go-node/blob/trunk/src/newrelic/README.md)) | [redis](https://github.com/Automattic/vip-go-node/tree/trunk/src/redis)) to learn more about how to use it.
 
 New Relic is no longer a peer dependency of this module. Please remember to install [New Relic](https://docs.newrelic.com/docs/agents/manage-apm-agents/installation/install-agent) separately if your app requires it.
 
