@@ -79,8 +79,8 @@ describe( 'src/redis', () => {
 		} );
 	} );
 
-	describe( 'Environment variable REDIS_MASTER is missing or malformed', () => {
-		it( 'Should log an error if REDIS_MASTER environment variable is missing', () => {
+	describe( 'environment variable REDIS_MASTER is missing or malformed', () => {
+		it( 'should log an error if REDIS_MASTER environment variable is missing', () => {
 			process.env.REDIS_MASTER = '';
 			const transport = new TestTransport();
 			redis( { logger: transport } );
@@ -88,7 +88,7 @@ describe( 'src/redis', () => {
 			expect( transport.errors[ 0 ] ).toMatch( 'Couldn\'t get the host and port from the REDIS_MASTER' );
 		} );
 
-		it( 'Should log an error if REDIS_MASTER environment variable has incorrect format', () => {
+		it( 'should log an error if REDIS_MASTER environment variable has incorrect format', () => {
 			process.env.REDIS_MASTER = 'abcdef'; // Expected is 123.123.123.123:4567
 			const transport = new TestTransport();
 			redis( { logger: transport } );
@@ -97,8 +97,8 @@ describe( 'src/redis', () => {
 		} );
 	} );
 
-	describe( 'Environment variable REDIS_MASTER is present', () => {
-		it( 'Should connect succesfully and return the redis client back', async () => {
+	describe( 'environment variable REDIS_MASTER is present', () => {
+		it( 'should connect succesfully and return the redis client back', async () => {
 			process.env.REDIS_MASTER = 'neverneverland:9876';
 			process.env.REDIS_PASSWORD = 'secret123';
 			redis();

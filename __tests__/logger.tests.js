@@ -16,16 +16,16 @@ class TestTransport extends Transport {
 }
 
 describe( 'src/logger', () => {
-	describe( 'Logger should fail if some parameters are not initialized', () => {
-		it( 'Should fail if not initialized with a namespace', () => {
+	describe( 'logger should fail if some parameters are not initialized', () => {
+		it( 'should fail if not initialized with a namespace', () => {
 			expect( () => {
 				goLogger.debug( 'This should fail as namespace is not provided' );
-			} ).toThrow();
+			} ).toThrow( 'goLogger.debug is not a function' );
 		} );
 	} );
 
-	describe( 'Logger should format messages and log to the provided transport', () => {
-		it( 'Should log a simple error message', () => {
+	describe( 'logger should format messages and log to the provided transport', () => {
+		it( 'should log a simple error message', () => {
 			const transport = new TestTransport();
 			const log = goLogger( 'go:application:test', { transport } );
 
@@ -36,7 +36,7 @@ describe( 'src/logger', () => {
 			expect( firstLog ).toHaveProperty( 'message', 'A simple log' );
 		} );
 
-		it( 'Should format an error message', () => {
+		it( 'should format an error message', () => {
 			const transport = new TestTransport();
 			const log = goLogger( 'go:application:test', { transport } );
 
@@ -83,8 +83,8 @@ describe( 'src/logger', () => {
 		} );
 	} );
 
-	describe( 'Logger should add necessary labels and handle custom ones', () => {
-		it( 'Should add custom labels to the output', () => {
+	describe( 'logger should add necessary labels and handle custom ones', () => {
+		it( 'should add custom labels to the output', () => {
 			const transport = new TestTransport();
 			const log = goLogger( 'go:application:test', { transport } );
 
@@ -95,7 +95,7 @@ describe( 'src/logger', () => {
 			expect( firstLog ).toHaveProperty( 'customLabel', 'custom value' );
 		} );
 
-		it( 'Should format and add new labels to the output', () => {
+		it( 'should format and add new labels to the output', () => {
 			const transport = new TestTransport();
 			const log = goLogger( 'go:application:test', { transport } );
 
@@ -110,7 +110,7 @@ describe( 'src/logger', () => {
 			expect( firstLog ).toHaveProperty( 'customLabel', 'custom value' );
 		} );
 
-		it( 'Should include all necessary labels', () => {
+		it( 'should include all necessary labels', () => {
 			const transport = new TestTransport();
 			const log = goLogger( 'go:application:test', { transport } );
 
@@ -127,8 +127,8 @@ describe( 'src/logger', () => {
 		} );
 	} );
 
-	describe( 'Logger should work in a cluster environments', () => {
-		it( 'Should add worker info', () => {
+	describe( 'logger should work in a cluster environments', () => {
+		it( 'should add worker info', () => {
 			const mockedCluster = {
 				isWorker: true,
 				worker: {
@@ -147,8 +147,8 @@ describe( 'src/logger', () => {
 		} );
 	} );
 
-	describe( 'Logger should not log if silent flag is true', () => {
-		it( 'Should add worker info', () => {
+	describe( 'logger should not log if silent flag is true', () => {
+		it( 'should add worker info', () => {
 			const transport = new TestTransport();
 			const log = goLogger( 'go:application:test', { transport, silent: true } );
 
