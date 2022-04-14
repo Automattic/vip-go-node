@@ -1,6 +1,6 @@
 ---
 
-name: Lint
+name: Build
 
 on:
   pull_request:
@@ -31,5 +31,5 @@ jobs:
       - name: Install
         run: npm install
 
-      - name: Test
-        run: npm run lint
+      - name: Build
+        run: npm run build
