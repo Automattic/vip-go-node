@@ -6,7 +6,6 @@ import commandLineArgs from 'command-line-args';
 import commandLineUsage from 'command-line-usage';
 import {cleanUp} from "./utils/shell";
 import {trackEvent} from './utils/tracks';
-import {globals} from "eslint-config-wpvip";
 
 console.log();
 console.log( '  Welcome to' );
