@@ -10,7 +10,7 @@ import Tracks from './tracks/analytics/clients/tracks';
 let analytics = null;
 
 async function init() {
-    const tracks = new Tracks( 0, 'anon', 'vip_preflights_' );
+    const tracks = new Tracks( 0, 'anon', 'vip_preflight_' );
     analytics = new Analytics( tracks );
 
     return analytics;

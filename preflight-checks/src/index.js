@@ -126,7 +126,7 @@ result.then( async () => {
 	const isWarning = warningSteps.length > 0 && warningSteps.length + successSteps.length + skippedSteps.length === checks.length;
 	const isFailed = failedSteps.length > 0;
 
-	await trackEvent( 'start_checks', {
+	await trackEvent( 'checks_finish', {
 		selected_node_version: global.nodeVersion,
 		port: options.port,
 		wait: options.wait,
