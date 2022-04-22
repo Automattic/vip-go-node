@@ -137,7 +137,7 @@ result.then( async () => {
 	} );
 
 	if ( isSuccess ) {
-		console.log( chalk.green( 'Congratulations!! Your application is ready for VIP Go!' ) );
+		console.log( chalk.green( 'Congratulations! Your application is ready for VIP Go!' ) );
 		process.exit();
 	}
 
