@@ -5,6 +5,7 @@ import packageJson from './package';
 import commandLineArgs from 'command-line-args';
 import commandLineUsage from 'command-line-usage';
 import {cleanUp} from "./utils/shell";
+import {trackEvent} from './utils/tracks';
 
 console.log();
 console.log( '  Welcome to' );
@@ -115,7 +116,7 @@ const result = checks.reduce( async ( priorCheck, check, index ) => {
 	} );
 }, Promise.resolve() );
 
-result.then( () => {
+result.then( async () => {
 	const successSteps = results.filter( result => result === 'success' );
 	const warningSteps = results.filter( result => result === 'warning' );
 	const failedSteps = results.filter( result => result === 'failed' );
@@ -124,6 +125,16 @@ result.then( () => {
 	const isSuccess = successSteps.length + skippedSteps.length === checks.length;
 	const isWarning = warningSteps.length > 0 && warningSteps.length + successSteps.length + skippedSteps.length === checks.length;
 	const isFailed = failedSteps.length > 0;
+
+	await trackEvent( 'checks_finish', {
+		selected_node_version: global.nodeVersion,
+		port: options.port,
+		wait: options.wait,
+		verbose: options.verbose,
+		is_success: isSuccess,
+		is_warning: isWarning,
+		is_failed: isFailed,
+	} );
 
 	if ( isSuccess ) {
 		console.log( chalk.green( 'Congratulations! Your application is ready for VIP Go!' ) );
@@ -139,6 +150,7 @@ result.then( () => {
 		console.log( chalk.red( 'Oups! Looks like you need to fix some steps to make your app ready for VIP Go.' ) );
 		process.exit( 1 );
 	}
+
 } ).then( () => {
 	// Clean-up any running processes
 	cleanUp();

@@ -31,11 +31,11 @@ module.exports = {
 
 
 		// Get the NodeJS version
-		let nodeVersion = process.versions.node;
+		global.nodeVersion = process.versions.node;
 
 		// Check for the CLI parameter
 		if ( options['node-version'] && ALLOWED_NODEJS_VERSIONS.includes( options['node-version'].toString() ) ) {
-			nodeVersion = options['node-version'];
+			global.nodeVersion = options['node-version'];
 		} else {
 			if ( 0 !== options['node-version'] ) {
 				console.log( chalk.yellow( '  Warning:' ), `The Node.JS version picked with`, chalk.bold( '--node-version' ) , `is not valid. Please pick a supported major version.` );
@@ -50,7 +50,7 @@ module.exports = {
 					choices: ALLOWED_NODEJS_VERSIONS,
 				} );
 
-				nodeVersion = await versionsPrompt.run();
+				global.nodeVersion = await versionsPrompt.run();
 			} catch( error ) {
 				console.log( chalk.yellow( '  Warning:' ), `There was an error selecting the version you specified. Defaulting to ${ nodeVersion }.` );
 				console.log( `  You can also select a specific Node version using the`, chalk.bold('--node-version <VERSION>') ,`argument.`)
