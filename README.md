@@ -44,3 +44,4 @@ To run tests locally, make sure the Docker container is up and running:
 ```
 docker-compose up
 ```
+test
