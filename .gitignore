@@ -59,3 +59,4 @@ typings/
 
 # dist folder, only for npm
 dist
+.git/
