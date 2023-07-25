@@ -6,7 +6,8 @@ const appProcess = process.env.NODEJS_APP_PROCESS || 'master';
 
 // Allow globally silencing logs by setting the env var to 1.
 // Defaults to not silent.
-const DEFAULT_SILENCE_LOGS = process.env.VIP_GO_SILENCE_LOGS && '1' === process.env.VIP_GO_SILENCE_LOGS;
+const DEFAULT_SILENCE_LOGS =
+	process.env.VIP_GO_SILENCE_LOGS && '1' === process.env.VIP_GO_SILENCE_LOGS;
 
 const isLocal = () => ! process.env.VIP_GO_APP_ID;
 
@@ -86,7 +87,7 @@ module.exports = ( namespace, { transport, cluster, silent = DEFAULT_SILENCE_LOG
 			consoleLogging
 		),
 		// Allow the user to define a transport (used for tests too)
-		transports: [ transport || new transports.Console ],
+		transports: [ transport || new transports.Console() ],
 		level,
 		silent,
 	} );

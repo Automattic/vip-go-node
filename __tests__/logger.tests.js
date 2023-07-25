@@ -58,15 +58,19 @@ describe( 'src/logger', () => {
 
 				const message = firstLog[ symbolForMessage ];
 				// eslint-disable-next-line max-len
-				expect( message ).toEqual( expect.stringMatching( /^\w{3}, \d{2} \w{3} \d{4} \d{2}:\d{2}:\d{2} GMT go:app \[info\] my message$/ ) );
+				expect( message ).toEqual(
+					expect.stringMatching(
+						/^\w{3}, \d{2} \w{3} \d{4} \d{2}:\d{2}:\d{2} GMT go:app \[info\] my message$/
+					)
+				);
 			} );
 		} );
 
 		describe( 'production logging', () => {
 			const ORIGINAL_VIP_GO_APP_ID = process.env.VIP_GO_APP_ID;
 
-			beforeEach( () => process.env.VIP_GO_APP_ID = true );
-			afterEach( () => process.env.VIP_GO_APP_ID = ORIGINAL_VIP_GO_APP_ID );
+			beforeEach( () => ( process.env.VIP_GO_APP_ID = true ) );
+			afterEach( () => ( process.env.VIP_GO_APP_ID = ORIGINAL_VIP_GO_APP_ID ) );
 
 			it( 'should format output correctly', () => {
 				const transport = new TestTransport();
@@ -78,7 +82,11 @@ describe( 'src/logger', () => {
 
 				const message = firstLog[ symbolForMessage ];
 				// eslint-disable-next-line max-len
-				expect( message ).toEqual( expect.stringMatching( /^\w{3}, \d{2} \w{3} \d{4} \d{2}:\d{2}:\d{2} GMT go:app {"message":"my message","level":"info","app":"go","app_type":"app","message_type":"info","app_process":"master","app_worker":"master"}$/ ) );
+				expect( message ).toEqual(
+					expect.stringMatching(
+						/^\w{3}, \d{2} \w{3} \d{4} \d{2}:\d{2}:\d{2} GMT go:app {"message":"my message","level":"info","app":"go","app_type":"app","message_type":"info","app_process":"master","app_worker":"master"}$/
+					)
+				);
 			} );
 		} );
 	} );
@@ -99,9 +107,9 @@ describe( 'src/logger', () => {
 			const transport = new TestTransport();
 			const log = goLogger( 'go:application:test', { transport } );
 
-			log.error( 'Should format %s, and add my custom label', 'this',
-				{ customLabel: 'custom value' }
-			);
+			log.error( 'Should format %s, and add my custom label', 'this', {
+				customLabel: 'custom value',
+			} );
 
 			const firstLog = transport.logs[ 0 ];
 			const expectedMessage = 'Should format this, and add my custom label';

@@ -12,14 +12,14 @@ npm install --save @automattic/vip-go
 
 The following is a list of modules included in this package:
 
-+ [server](https://github.com/Automattic/vip-go-node/tree/trunk/src/server): a server that wraps your request handler or `express` app behind an easy to use interface
-+ [logger](https://github.com/Automattic/vip-go-node/tree/trunk/src/logger): a ready to use logger for your node applications with Kibana integration out of the box
-+ [newrelic](https://github.com/Automattic/vip-go-node/tree/trunk/src/newrelic): New Relic integration for applications on VIP Go
-+ [redis](https://github.com/Automattic/vip-go-node/tree/trunk/src/redis): a helper library to instantiate a Redis client compatible with VIP Go
+- [server](https://github.com/Automattic/vip-go-node/tree/trunk/src/server): a server that wraps your request handler or `express` app behind an easy to use interface
+- [logger](https://github.com/Automattic/vip-go-node/tree/trunk/src/logger): a ready to use logger for your node applications with Kibana integration out of the box
+- [newrelic](https://github.com/Automattic/vip-go-node/tree/trunk/src/newrelic): New Relic integration for applications on VIP Go
+- [redis](https://github.com/Automattic/vip-go-node/tree/trunk/src/redis): a helper library to instantiate a Redis client compatible with VIP Go
 
 ## Usage
 
-``` js
+```js
 const { server, logger, newrelic, redis } = require( '@automattic/vip-go' );
 ```
 

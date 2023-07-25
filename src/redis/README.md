@@ -12,7 +12,7 @@ npm install --save ioredis@4.14.1
 
 Instantiate a new Redis client:
 
-``` js
+```js
 const { redis } = require( '@automattic/vip-go' );
 const client = redis();
 ```
