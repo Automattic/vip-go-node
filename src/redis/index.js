@@ -25,7 +25,7 @@ const getConnectionInfo = () => {
 	let host = null;
 	let port = null;
 	// Must be in the format `host:port`
-	if ( hostAndPort && hostAndPort.match( /^[\w\-\_\.]+:\d+$/ ) ) {
+	if ( hostAndPort && hostAndPort.match( /^[\w\-_.]+:\d+$/ ) ) {
 		const splitted = hostAndPort.split( ':' );
 		host = splitted[ 0 ];
 		port = splitted[ 1 ];
@@ -43,9 +43,9 @@ module.exports = ( { logger = console } = {} ) => {
 	const { host, port, password } = getConnectionInfo();
 
 	if ( ! host || ! port ) {
-		logger.error( `Couldn't get the host and port from the REDIS_MASTER 
-			environment variable. Please pass a valid REDIS_MASTER environment variable 
-			in the form of a host:port string` );
+		logger.error(
+			`Couldn't get the host and port from the REDIS_MASTER environment variable. Please pass a valid REDIS_MASTER environment variable in the form of a host:port string`
+		);
 		return;
 	}
 
@@ -73,8 +73,9 @@ module.exports = ( { logger = console } = {} ) => {
 		logger.info( 'Attempting a reconnection to redis...' );
 
 		if ( redisClient.maxRetriesPerRequest ) {
-			logger.error( `Max retries reached (max: ${ redisClient.maxRetriesPerRequest }). 
-				Flushing all pending commands and disabling the offline queue...` );
+			logger.error(
+				`Max retries reached (max: ${ redisClient.maxRetriesPerRequest }). Flushing all pending commands and disabling the offline queue...`
+			);
 
 			redisClient.enableOfflineQueue = false;
 		}
