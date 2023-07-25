@@ -4,10 +4,15 @@
   "description": "Node package helpers for the VIP Go platform",
   "main": "./src/index.js",
   "scripts": {
-    "test": "npm run lint && npm run jest",
+    "build": "echo \"No build step\"",
+    "cmd:format": "prettier '**/*.(js|json|jsx|md|ts|tsx|yml|yaml)'",
+    "cmd:lint": "eslint --ext 'js,jsx,ts,tsx' --quiet",
+    "format": "npm run cmd:format -- --write",
+    "format:check": "npm run cmd:format -- --check",
     "jest": "jest",
-    "lint": "eslint .",
-    "build": "echo \"No build step\""
+    "lint": "npm run cmd:lint .",
+    "lint:fix": "npm run cmd:lint . -- --fix",
+    "test": "npm run lint && npm run jest"
   },
   "repository": {
     "type": "git",
