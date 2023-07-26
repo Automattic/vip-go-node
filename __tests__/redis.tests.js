@@ -45,22 +45,10 @@ describe( 'src/redis', () => {
 		} );
 
 		it.each( [
-			[
-				'host:123',
-				{ host: 'host', port: '123', password: null },
-			],
-			[
-				'123:123',
-				{ host: '123', port: '123', password: null },
-			],
-			[
-				'127.0.0.1:3379',
-				{ host: '127.0.0.1', port: '3379', password: null },
-			],
-			[
-				'HOST_name.go-vip.co:123',
-				{ host: 'HOST_name.go-vip.co', port: '123', password: null },
-			],
+			[ 'host:123', { host: 'host', port: '123', password: null } ],
+			[ '123:123', { host: '123', port: '123', password: null } ],
+			[ '127.0.0.1:3379', { host: '127.0.0.1', port: '3379', password: null } ],
+			[ 'HOST_name.go-vip.co:123', { host: 'HOST_name.go-vip.co', port: '123', password: null } ],
 		] )( 'should return valid info if REDIS_MASTER is valid', ( hostAndPort, expectedInfo ) => {
 			process.env.REDIS_MASTER = hostAndPort;
 
@@ -85,7 +73,9 @@ describe( 'src/redis', () => {
 			const transport = new TestTransport();
 			redis( { logger: transport } );
 
-			expect( transport.errors[ 0 ] ).toMatch( 'Couldn\'t get the host and port from the REDIS_MASTER' );
+			expect( transport.errors[ 0 ] ).toMatch(
+				"Couldn't get the host and port from the REDIS_MASTER"
+			);
 		} );
 
 		it( 'should log an error if REDIS_MASTER environment variable has incorrect format', () => {
@@ -93,7 +83,9 @@ describe( 'src/redis', () => {
 			const transport = new TestTransport();
 			redis( { logger: transport } );
 
-			expect( transport.errors[ 0 ] ).toMatch( 'Couldn\'t get the host and port from the REDIS_MASTER' );
+			expect( transport.errors[ 0 ] ).toMatch(
+				"Couldn't get the host and port from the REDIS_MASTER"
+			);
 		} );
 	} );
 

@@ -3,6 +3,7 @@
 ## Releasing / Publishing
 
 ### New release
+
 Publishing a new version can be done using the following checklist:
 
 1. Set the version (via `npm version minor` or `npm version major` or `npm version patch`)
