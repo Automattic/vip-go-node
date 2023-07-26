@@ -15,12 +15,9 @@ on:
           - major
 
 jobs:
-  publish:
+  prepare:
     name: Prepare a new npm release
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
-      pull-requests: write
     steps:
       - name: Check out the source code
         uses: actions/checkout@v3
@@ -30,4 +27,3 @@ jobs:
         with:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           npm-version-type: ${{ inputs.npm-version-type }}
-          release-branch: trunk
