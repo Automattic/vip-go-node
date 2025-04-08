@@ -1,6 +1,7 @@
-const redis = require( '../src/redis/' );
 const IORedis = require( 'ioredis' );
 const Transport = require( 'winston-transport' );
+
+const redis = require( '../src/redis/' );
 
 jest.mock( 'ioredis' );
 

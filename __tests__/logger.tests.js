@@ -1,5 +1,6 @@
-const goLogger = require( '../src/logger/' );
 const Transport = require( 'winston-transport' );
+
+const goLogger = require( '../src/logger/' );
 const symbolForMessage = Symbol.for( 'message' );
 
 class TestTransport extends Transport {
@@ -56,6 +57,7 @@ describe( 'src/logger', () => {
 
 				const firstLog = transport.logs[ 0 ];
 
+				// eslint-disable-next-line security/detect-object-injection
 				const message = firstLog[ symbolForMessage ];
 				// eslint-disable-next-line max-len
 				expect( message ).toEqual(
@@ -80,6 +82,7 @@ describe( 'src/logger', () => {
 
 				const firstLog = transport.logs[ 0 ];
 
+				// eslint-disable-next-line security/detect-object-injection
 				const message = firstLog[ symbolForMessage ];
 				// eslint-disable-next-line max-len
 				expect( message ).toEqual(

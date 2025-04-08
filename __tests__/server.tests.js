@@ -1,6 +1,8 @@
-const server = require( '../src/server/' );
 const expressApp = require( 'express' )();
 const request = require( 'supertest' );
+
+const server = require( '../src/server/' );
+
 const HEALTHCHECKURL = '/cache-healthcheck?';
 
 describe( 'src/server', () => {
@@ -40,6 +42,7 @@ describe( 'src/server', () => {
 			if ( req.url === '/custom' ) {
 				res.writeHead( 201 );
 				res.end();
+				return;
 			}
 
 			mock();

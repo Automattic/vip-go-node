@@ -1,5 +1,6 @@
-const newrelic = require( '../src/newrelic/' );
 const Transport = require( 'winston-transport' );
+
+const newrelic = require( '../src/newrelic/' );
 
 class TestTransport extends Transport {
 	constructor( opts ) {
