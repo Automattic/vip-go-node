@@ -1,5 +1,6 @@
-const { createLogger, format, transports } = require( 'winston' );
 const nodeCluster = require( 'cluster' );
+const { createLogger, format, transports } = require( 'winston' );
+
 const { combine, timestamp, printf, splat } = format;
 
 const appProcess = process.env.NODEJS_APP_PROCESS || 'master';
