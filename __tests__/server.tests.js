@@ -7,32 +7,28 @@ const HEALTHCHECKURL = '/cache-healthcheck?';
 
 describe( 'src/server', () => {
 	describe( 'should work with an express application', () => {
-		it( 'should add a /cache-healthcheck? route returning 200 OK', async () => {
+		it( 'should add a /cache-healthcheck? route returning 200 OK', () => {
 			const expressServer = server( expressApp );
-			const response = await request( expressServer.app ).get( HEALTHCHECKURL );
-
-			expect( response.statusCode ).toBe( 200 );
-			expect( response.text ).toBe( 'ok' );
+			return request( expressServer.app ).get( HEALTHCHECKURL ).expect( 200, 'ok' );
 		} );
 
-		it( 'should keep already defined routes', async () => {
+		it( 'should keep already defined routes', () => {
 			expressApp.get( '/down', ( _req, res ) => {
 				res.status( 501 ).end();
 			} );
 
 			const expressServer = server( expressApp );
-			const response = await request( expressServer.app ).get( '/down' );
-
-			expect( response.statusCode ).toBe( 501 );
+			return request( expressServer.app ).get( '/down' ).expect( 501 );
 		} );
 
 		it( 'should boot up a server on the provided PORT', async () => {
 			const expressServerOnPort = server( expressApp, { PORT: 8000 } );
 			expressServerOnPort.listen();
-			const response = await request( 'http://localhost:8000' ).get( HEALTHCHECKURL );
-
-			expect( response.statusCode ).toBe( 200 );
-			expressServerOnPort.close();
+			try {
+				await request( 'http://localhost:8000' ).get( HEALTHCHECKURL ).expect( 200 );
+			} finally {
+				expressServerOnPort.close();
+			}
 		} );
 	} );
 
@@ -59,45 +55,40 @@ describe( 'src/server', () => {
 			} ).toThrow( 'Please include a requestHandler' );
 		} );
 
-		it( 'should add a /cache-healthcheck? route returning 200 OK', async () => {
+		it( 'should add a /cache-healthcheck? route returning 200 OK', () => {
 			const httpServer = server( requestHandler );
-			const response = await request( httpServer.app ).get( HEALTHCHECKURL );
-
-			expect( response.statusCode ).toBe( 200 );
-			expect( response.text ).toBe( 'ok' );
+			return request( httpServer.app ).get( HEALTHCHECKURL ).expect( 200, 'ok' );
 		} );
 
-		it( 'should respond to /cache-healthcheck? route and not forward the request', async () => {
+		it( 'should respond to /cache-healthcheck? route and not forward the request', () => {
 			const httpServer = server( requestHandler );
-			const response = await request( httpServer.app ).get( HEALTHCHECKURL );
-
-			expect( response.statusCode ).toBe( 200 );
-			expect( response.text ).toBe( 'ok' );
-			expect( mock ).not.toHaveBeenCalled();
+			return request( httpServer.app )
+				.get( HEALTHCHECKURL )
+				.expect( 200, 'ok' )
+				.expect( () => {
+					expect( mock ).not.toHaveBeenCalled();
+				} );
 		} );
 
-		it( 'should match defined routes', async () => {
+		it( 'should match defined routes', () => {
 			const httpServer = server( requestHandler );
-			const response = await request( httpServer.app ).get( '/custom' );
-
-			expect( response.statusCode ).toBe( 201 );
+			return request( httpServer.app ).get( '/custom' ).expect( 201 );
 		} );
 
-		it( 'should return default response if no route is matched', async () => {
+		it( 'should return default response if no route is matched', () => {
 			const httpServer = server( requestHandler );
 
-			const response = await request( httpServer.app ).get( '/notfound' );
-
-			expect( response.statusCode ).toBe( 404 );
+			return request( httpServer.app ).get( '/notfound' ).expect( 404 );
 		} );
 
 		it( 'should boot up a server on the provided PORT', async () => {
 			const httpServerOnPort = server( requestHandler, { PORT: 8000 } );
 			httpServerOnPort.listen();
-			const response = await request( 'http://localhost:8000' ).get( HEALTHCHECKURL );
-
-			expect( response.statusCode ).toBe( 200 );
-			httpServerOnPort.close();
+			try {
+				await request( 'http://localhost:8000' ).get( HEALTHCHECKURL ).expect( 200 );
+			} finally {
+				httpServerOnPort.close();
+			}
 		} );
 	} );
 } );
