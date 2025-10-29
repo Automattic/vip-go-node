@@ -49,7 +49,7 @@ module.exports = ( { logger = console } = {} ) => {
 		return;
 	}
 
-	logger.info( 'Initializing a new redis client...' );
+	logger.debug( 'Initializing a new redis client...' );
 
 	const IORedis = getIORedis();
 
@@ -65,12 +65,12 @@ module.exports = ( { logger = console } = {} ) => {
 	// Attaching event listeners
 
 	redisClient.on( 'connect', () => {
-		logger.info( 'Connected to Redis client...' );
+		logger.debug( 'Connected to Redis client...' );
 		redisClient.enableOfflineQueue = true;
 	} );
 
 	redisClient.on( 'reconnecting', () => {
-		logger.info( 'Attempting a reconnection to redis...' );
+		logger.debug( 'Attempting a reconnection to redis...' );
 
 		if ( redisClient.maxRetriesPerRequest ) {
 			logger.error(
@@ -86,7 +86,7 @@ module.exports = ( { logger = console } = {} ) => {
 	} );
 
 	redisClient.on( 'disconnect', () => {
-		logger.info( 'Disconnected from redis client' );
+		logger.debug( 'Disconnected from redis client' );
 	} );
 
 	return redisClient;
