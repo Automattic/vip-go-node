@@ -1,6 +1,6 @@
 {
   "name": "@automattic/vip-go",
-  "version": "1.2.2",
+  "version": "1.2.3-dev.0",
   "description": "Node package helpers for the VIP Go platform",
   "main": "./src/index.js",
   "scripts": {
