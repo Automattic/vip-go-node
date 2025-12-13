@@ -59,7 +59,7 @@ describe( 'src/logger', () => {
 
 				// eslint-disable-next-line security/detect-object-injection
 				const message = firstLog[ symbolForMessage ];
-				// eslint-disable-next-line max-len
+
 				expect( message ).toEqual(
 					expect.stringMatching(
 						/^\w{3}, \d{2} \w{3} \d{4} \d{2}:\d{2}:\d{2} GMT go:app \[info\] my message$/
@@ -84,7 +84,7 @@ describe( 'src/logger', () => {
 
 				// eslint-disable-next-line security/detect-object-injection
 				const message = firstLog[ symbolForMessage ];
-				// eslint-disable-next-line max-len
+
 				expect( message ).toEqual(
 					expect.stringMatching(
 						/^\w{3}, \d{2} \w{3} \d{4} \d{2}:\d{2}:\d{2} GMT go:app {"message":"my message","level":"info","app":"go","app_type":"app","message_type":"info","app_process":"master","app_worker":"master"}$/

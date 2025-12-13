@@ -6,7 +6,7 @@
   "scripts": {
     "build": "echo \"No build step\"",
     "cmd:format": "prettier '**/*.(js|json|jsx|md|ts|tsx|yml|yaml)'",
-    "cmd:lint": "eslint --ext 'js,jsx,ts,tsx' --quiet",
+    "cmd:lint": "eslint --ext 'js,jsx,ts,tsx'",
     "format": "npm run cmd:format -- --write",
     "format:check": "npm run cmd:format -- --check",
     "jest": "jest",
@@ -35,12 +35,11 @@
     "winston": "^3.10.0"
   },
   "devDependencies": {
-    "@automattic/eslint-plugin-wpvip": "0.13.1",
-    "eslint": "8.56.0",
+    "@automattic/eslint-plugin-wpvip": "1.0.0",
     "express": "^5.1.0",
     "ioredis": "^5.8.0",
     "jest": "^30.1.3",
-    "prettier": "npm:wp-prettier@2.8.5",
+    "prettier": "npm:wp-prettier@3.0.3",
     "supertest": "^6.3.4",
     "winston-transport": "^4.9.0"
   }
