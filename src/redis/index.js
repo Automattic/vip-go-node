@@ -34,6 +34,12 @@ const getConnectionInfo = () => {
 	return { host, port, password };
 };
 
+/**
+ * Initializes and returns a Redis client instance for VIP Go applications.
+ * @param {Object} [options] - Configuration options
+ * @param {Console} [options.logger] - Logger instance for output
+ * @returns {import('ioredis').Redis | undefined} Redis client instance or undefined on error
+ */
 module.exports = ( { logger = console } = {} ) => {
 	if ( redisClient ) {
 		// Client already defined and initialized

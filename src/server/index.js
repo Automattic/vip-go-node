@@ -23,6 +23,14 @@ const wrapApplication = ( application, { PORT, logger } ) => {
 	};
 };
 
+/**
+ * Creates an HTTP server wrapper with health check endpoint.
+ * @param {Function} app - Express application or custom request handler
+ * @param {Object} [options] - Server options
+ * @param {number} [options.PORT] - Port number for the server
+ * @param {Console} [options.logger] - Logger instance for output
+ * @returns {{app: any, server: any, listen: Function, close: Function}} Server wrapper object
+ */
 module.exports = ( app, { PORT, logger = console } = {} ) => {
 	if ( ! app ) {
 		throw Error( 'Please include a requestHandler' );

@@ -66,6 +66,15 @@ const prodLoggingFormat = printf( output => {
 	return `${ time } ${ app }:${ type } ${ JSON.stringify( output ) }`;
 } );
 
+/**
+ * Creates a logger instance with custom formatting for VIP Go platform.
+ * @param {string} namespace - The namespace for the logger (e.g., 'my-app:module')
+ * @param {Object} [options] - Logger options
+ * @param {import('winston-transport')} [options.transport] - Custom Winston transport
+ * @param {import('cluster')} [options.cluster] - Node cluster instance
+ * @param {boolean} [options.silent] - Whether to silence logs
+ * @returns {import('winston').Logger} Winston logger instance
+ */
 module.exports = ( namespace, { transport, cluster, silent = DEFAULT_SILENCE_LOGS } = {} ) => {
 	if ( ! namespace ) {
 		throw Error( 'Please include a namespace to initialize your logger.' );

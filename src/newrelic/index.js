@@ -1,3 +1,9 @@
+/**
+ * Initializes New Relic monitoring for VIP Go applications.
+ * @param {Object} [options] - Configuration options
+ * @param {Console} [options.logger] - Logger instance for output
+ * @returns {any} New Relic instance or undefined if initialization is skipped
+ */
 module.exports = ( { logger = console } = {} ) => {
 	const licenseKey = process.env.NEW_RELIC_LICENSE_KEY;
 	const noConfig = process.env.NEW_RELIC_NO_CONFIG_FILE === 'true';

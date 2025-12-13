@@ -3,8 +3,9 @@
   "version": "1.3.1-dev.0",
   "description": "Node package helpers for the VIP Go platform",
   "main": "./src/index.js",
+  "types": "./src/index.d.ts",
   "scripts": {
-    "build": "echo \"No build step\"",
+    "build": "tsc",
     "cmd:format": "prettier '**/*.(js|json|jsx|md|ts|tsx|yml|yaml)'",
     "cmd:lint": "eslint --ext 'js,jsx,ts,tsx' --quiet",
     "format": "npm run cmd:format -- --write",
@@ -42,6 +43,7 @@
     "jest": "^30.1.3",
     "prettier": "npm:wp-prettier@2.8.5",
     "supertest": "^6.3.4",
+    "typescript": "^5.9.3",
     "winston-transport": "^4.9.0"
   }
 }
