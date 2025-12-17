@@ -1,3 +1,4 @@
+/* eslint-disable jest/expect-expect */
 const expressApp = require( 'express' )();
 const request = require( 'supertest' );
 

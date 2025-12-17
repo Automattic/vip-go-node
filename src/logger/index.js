@@ -31,14 +31,10 @@ const createLogEntry = ( namespace, cluster ) => {
 
 		const output = {
 			app: namespace.substring( 0, firstSeparator ),
-			// eslint-disable-next-line camelcase
 			app_type: namespace.substring( firstSeparator + 1, namespace.length ),
-			// eslint-disable-next-line camelcase
 			message_type: level,
 			message,
-			// eslint-disable-next-line camelcase
 			app_process: appProcess,
-			// eslint-disable-next-line camelcase
 			app_worker: appWorker,
 		};
 
