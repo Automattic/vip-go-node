@@ -1,4 +1,3 @@
-version: '2'
 services:
   parker_redis:
     container_name: redis
