@@ -33,6 +33,12 @@ Please refer the documentation for each module ([`server`](https://github.com/Au
 
 New Relic is no longer a peer dependency of this module. Please remember to install [New Relic](https://docs.newrelic.com/docs/agents/manage-apm-agents/installation/install-agent) separately if your app requires it.
 
+## Reference docs
+
+- [Architecture](docs/ARCHITECTURE.md)
+- [Environment](docs/ENVIRONMENT.md)
+- [Testing](docs/TESTING.md)
+
 ## Development
 
 ### Using hooks
