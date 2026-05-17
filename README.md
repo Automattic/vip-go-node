@@ -36,3 +36,35 @@ For development, we have some hooks running before each commit/push. To use them
 ```
 git config core.hooksPath hooks
 ```
+
+### Running tests
+
+To run tests locally, make sure the Docker container is up and running:
+
+```
+docker-compose up
+```
+
+Build the TypeScript sources before using the CommonJS compatibility wrappers:
+
+```
+npm run build
+```
+
+Run strict type checking for both the library and tests:
+
+```
+npm run typecheck
+```
+
+Jest runs against JavaScript emitted into `.test-build/`:
+
+```
+npm run jest
+```
+
+The full test command runs linting, type checking, and the compiled Jest suite:
+
+```
+npm test
+```

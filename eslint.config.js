@@ -5,7 +5,13 @@ const config = [
 		ignores: [ 'dist/**', 'preflight-checks/**' ],
 	},
 	...configs.recommended,
-	...configs.testing,
+	...configs.typescript,
+	{
+		files: [ 'src/**/*.ts' ],
+		rules: {
+			'@typescript-eslint/no-namespace': 'off',
+		},
+	},
 	{
 		linterOptions: {
 			reportUnusedDisableDirectives: 'warn',

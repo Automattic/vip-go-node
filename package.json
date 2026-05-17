@@ -2,28 +2,32 @@
   "name": "@automattic/vip-go",
   "version": "1.3.1-dev.0",
   "description": "Node package helpers for the VIP Go platform",
-  "main": "./src/index.js",
+  "main": "./dist/src/index.js",
+  "types": "./dist/src/index.d.ts",
+  "files": [
+    "dist/src/"
+  ],
   "scripts": {
-    "build": "echo \"No build step\"",
+    "build": "tsc",
+    "clean": "rm -rf dist",
     "cmd:format": "prettier '**/*.(js|json|jsx|md|ts|tsx|yml|yaml)'",
     "cmd:lint": "eslint --ext 'js,jsx,ts,tsx'",
     "format": "npm run cmd:format -- --write",
     "format:check": "npm run cmd:format -- --check",
-    "jest": "jest",
+    "cmd:test": "node --no-warnings --require ts-node/register --experimental-test-module-mocks --test __tests__/*.spec.ts",
     "lint": "npm run cmd:lint .",
     "lint:fix": "npm run cmd:lint . -- --fix",
-    "test": "npm run lint && npm run jest"
+    "prepare": "npm run build",
+    "test": "npm run lint && npm run typecheck && npm run cmd:test",
+    "typecheck": "tsc --noEmit"
   },
   "engines": {
-    "node": ">= 20.19.0",
+    "node": ">= 22.15.0",
     "npm": ">= 10.8.2"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Automattic/vip-go-node.git"
-  },
-  "jest": {
-    "verbose": true
   },
   "author": "",
   "license": "ISC",
@@ -36,11 +40,15 @@
   },
   "devDependencies": {
     "@automattic/eslint-plugin-wpvip": "1.2.1",
+    "@types/express": "^5.0.6",
+    "@types/node": "^25.8.0",
+    "@types/supertest": "^7.2.0",
     "express": "^5.1.0",
     "ioredis": "^5.8.0",
-    "jest": "^30.1.3",
     "prettier": "npm:wp-prettier@3.0.3",
     "supertest": "^6.3.4",
+    "ts-node": "^10.9.2",
+    "typescript": "^6.0.3",
     "winston-transport": "^4.9.0"
   }
 }
