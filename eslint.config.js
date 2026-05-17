@@ -7,12 +7,6 @@ const config = [
 	...configs.recommended,
 	...configs.typescript,
 	{
-		files: [ 'src/**/*.ts' ],
-		rules: {
-			'@typescript-eslint/no-namespace': 'off',
-		},
-	},
-	{
 		linterOptions: {
 			reportUnusedDisableDirectives: 'warn',
 		},

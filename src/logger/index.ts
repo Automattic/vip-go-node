@@ -1,7 +1,7 @@
 import nodeCluster from 'node:cluster';
 import { createLogger, format, transports } from 'winston';
-import TransportStream from 'winston-transport';
 
+import type { ClusterLike, LoggerOptions } from './types';
 import type { TransformableInfo } from 'logform';
 import type { Logger } from 'winston';
 
@@ -24,7 +24,7 @@ interface LogEntry extends TransformableInfo {
 
 const isLocal = () => ! process.env[ 'VIP_GO_APP_ID' ];
 
-const createLogEntry = ( namespace: string, cluster: createGoLogger.ClusterLike ) => {
+const createLogEntry = ( namespace: string, cluster: ClusterLike ) => {
 	return format( ( info: TransformableInfo ) => {
 		const { level, message } = info;
 
@@ -81,7 +81,7 @@ const prodLoggingFormat = printf( output => {
 
 function createGoLogger(
 	namespace: string,
-	{ transport, cluster, silent = DEFAULT_SILENCE_LOGS }: createGoLogger.Options = {}
+	{ transport, cluster, silent = DEFAULT_SILENCE_LOGS }: LoggerOptions = {}
 ): Logger {
 	if ( ! namespace ) {
 		throw Error( 'Please include a namespace to initialize your logger.' );
@@ -110,22 +110,6 @@ function createGoLogger(
 	} );
 
 	return winstonLogger;
-}
-
-namespace createGoLogger {
-	export interface ClusterLike {
-		isMaster?: boolean;
-		isWorker?: boolean;
-		worker?: {
-			id: number | string;
-		};
-	}
-
-	export interface Options {
-		transport?: TransportStream;
-		cluster?: ClusterLike;
-		silent?: boolean;
-	}
 }
 
 export = createGoLogger;

@@ -1,13 +1,10 @@
-interface LoggerLike {
-	debug: ( message: string ) => void;
-	error: ( message: string ) => void;
-}
+import type { ConnectionInfo, Options, RedisClient, RedisOptions } from './types';
 
 interface RedisConstructor {
-	new ( options: redis.RedisOptions ): redis.RedisClient;
+	new ( options: RedisOptions ): RedisClient;
 }
 
-let redisClient: redis.RedisClient | null = null;
+let redisClient: RedisClient | null = null;
 
 const getErrorMessage = ( error: unknown ): string => {
 	if ( error instanceof Error ) {
@@ -33,7 +30,7 @@ const retryStrategy = ( times: number ): number => {
 	return Math.min( times * 50, 2000 );
 };
 
-const getConnectionInfo = (): redis.ConnectionInfo => {
+const getConnectionInfo = (): ConnectionInfo => {
 	const hostAndPort = process.env[ 'REDIS_MASTER' ] || '';
 	const password = process.env[ 'REDIS_PASSWORD' ] || null;
 
@@ -49,7 +46,7 @@ const getConnectionInfo = (): redis.ConnectionInfo => {
 	return { host, port, password };
 };
 
-function redis( { logger = console }: redis.Options = {} ): redis.RedisClient | undefined {
+function redis( { logger = console }: Options = {} ): RedisClient | undefined {
 	if ( redisClient ) {
 		// Client already defined and initialized
 		return redisClient;
@@ -108,33 +105,8 @@ function redis( { logger = console }: redis.Options = {} ): redis.RedisClient | 
 	return client;
 }
 
-namespace redis {
-	export interface Options {
-		logger?: LoggerLike;
-	}
+const redisWithHelpers = Object.assign( redis, {
+	getConnectionInfo,
+} );
 
-	export interface ConnectionInfo {
-		host: string | null;
-		password: string | null;
-		port: string | null;
-	}
-
-	export interface RedisOptions {
-		enableOfflineQueue: boolean;
-		host: string;
-		maxRetriesPerRequest: number | string;
-		password: string | null;
-		port: string;
-		retryStrategy: ( times: number ) => number;
-	}
-
-	export interface RedisClient {
-		enableOfflineQueue: boolean;
-		maxRetriesPerRequest?: number | string | null;
-		on: ( event: string, listener: ( error?: Error ) => void ) => void;
-	}
-}
-
-redis.getConnectionInfo = getConnectionInfo;
-
-export = redis;
+export = redisWithHelpers;
