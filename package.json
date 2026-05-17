@@ -4,6 +4,17 @@
   "description": "Node package helpers for the VIP Go platform",
   "main": "./dist/src/index.js",
   "types": "./dist/src/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/src/index.d.ts",
+      "require": "./dist/src/index.js",
+      "default": "./dist/src/index.js"
+    },
+    "./types": {
+      "types": "./dist/src/types/index.d.ts",
+      "default": "./dist/src/types/index.js"
+    }
+  },
   "files": [
     "dist/src/"
   ],

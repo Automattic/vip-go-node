@@ -1,8 +1,4 @@
-interface LoggerLike {
-	error: ( message: string ) => void;
-	info: ( message: string ) => void;
-	log: ( message: string ) => void;
-}
+import type { NewRelicOptions } from './types';
 
 const getErrorMessage = ( error: unknown ): string => {
 	if ( error instanceof Error ) {
@@ -12,7 +8,7 @@ const getErrorMessage = ( error: unknown ): string => {
 	return String( error );
 };
 
-function initializeNewRelic( { logger = console }: initializeNewRelic.Options = {} ): unknown {
+function initializeNewRelic( { logger = console }: NewRelicOptions = {} ): unknown {
 	const licenseKey = process.env[ 'NEW_RELIC_LICENSE_KEY' ];
 	const noConfig = process.env[ 'NEW_RELIC_NO_CONFIG_FILE' ] === 'true';
 
@@ -44,12 +40,6 @@ function initializeNewRelic( { logger = console }: initializeNewRelic.Options = 
 		throw new Error( `The 'newrelic' package could not be imported.
 			Please make sure the package is installed and available.
 			Details: ${ getErrorMessage( error ) }` );
-	}
-}
-
-namespace initializeNewRelic {
-	export interface Options {
-		logger?: LoggerLike;
 	}
 }
 

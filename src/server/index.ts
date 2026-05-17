@@ -1,17 +1,13 @@
-import { createServer, type IncomingMessage, type Server, type ServerResponse } from 'node:http';
+import { createServer, type Server } from 'node:http';
+
+import type { GoServerOptions, RequestHandler, WrappedApplication } from './types';
 
 const HEALTHCHECKURL = '/cache-healthcheck?';
 
-type RequestHandler = ( req: IncomingMessage, res: ServerResponse ) => unknown;
-
-interface LoggerLike {
-	info: ( message: string ) => void;
-}
-
 const wrapApplication = (
 	application: Server,
-	{ PORT, logger }: Required< createGoServer.Options >
-): createGoServer.WrappedApplication => {
+	{ PORT, logger }: Required< GoServerOptions >
+): WrappedApplication => {
 	const app = application;
 	let server: Server | undefined;
 
@@ -36,8 +32,8 @@ const wrapApplication = (
 
 function createGoServer(
 	app?: RequestHandler,
-	{ PORT, logger = console }: createGoServer.Options = {}
-): createGoServer.WrappedApplication {
+	{ PORT, logger = console }: GoServerOptions = {}
+): WrappedApplication {
 	if ( ! app ) {
 		throw Error( 'Please include a requestHandler' );
 	}
@@ -54,20 +50,6 @@ function createGoServer(
 	} );
 
 	return wrapApplication( server, { PORT: PORT || process.env[ 'PORT' ] || 3000, logger } );
-}
-
-namespace createGoServer {
-	export interface Options {
-		PORT?: number | string;
-		logger?: LoggerLike;
-	}
-
-	export interface WrappedApplication {
-		app: Server;
-		server: Server | undefined;
-		listen: ( connected?: () => void ) => void;
-		close: () => void;
-	}
 }
 
 export = createGoServer;

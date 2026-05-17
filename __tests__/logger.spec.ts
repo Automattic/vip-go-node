@@ -1,27 +1,17 @@
 import assert, { equal, match } from 'node:assert/strict';
 import { afterEach, beforeEach, describe, it } from 'node:test';
-import Transport from 'winston-transport';
 
+import { TestTransport } from './testtransport';
 import goLogger from '../src/logger';
 
 import type { TransformableInfo } from 'logform';
 
 const symbolForMessage = Symbol.for( 'message' );
 
-class TestTransport extends Transport {
-	public logs: TransformableInfo[] = [];
-
-	public log( info: TransformableInfo, callback: () => void ): void {
-		this.logs.push( info );
-
-		callback();
-	}
-}
-
 void describe( 'src/logger', async () => {
 	await describe( 'logger should format messages and log to the provided transport', async () => {
 		await it( 'should log a simple error message', () => {
-			const transport = new TestTransport();
+			const transport = new TestTransport< TransformableInfo >();
 			const log = goLogger( 'go:application:test', { transport } );
 
 			log.info( 'A simple log' );
@@ -33,7 +23,7 @@ void describe( 'src/logger', async () => {
 		} );
 
 		await it( 'should format an error message', () => {
-			const transport = new TestTransport();
+			const transport = new TestTransport< TransformableInfo >();
 			const log = goLogger( 'go:application:test', { transport } );
 
 			log.debug( 'Should format %s message', 'this' );
@@ -46,7 +36,7 @@ void describe( 'src/logger', async () => {
 
 		await describe( 'local logging', async () => {
 			await it( 'should format output correctly', () => {
-				const transport = new TestTransport();
+				const transport = new TestTransport< TransformableInfo >();
 				const log = goLogger( 'go:app', { transport } );
 
 				log.info( 'my message' );
@@ -71,7 +61,7 @@ void describe( 'src/logger', async () => {
 			afterEach( () => ( process.env[ 'VIP_GO_APP_ID' ] = ORIGINAL_VIP_GO_APP_ID ) );
 
 			await it( 'should format output correctly', () => {
-				const transport = new TestTransport();
+				const transport = new TestTransport< TransformableInfo >();
 				const log = goLogger( 'go:app', { transport } );
 
 				log.info( 'my message' );
@@ -92,7 +82,7 @@ void describe( 'src/logger', async () => {
 
 	await describe( 'logger should add necessary labels and handle custom ones', async () => {
 		await it( 'should add custom labels to the output', () => {
-			const transport = new TestTransport();
+			const transport = new TestTransport< TransformableInfo >();
 			const log = goLogger( 'go:application:test', { transport } );
 
 			log.error( 'Should add my custom label', { customLabel: 'custom value' } );
@@ -104,7 +94,7 @@ void describe( 'src/logger', async () => {
 		} );
 
 		await it( 'should format and add new labels to the output', () => {
-			const transport = new TestTransport();
+			const transport = new TestTransport< TransformableInfo >();
 			const log = goLogger( 'go:application:test', { transport } );
 
 			log.error( 'Should format %s, and add my custom label', 'this', {
@@ -120,7 +110,7 @@ void describe( 'src/logger', async () => {
 		} );
 
 		await it( 'should include all necessary labels', () => {
-			const transport = new TestTransport();
+			const transport = new TestTransport< TransformableInfo >();
 			const log = goLogger( 'go:application:test', { transport } );
 
 			log.error( 'Should have some necessary labels' );
@@ -146,7 +136,7 @@ void describe( 'src/logger', async () => {
 				},
 			};
 
-			const transport = new TestTransport();
+			const transport = new TestTransport< TransformableInfo >();
 			const log = goLogger( 'go:application:test', { transport, cluster: mockedCluster } );
 
 			log.info( 'Logging from worker' );
@@ -160,7 +150,7 @@ void describe( 'src/logger', async () => {
 
 	await describe( 'logger should not log if silent flag is true', async () => {
 		await it( 'should add worker info', () => {
-			const transport = new TestTransport();
+			const transport = new TestTransport< TransformableInfo >();
 			const log = goLogger( 'go:application:test', { transport, silent: true } );
 
 			log.error( 'This should not be logged!' );

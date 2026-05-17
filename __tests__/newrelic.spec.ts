@@ -1,26 +1,9 @@
 import assert, { equal, match, throws } from 'node:assert/strict';
 import { ModuleHooks, registerHooks } from 'node:module';
 import { afterEach, beforeEach, describe, it } from 'node:test';
-import Transport from 'winston-transport';
 
+import { TestTransport } from './testtransport';
 import newrelic from '../src/newrelic';
-
-class TestTransport extends Transport {
-	public logs: string[] = [];
-	public errors: string[] = [];
-
-	public log( info: string ): void {
-		this.logs.push( info );
-	}
-
-	public info( info: string ): void {
-		this.logs.push( info );
-	}
-
-	public error( info: string ): void {
-		this.errors.push( info );
-	}
-}
 
 function mockNewRelic(): ModuleHooks {
 	return registerHooks( {

@@ -1,27 +1,10 @@
 import assert, { deepEqual, equal, match, ok } from 'node:assert/strict';
 import { after, afterEach, describe, it, Mock, mock } from 'node:test';
-import Transport from 'winston-transport';
 
+import { TestTransport } from './testtransport';
 import redis from '../src/redis';
 
-type RedisOptions = redis.RedisOptions;
-
-class TestTransport extends Transport {
-	public logs: string[] = [];
-	public errors: string[] = [];
-
-	public info( info: string ): void {
-		this.logs.push( info );
-	}
-
-	public debug( info: string ): void {
-		this.logs.push( info );
-	}
-
-	public error( info: string ): void {
-		this.errors.push( info );
-	}
-}
+import type { RedisOptions } from '../src/redis/types';
 
 void describe( 'src/redis', async () => {
 	const OLD_ENV_VARS = { ...process.env };
@@ -32,6 +15,10 @@ void describe( 'src/redis', async () => {
 	} );
 
 	await describe( 'getConnectionInfo()', async () => {
+		await it( 'should expose getConnectionInfo on the exported redis helper', () => {
+			equal( typeof redis.getConnectionInfo, 'function' );
+		} );
+
 		await it( 'should return empty info if REDIS_MASTER is invalid', () => {
 			for ( const hostAndPort of [
 				'', // empty
