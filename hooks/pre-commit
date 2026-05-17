@@ -1,23 +1,23 @@
 #!/bin/sh
-scriptfiles=$( git diff --cached --name-only ./ | grep -E '\.ts$' )
+scriptfiles=$( git diff --cached --name-only ./ | grep -E '\.(js|jsx|ts|tsx)$' )
 
 if [ "$scriptfiles" = "" ]; then
-	printf "\033[0;32m \nNo TypeScript files changed in this commit, skipping linting... \033[0m\n"
+	printf "\033[0;32m \nNo linted script files changed in this commit, skipping linting... \033[0m\n"
     exit 0
 fi
 
-printf "\nTypeScript files changed:\n"
+printf "\nLinted script files changed:\n"
 printf '%s\n' "$scriptfiles"
 
 
-printf "\nValidating .ts files:\n"
+printf "\nValidating linted script files:\n"
 
 npm run lint
 linter_exit_code=$?
 
 if [ ! 0 = "$linter_exit_code" ]
 then
-	printf "\033[0;31m \nCommit aborted, your .ts files have some linting errors, please fix them before commiting...\033[0m \n"
+	printf "\033[0;31m \nCommit aborted, your script files have some linting errors, please fix them before committing...\033[0m \n"
 fi
 
 exit $linter_exit_code
