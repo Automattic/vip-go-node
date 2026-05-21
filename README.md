@@ -51,7 +51,9 @@ git config core.hooksPath hooks
 
 ### Running tests
 
-To run tests locally, make sure the Docker container is up and running:
+Unit tests can run locally without Docker because test dependencies are mocked.
+
+Start Docker services only when working on local or integration scenarios that require Redis:
 
 ```
 docker-compose up

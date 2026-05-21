@@ -37,7 +37,7 @@ npm run cmd:test
 It expands to:
 
 ```sh
-node --no-warnings --require ts-node/register --experimental-test-module-mocks --test __tests__/*.spec.ts
+node --require ts-node/register --experimental-test-module-mocks --test __tests__/*.spec.ts
 ```
 
 ## Validation commands
