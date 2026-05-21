@@ -41,7 +41,7 @@ void describe( 'src/newrelic', async () => {
 
 	afterEach( () => {
 		process.env = { ...OLD_ENV_VARS };
-		process.env[ 'VIP_GO_APP_ID' ] = '123'; // Adding an ID to mimick VIP Go
+		process.env[ 'VIP_GO_APP_ID' ] = '123'; // Adding an ID to mimic VIP Go
 	} );
 
 	await describe( 'environment variables are missing', async () => {

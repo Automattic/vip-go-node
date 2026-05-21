@@ -11,7 +11,7 @@ void describe( 'src/redis', async () => {
 
 	afterEach( () => {
 		process.env = { ...OLD_ENV_VARS };
-		process.env[ 'VIP_GO_APP_ID' ] = '123'; // Adding an ID to mimick VIP Go
+		process.env[ 'VIP_GO_APP_ID' ] = '123'; // Adding an ID to mimic VIP Go
 	} );
 
 	await describe( 'getConnectionInfo()', async () => {
@@ -100,7 +100,7 @@ void describe( 'src/redis', async () => {
 			mockedCtor.mock.restore();
 		} );
 
-		await it( 'should connect succesfully and return the redis client back', () => {
+		await it( 'should connect successfully and return the redis client back', () => {
 			process.env[ 'REDIS_MASTER' ] = 'neverneverland:9876';
 			process.env[ 'REDIS_PASSWORD' ] = 'secret123';
 
