@@ -29,7 +29,7 @@ TypeScript consumers can import public helper types from the package subpath:
 import type { RedisOptions } from '@automattic/vip-go/types';
 ```
 
-Please refer the documentation for each module ([`server`](https://github.com/Automattic/vip-go-node/blob/trunk/src/server/README.md) | [`logger`](https://github.com/Automattic/vip-go-node/blob/trunk/src/logger/README.md) | [`newrelic`](https://github.com/Automattic/vip-go-node/blob/trunk/src/newrelic/README.md)) | [redis](https://github.com/Automattic/vip-go-node/tree/trunk/src/redis)) to learn more about how to use it.
+Please refer the documentation for each module ([`server`](https://github.com/Automattic/vip-go-node/blob/trunk/src/server/README.md) | [`logger`](https://github.com/Automattic/vip-go-node/blob/trunk/src/logger/README.md) | [`newrelic`](https://github.com/Automattic/vip-go-node/blob/trunk/src/newrelic/README.md) | [`redis`](https://github.com/Automattic/vip-go-node/tree/trunk/src/redis)) to learn more about how to use it.
 
 New Relic is no longer a peer dependency of this module. Please remember to install [New Relic](https://docs.newrelic.com/docs/agents/manage-apm-agents/installation/install-agent) separately if your app requires it.
 
