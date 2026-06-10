@@ -32,9 +32,21 @@ jobs:
       - name: Check formatting
         run: npm run format:check
 
-  jest:
+  typecheck:
+    name: Type check
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Setup and install
+        uses: Automattic/vip-actions/nodejs-setup@trunk
+        with:
+          node-version-file: .nvmrc
+
+      - name: Run type checker
+        run: npm run typecheck
+
+  test:
     name: Run unit tests
-    needs: [lint]
     runs-on: ubuntu-latest
 
     steps:
@@ -44,4 +56,4 @@ jobs:
           node-version-file: .nvmrc
 
       - name: Run tests
-        run: npm run jest
+        run: npm run cmd:test

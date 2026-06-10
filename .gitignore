@@ -1,3 +1,4 @@
 /dist/
+/.test-build/
 /node_modules/
 /preflight-checks/

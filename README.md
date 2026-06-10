@@ -23,9 +23,21 @@ The following is a list of modules included in this package:
 const { server, logger, newrelic, redis } = require( '@automattic/vip-go' );
 ```
 
-Please refer the documentation for each module ([`server`](https://github.com/Automattic/vip-go-node/blob/trunk/src/server/README.md) | [`logger`](https://github.com/Automattic/vip-go-node/blob/trunk/src/logger/README.md) | [`newrelic`](https://github.com/Automattic/vip-go-node/blob/trunk/src/newrelic/README.md)) | [redis](https://github.com/Automattic/vip-go-node/tree/trunk/src/redis)) to learn more about how to use it.
+TypeScript consumers can import public helper types from the package subpath:
+
+```ts
+import type { RedisOptions } from '@automattic/vip-go/types';
+```
+
+Please refer the documentation for each module ([`server`](https://github.com/Automattic/vip-go-node/blob/trunk/src/server/README.md) | [`logger`](https://github.com/Automattic/vip-go-node/blob/trunk/src/logger/README.md) | [`newrelic`](https://github.com/Automattic/vip-go-node/blob/trunk/src/newrelic/README.md) | [`redis`](https://github.com/Automattic/vip-go-node/tree/trunk/src/redis)) to learn more about how to use it.
 
 New Relic is no longer a peer dependency of this module. Please remember to install [New Relic](https://docs.newrelic.com/docs/agents/manage-apm-agents/installation/install-agent) separately if your app requires it.
+
+## Reference docs
+
+- [Architecture](docs/ARCHITECTURE.md)
+- [Environment](docs/ENVIRONMENT.md)
+- [Testing](docs/TESTING.md)
 
 ## Development
 
@@ -35,4 +47,38 @@ For development, we have some hooks running before each commit/push. To use them
 
 ```
 git config core.hooksPath hooks
+```
+
+### Running tests
+
+Unit tests can run locally without Docker because test dependencies are mocked.
+
+Start Docker services only when working on local or integration scenarios that require Redis:
+
+```
+docker-compose up
+```
+
+Build the TypeScript sources before using the CommonJS compatibility wrappers:
+
+```
+npm run build
+```
+
+Run strict type checking for both the library and tests:
+
+```
+npm run typecheck
+```
+
+Run the TypeScript test suite directly with Node's test runner:
+
+```
+npm run cmd:test
+```
+
+The full test command runs linting, type checking, and the test suite:
+
+```
+npm test
 ```

@@ -5,7 +5,7 @@ const config = [
 		ignores: [ 'dist/**', 'preflight-checks/**' ],
 	},
 	...configs.recommended,
-	...configs.testing,
+	...configs.typescript,
 	{
 		linterOptions: {
 			reportUnusedDisableDirectives: 'warn',

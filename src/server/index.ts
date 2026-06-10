@@ -1,8 +1,15 @@
-const { createServer } = require( 'http' );
+import { createServer, type Server } from 'node:http';
+
+import type { GoServerOptions, RequestHandler, WrappedApplication } from './types';
+
 const HEALTHCHECKURL = '/cache-healthcheck?';
-const wrapApplication = ( application, { PORT, logger } ) => {
+
+const wrapApplication = (
+	application: Server,
+	{ PORT, logger }: Required< GoServerOptions >
+): WrappedApplication => {
 	const app = application;
-	let server;
+	let server: Server | undefined;
 
 	return {
 		app,
@@ -18,21 +25,22 @@ const wrapApplication = ( application, { PORT, logger } ) => {
 			} );
 		},
 		close: () => {
-			server.close();
+			( server as Server ).close();
 		},
 	};
 };
 
-module.exports = ( app, { PORT, logger = console } = {} ) => {
+function createGoServer(
+	app?: RequestHandler,
+	{ PORT, logger = console }: GoServerOptions = {}
+): WrappedApplication {
 	if ( ! app ) {
 		throw Error( 'Please include a requestHandler' );
 	}
 
-	let server = null;
-
 	logger.info( 'Creating an HTTP server...' );
 
-	server = createServer( ( req, res ) => {
+	const server = createServer( ( req, res ) => {
 		if ( req.url === HEALTHCHECKURL ) {
 			res.writeHead( 200 );
 			return res.end( 'ok' );
@@ -41,5 +49,7 @@ module.exports = ( app, { PORT, logger = console } = {} ) => {
 		return app( req, res );
 	} );
 
-	return wrapApplication( server, { PORT: PORT || process.env.PORT || 3000, logger } );
-};
+	return wrapApplication( server, { PORT: PORT || process.env[ 'PORT' ] || 3000, logger } );
+}
+
+export = createGoServer;

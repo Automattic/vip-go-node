@@ -1,19 +1,31 @@
-const nodeCluster = require( 'cluster' );
-const { createLogger, format, transports } = require( 'winston' );
+import nodeCluster from 'node:cluster';
+import { createLogger, format, transports } from 'winston';
+
+import type { ClusterLike, LoggerOptions } from './types';
+import type { TransformableInfo } from 'logform';
+import type { Logger } from 'winston';
 
 const { combine, timestamp, printf, splat } = format;
 
-const appProcess = process.env.NODEJS_APP_PROCESS || 'master';
+const appProcess = process.env[ 'NODEJS_APP_PROCESS' ] || 'master';
 
 // Allow globally silencing logs by setting the env var to 1.
 // Defaults to not silent.
-const DEFAULT_SILENCE_LOGS =
-	process.env.VIP_GO_SILENCE_LOGS && '1' === process.env.VIP_GO_SILENCE_LOGS;
+const DEFAULT_SILENCE_LOGS = Boolean(
+	process.env[ 'VIP_GO_SILENCE_LOGS' ] && '1' === process.env[ 'VIP_GO_SILENCE_LOGS' ]
+);
 
-const isLocal = () => ! process.env.VIP_GO_APP_ID;
+interface LogEntry extends TransformableInfo {
+	app?: unknown;
+	app_type?: unknown;
+	meta?: Record< string, unknown >;
+	timestamp?: unknown;
+}
 
-const createLogEntry = ( namespace, cluster ) => {
-	return format( info => {
+const isLocal = () => ! process.env[ 'VIP_GO_APP_ID' ];
+
+const createLogEntry = ( namespace: string, cluster: ClusterLike ) => {
+	return format( ( info: TransformableInfo ) => {
 		const { level, message } = info;
 
 		// Given a namespace like `my-app:module:sub-module`
@@ -25,7 +37,7 @@ const createLogEntry = ( namespace, cluster ) => {
 
 		if ( cluster.isMaster ) {
 			appWorker = 'master';
-		} else if ( cluster.isWorker ) {
+		} else if ( cluster.isWorker && cluster.worker ) {
 			appWorker = `worker_${ cluster.worker.id }`;
 		}
 
@@ -42,27 +54,35 @@ const createLogEntry = ( namespace, cluster ) => {
 
 		// If formatting is used and a custom object is provided, winston
 		// will move the object to meta. Adding the info.meta helps flatten the object
-		return Object.assign( info, output, info.meta );
+		return Object.assign( info, output, ( info as LogEntry ).meta );
 	} );
 };
 
 // Logging format for local
 const localLoggingFormat = printf( output => {
-	const { timestamp: time, app, app_type: type, level, message } = output;
-	return `${ time } ${ app }:${ type } [${ level }] ${ message }`;
+	const { timestamp: time, app, app_type: type, level, message } = output as LogEntry;
+	return `${ String( time ) } ${ String( app ) }:${ String( type ) } [${ level }] ${ String(
+		message
+	) }`;
 } );
 
 // Logging format for production
 const prodLoggingFormat = printf( output => {
-	const { timestamp: time, app, app_type: type } = output;
+	const logOutput = output as LogEntry;
+	const { timestamp: time, app, app_type: type } = logOutput;
 
 	// Can't include the timestamp in the JSON
-	delete output.timestamp;
+	delete logOutput.timestamp;
 
-	return `${ time } ${ app }:${ type } ${ JSON.stringify( output ) }`;
+	return `${ String( time ) } ${ String( app ) }:${ String( type ) } ${ JSON.stringify(
+		logOutput
+	) }`;
 } );
 
-module.exports = ( namespace, { transport, cluster, silent = DEFAULT_SILENCE_LOGS } = {} ) => {
+function createGoLogger(
+	namespace: string,
+	{ transport, cluster, silent = DEFAULT_SILENCE_LOGS }: LoggerOptions = {}
+): Logger {
 	if ( ! namespace ) {
 		throw Error( 'Please include a namespace to initialize your logger.' );
 	}
@@ -90,4 +110,6 @@ module.exports = ( namespace, { transport, cluster, silent = DEFAULT_SILENCE_LOG
 	} );
 
 	return winstonLogger;
-};
+}
+
+export = createGoLogger;
