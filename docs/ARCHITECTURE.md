@@ -135,16 +135,16 @@ Responsibilities:
 - Expose `redis.getConnectionInfo()` for bring-your-own-client scenarios.
 - Read `REDIS_MASTER` as `host:port`.
 - Read `REDIS_PASSWORD` and pass it to the client options.
-- Use `QUEUED_CONNECTION_ATTEMPTS` as `maxRetriesPerRequest`, defaulting to `3`.
+- Use `QUEUED_CONNECTION_ATTEMPTS` as `maxRetriesPerRequest`, validating it as an integer greater than or equal to `1` and falling back to `3` otherwise.
 - Enable offline queue by default.
-- Re-enable offline queue on connect.
-- Disable offline queue on reconnect once max retry behavior is reached.
-- Attach connect, reconnecting, error, and disconnect log handlers.
+- Re-enable offline queue on the `ready` event.
+- Disable offline queue via `retryStrategy` once the validated attempt limit is reached, logging one error per outage.
+- Attach connect, ready, reconnecting, error, close, and end log handlers.
 - Dynamically require `ioredis` only when a valid host and port are present.
 
 Boundary:
 
-- `ioredis` is not a production dependency of this package. Applications using Redis must install it.
+- `ioredis` ^5 is declared as an optional peer dependency, not a production dependency. Applications using Redis must install it.
 - The helper standardizes client creation but does not own cache semantics, key design, or command-level retry policy beyond the configured client options.
 
 ## Runtime mode model

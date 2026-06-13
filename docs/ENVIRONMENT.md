@@ -185,7 +185,7 @@ Source: `src/redis/index.ts`
 
 Default: `null`
 
-The Redis helper passes `REDIS_PASSWORD` to `ioredis` as the client password. If unset, the helper passes `null`.
+The Redis helper passes `REDIS_PASSWORD` to `ioredis` as the client password. If unset, `redis.getConnectionInfo()` returns `password: null` and the helper omits the password from the `ioredis` client options by passing `undefined`.
 
 Operational notes:
 
@@ -206,8 +206,10 @@ The Redis helper passes `QUEUED_CONNECTION_ATTEMPTS` to `ioredis` as `maxRetries
 Behavior:
 
 - Offline queueing is enabled when the client is created.
-- The helper re-enables offline queueing on `connect`.
-- On reconnecting, when `maxRetriesPerRequest` is present, the helper logs an error and disables the offline queue.
+- Values are validated as integers greater than or equal to `1`; unset, empty, zero, negative, fractional, or non-numeric values fall back to `3`.
+- After that many reconnection attempts, the helper logs one error per outage and disables the offline queue, so new commands are rejected.
+- `ioredis` flushes previously queued commands with `MaxRetriesPerRequestError` after `maxRetriesPerRequest` attempts.
+- The helper re-enables the offline queue when the connection becomes `ready`.
 
 Operational notes:
 
@@ -245,18 +247,18 @@ Common test patterns:
 
 ## Quick reference
 
-| Variable                     | Helper               | Required for runtime?              | Default or fallback                                     |
-| ---------------------------- | -------------------- | ---------------------------------- | ------------------------------------------------------- |
-| `PORT`                       | `server`             | no                                 | `3000`                                                  |
-| `NODEJS_APP_PROCESS`         | `logger`             | no                                 | `master`                                                |
-| `VIP_GO_SILENCE_LOGS`        | `logger`             | no                                 | logging enabled                                         |
-| `VIP_GO_APP_ID`              | `logger`, `newrelic` | required for VIP mode behavior     | local mode when absent                                  |
-| `NEW_RELIC_NO_CONFIG_FILE`   | `newrelic`           | yes, outside local mode            | skip New Relic when missing or not `true`               |
-| `NEW_RELIC_LICENSE_KEY`      | `newrelic`           | yes, outside local mode            | skip New Relic when missing                             |
-| `REDIS_MASTER`               | `redis`              | yes, for `redis()` client creation | log error and return `undefined` when missing/malformed |
-| `REDIS_PASSWORD`             | `redis`              | only when Redis requires auth      | `null`                                                  |
-| `QUEUED_CONNECTION_ATTEMPTS` | `redis`              | no                                 | `3`                                                     |
-| `NODE_ENV`                   | README example only  | no                                 | not read by runtime helpers                             |
+| Variable                     | Helper               | Required for runtime?              | Default or fallback                                            |
+| ---------------------------- | -------------------- | ---------------------------------- | -------------------------------------------------------------- |
+| `PORT`                       | `server`             | no                                 | `3000`                                                         |
+| `NODEJS_APP_PROCESS`         | `logger`             | no                                 | `master`                                                       |
+| `VIP_GO_SILENCE_LOGS`        | `logger`             | no                                 | logging enabled                                                |
+| `VIP_GO_APP_ID`              | `logger`, `newrelic` | required for VIP mode behavior     | local mode when absent                                         |
+| `NEW_RELIC_NO_CONFIG_FILE`   | `newrelic`           | yes, outside local mode            | skip New Relic when missing or not `true`                      |
+| `NEW_RELIC_LICENSE_KEY`      | `newrelic`           | yes, outside local mode            | skip New Relic when missing                                    |
+| `REDIS_MASTER`               | `redis`              | yes, for `redis()` client creation | log error and return `undefined` when missing/malformed        |
+| `REDIS_PASSWORD`             | `redis`              | only when Redis requires auth      | `null` from `getConnectionInfo()`; omitted from client options |
+| `QUEUED_CONNECTION_ATTEMPTS` | `redis`              | no                                 | `3`                                                            |
+| `NODE_ENV`                   | README example only  | no                                 | not read by runtime helpers                                    |
 
 ## Related docs
 
