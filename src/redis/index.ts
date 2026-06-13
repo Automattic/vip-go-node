@@ -87,8 +87,9 @@ function redis( { logger = console }: Options = {} ): Redis | undefined {
 				`Max connection retries reached (max: ${ maxRetriesPerRequest }). Disabling the offline queue; new commands will be rejected until the connection is reestablished.`
 			);
 
-			// ioredis flushes already-queued commands on its own; additionally reject any
-			// new commands instead of queueing them indefinitely.
+			// ioredis flushes previously queued commands (with MaxRetriesPerRequestError)
+			// on the following retry attempt; we additionally reject new commands
+			// immediately instead of queueing them indefinitely.
 			clientRef.options.enableOfflineQueue = false;
 		}
 
