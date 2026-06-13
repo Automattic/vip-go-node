@@ -3,7 +3,7 @@ import { equal, ok, throws } from 'node:assert/strict';
 import { request as httpRequest } from 'node:http';
 import { describe, it, mock, afterEach } from 'node:test';
 
-import server from '../src/server';
+import server from '../../src/server';
 
 import type { IncomingMessage, Server, ServerResponse } from 'node:http';
 

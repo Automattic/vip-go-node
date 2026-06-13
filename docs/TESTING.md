@@ -37,8 +37,16 @@ npm run cmd:test
 It expands to:
 
 ```sh
-node --require ts-node/register --experimental-test-module-mocks --test __tests__/*.spec.ts
+node --require ts-node/register --experimental-test-module-mocks --test __tests__/unit/*.spec.ts
 ```
+
+Integration tests live in `__tests__/integration/` and run separately:
+
+```sh
+npm run test:integration
+```
+
+They require a reachable Redis instance (started with `docker compose up -d`); when Redis is unreachable, the suite skips itself with a warning instead of failing.
 
 ## Validation commands
 
@@ -58,13 +66,14 @@ Command roles:
 - `npm run lint`: runs ESLint over JavaScript, JSX, TypeScript, and TSX files.
 - `npm run format:check`: verifies Prettier formatting.
 - `npm run typecheck`: runs `tsc --noEmit` for strict type validation.
-- `npm run cmd:test`: runs TypeScript specs through Node's test runner.
-- `npm test`: runs lint, typecheck, and tests together.
+- `npm run cmd:test`: runs unit specs through Node's test runner.
+- `npm run test:integration`: runs integration specs against a live Redis.
+- `npm test`: runs lint, typecheck, and unit tests together.
 - `npm run build`: emits CommonJS JavaScript and declarations into `dist/`.
 
 ## Test file map
 
-### `__tests__/server.spec.ts`
+### `__tests__/unit/server.spec.ts`
 
 Covers `src/server`.
 
@@ -85,7 +94,7 @@ Important patterns:
 - Uses port `8000` only for explicit `PORT` behavior tests.
 - Closes started servers in `finally` blocks.
 
-### `__tests__/logger.spec.ts`
+### `__tests__/unit/logger.spec.ts`
 
 Covers `src/logger`.
 
@@ -106,7 +115,7 @@ Important patterns:
 - Saves and restores `VIP_GO_APP_ID` around production-format tests.
 - Reads Winston's rendered message through `Symbol.for( 'message' )`.
 
-### `__tests__/newrelic.spec.ts`
+### `__tests__/unit/newrelic.spec.ts`
 
 Covers `src/newrelic`.
 
@@ -125,7 +134,7 @@ Important patterns:
 - Restores module hooks after each test.
 - Restores `process.env` after each test and sets `VIP_GO_APP_ID` to mimic VIP Go mode.
 
-### `__tests__/redis.spec.ts`
+### `__tests__/unit/redis.spec.ts`
 
 Covers `src/redis`.
 
@@ -144,6 +153,26 @@ Important patterns:
 - Uses `mock.module( 'ioredis', ... )` to avoid network connections.
 - Restores module mocks and `process.env` after tests.
 - Tests both positive and negative parsing examples for `REDIS_MASTER`.
+
+### `__tests__/integration/redis.spec.ts`
+
+Covers `src/redis` against a live Redis server.
+
+Primary behavior under test:
+
+- `redis()` creates a working client from `REDIS_MASTER` and answers `PING`.
+- Repeated `redis()` calls return the same singleton client.
+- Values round-trip through the real server (`SET`/`GET`/`DEL`).
+- Expiry options (`PX`) are honored by the real server.
+- `redis.getConnectionInfo()` matches the live environment.
+- Client status reaches `connect`/`ready` after a successful command.
+
+Important patterns:
+
+- Probes TCP availability first and skips the whole suite with a warning when Redis is unreachable.
+- Honors `REDIS_INTEGRATION_HOST`/`REDIS_INTEGRATION_PORT` overrides, defaulting to `127.0.0.1:6379` from `docker-compose.yml`.
+- Uses unique, expiring keys and deletes them, leaving no state behind.
+- Closes the client with `quit()` in `after`.
 
 ### `__tests__/testtransport.ts`
 
@@ -195,7 +224,7 @@ The test runner command includes `--experimental-test-module-mocks`; keep that f
 
 When adding or changing a helper:
 
-1. Add tests in the matching `__tests__/*.spec.ts` file.
+1. Add tests in the matching `__tests__/unit/*.spec.ts` file (or `__tests__/integration/` for tests that need live services).
 2. Use source-level imports from `../src/...`, not built `dist/` output.
 3. Prefer explicit behavior assertions over snapshots.
 4. Mock optional dependencies instead of adding service dependencies to the test environment.

@@ -2,8 +2,8 @@ import assert, { equal, match, throws } from 'node:assert/strict';
 import { ModuleHooks, registerHooks } from 'node:module';
 import { afterEach, beforeEach, describe, it } from 'node:test';
 
-import { TestTransport } from './testtransport';
-import newrelic from '../src/newrelic';
+import newrelic from '../../src/newrelic';
+import { TestTransport } from '../testtransport';
 
 function mockNewRelic(): ModuleHooks {
 	return registerHooks( {
