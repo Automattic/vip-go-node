@@ -50,16 +50,22 @@ void describe( 'src/redis (integration)', async () => {
 	const itLive = available ? it : it.skip.bind( it );
 	let client: Redis | undefined;
 
+	// Configure the environment at suite level so individual tests can run in isolation
+	// without depending on a previous test having mutated process.env.
+	process.env[ 'REDIS_MASTER' ] = `${ REDIS_HOST }:${ REDIS_PORT }`;
+	delete process.env[ 'REDIS_PASSWORD' ];
+
 	after( async () => {
 		if ( client ) {
-			await client.quit();
+			try {
+				await client.quit();
+			} catch {
+				client.disconnect();
+			}
 		}
 	} );
 
 	await itLive( 'should create a client from REDIS_MASTER and connect', async () => {
-		process.env[ 'REDIS_MASTER' ] = `${ REDIS_HOST }:${ REDIS_PORT }`;
-		delete process.env[ 'REDIS_PASSWORD' ];
-
 		const transport = new TestTransport();
 		client = redis( { logger: transport } );
 

@@ -239,6 +239,33 @@ void describe( 'src/redis', async () => {
 				equal( instance.options.enableOfflineQueue, false );
 				equal( transport.errors.length, 1 );
 			} );
+
+			await it( 'should re-arm the latch after the connection becomes ready', () => {
+				const transport = new TestTransport();
+				const instance = createClient( transport );
+				const { retryStrategy } = instance.options;
+				ok( retryStrategy, 'Expected a retryStrategy to be configured' );
+
+				// First outage: disable the queue and log a single error.
+				retryStrategy( 3 );
+				equal( instance.options.enableOfflineQueue, false );
+				equal( transport.errors.length, 1 );
+
+				// Latched: further retries do not log again.
+				retryStrategy( 4 );
+				equal( transport.errors.length, 1 );
+
+				// Recovery: the ready handler re-enables the queue.
+				const readyHandler = instance.handlers.get( 'ready' );
+				ok( readyHandler, 'Expected a ready handler to be registered' );
+				readyHandler();
+				equal( instance.options.enableOfflineQueue, true );
+
+				// Second outage: the latch re-armed, so the queue is disabled and logged again.
+				retryStrategy( 3 );
+				equal( instance.options.enableOfflineQueue, false );
+				equal( transport.errors.length, 2 );
+			} );
 		} );
 
 		await describe( 'event handlers', async () => {
