@@ -1,10 +1,7 @@
-import type { ConnectionInfo, Options, RedisClient, RedisOptions } from './types';
+import type { ConnectionInfo, Options } from './types';
+import type { Redis } from 'ioredis';
 
-interface RedisConstructor {
-	new ( options: RedisOptions ): RedisClient;
-}
-
-let redisClient: RedisClient | null = null;
+let redisClient: Redis | null = null;
 
 const getErrorMessage = ( error: unknown ): string => {
 	if ( error instanceof Error ) {
@@ -14,10 +11,11 @@ const getErrorMessage = ( error: unknown ): string => {
 	return String( error );
 };
 
-const getIORedis = (): RedisConstructor => {
+const getIORedis = (): typeof Redis => {
 	try {
 		// eslint-disable-next-line @typescript-eslint/no-require-imports
-		return require( 'ioredis' ) as RedisConstructor;
+		const { Redis } = require( 'ioredis' ) as typeof import('ioredis');
+		return Redis;
 	} catch ( error ) {
 		throw new Error( `The 'ioredis' package could not be imported.
 			Please make sure the package is installed and available.
@@ -25,9 +23,20 @@ const getIORedis = (): RedisConstructor => {
 	}
 };
 
-const retryStrategy = ( times: number ): number => {
-	// Wait 2 seconds maximum before attempting reconnection
-	return Math.min( times * 50, 2000 );
+const getQueuedConnectionAttempts = (): number => {
+	const DEFAULT_QUEUED_CONNECTION_ATTEMPTS = 3;
+	const rawValue = process.env[ 'QUEUED_CONNECTION_ATTEMPTS' ];
+
+	// Only accept strictly positive integers; anything else falls back to the default.
+	if ( ! rawValue || ! /^\d+$/.test( rawValue ) ) {
+		return DEFAULT_QUEUED_CONNECTION_ATTEMPTS;
+	}
+
+	const queuedConnectionAttempts = Number( rawValue );
+
+	return Number.isSafeInteger( queuedConnectionAttempts ) && queuedConnectionAttempts >= 1
+		? queuedConnectionAttempts
+		: DEFAULT_QUEUED_CONNECTION_ATTEMPTS;
 };
 
 const getConnectionInfo = (): ConnectionInfo => {
@@ -46,7 +55,7 @@ const getConnectionInfo = (): ConnectionInfo => {
 	return { host, port, password };
 };
 
-function redis( { logger = console }: Options = {} ): RedisClient | undefined {
+function redis( { logger = console }: Options = {} ): Redis | undefined {
 	if ( redisClient ) {
 		// Client already defined and initialized
 		return redisClient;
@@ -64,41 +73,66 @@ function redis( { logger = console }: Options = {} ): RedisClient | undefined {
 	logger.debug( 'Initializing a new redis client...' );
 
 	const IORedis = getIORedis();
+	const maxRetriesPerRequest = getQueuedConnectionAttempts();
 
-	redisClient = new IORedis( {
+	// Assigned right after the IORedis constructor below; declared first so the
+	// retryStrategy closure never hits a temporal dead zone if invoked synchronously.
+	let clientRef: Redis | null = null;
+
+	const retryStrategy = ( times: number ): number => {
+		// Only log and disable the queue once per outage (while the queue is still enabled),
+		// instead of on every subsequent retry.
+		if ( clientRef && times >= maxRetriesPerRequest && clientRef.options.enableOfflineQueue ) {
+			logger.error(
+				`Max connection retries reached (max: ${ maxRetriesPerRequest }). Disabling the offline queue; new commands will be rejected until the connection is reestablished.`
+			);
+
+			// ioredis flushes already-queued commands on its own; additionally reject any
+			// new commands instead of queueing them indefinitely.
+			clientRef.options.enableOfflineQueue = false;
+		}
+
+		// Wait 2 seconds maximum before attempting reconnection
+		return Math.min( times * 50, 2000 );
+	};
+
+	const client = new IORedis( {
 		host,
-		port,
-		password,
+		port: Number( port ),
+		password: password ?? undefined,
 		retryStrategy,
 		enableOfflineQueue: true,
-		maxRetriesPerRequest: process.env[ 'QUEUED_CONNECTION_ATTEMPTS' ] || 3,
+		maxRetriesPerRequest,
 	} );
-	const client = redisClient;
+	clientRef = client;
+	redisClient = client;
 
 	// Attaching event listeners
 
 	client.on( 'connect', () => {
 		logger.debug( 'Connected to Redis client...' );
-		client.enableOfflineQueue = true;
+	} );
+
+	client.on( 'ready', () => {
+		logger.debug( 'Redis connection ready...' );
+		// Restore offline queueing only once the connection is fully ready; ioredis
+		// resets its retry counter on 'ready', not on 'connect'.
+		client.options.enableOfflineQueue = true;
 	} );
 
 	client.on( 'reconnecting', () => {
 		logger.debug( 'Attempting a reconnection to redis...' );
-
-		if ( client.maxRetriesPerRequest ) {
-			logger.error(
-				`Max retries reached (max: ${ client.maxRetriesPerRequest }). Flushing all pending commands and disabling the offline queue...`
-			);
-
-			client.enableOfflineQueue = false;
-		}
 	} );
 
 	client.on( 'error', error => {
 		logger.error( `Error: ${ error?.message }. Complete error: ${ JSON.stringify( error ) }` );
 	} );
 
-	client.on( 'disconnect', () => {
+	client.on( 'close', () => {
+		logger.debug( 'Redis connection closed' );
+	} );
+
+	client.on( 'end', () => {
 		logger.debug( 'Disconnected from redis client' );
 	} );
 

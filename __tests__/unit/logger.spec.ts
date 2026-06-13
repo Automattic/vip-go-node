@@ -1,8 +1,8 @@
 import assert, { equal, match } from 'node:assert/strict';
 import { afterEach, beforeEach, describe, it } from 'node:test';
 
-import { TestTransport } from './testtransport';
-import goLogger from '../src/logger';
+import goLogger from '../../src/logger';
+import { TestTransport } from '../testtransport';
 
 import type { TransformableInfo } from 'logform';
 

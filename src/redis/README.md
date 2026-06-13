@@ -4,10 +4,10 @@ Our Redis helper is based on the [ioredis](https://github.com/luin/ioredis) proj
 
 ## Initialization
 
-To start, install the `ioredis` package:
+To start, install the `ioredis` package (declared as an optional peer dependency of this library):
 
 ```
-npm install --save ioredis@4.14.1
+npm install --save ioredis@^5
 ```
 
 Instantiate a new Redis client:
@@ -36,9 +36,11 @@ REDIS_PASSWORD=password
 
 ## Reconnecting to Redis
 
-If the connection to the Redis server is lost, offline queuing for commands will be disabled.
+If the connection to the Redis server is lost, the client keeps queueing commands while it attempts to reconnect.
 
-After three reconnection attempts, all pending commands will be flushed so that there are no stale commands. You can change this number by using the `QUEUED_CONNECTION_ATTEMPTS` environment variable.
+After `QUEUED_CONNECTION_ATTEMPTS` reconnection attempts (default: `3`), the offline queue is disabled and new commands are rejected immediately. ioredis flushes the previously queued commands on its own with a `MaxRetriesPerRequestError`, so no stale commands linger. The offline queue is re-enabled once the connection becomes ready again.
+
+Set the `QUEUED_CONNECTION_ATTEMPTS` environment variable to a positive integer to change the number of attempts; invalid values fall back to the default.
 
 ## Bring Your Own Client
 
