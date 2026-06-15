@@ -74,7 +74,7 @@ void describe( 'src/logger', async () => {
 				assert( typeof message === 'string', 'Expected log message to be a string' );
 				match(
 					message,
-					/^\w{3}, \d{2} \w{3} \d{4} \d{2}:\d{2}:\d{2} GMT go:app {"message":"my message","level":"info","app":"go","app_type":"app","message_type":"info","app_process":"master","app_worker":"master"}$/
+					/^go:app {"message":"my message","level":"info","app":"go","app_type":"app","message_type":"info","app_process":"master","app_worker":"master"}$/
 				);
 			} );
 		} );

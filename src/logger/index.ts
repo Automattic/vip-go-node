@@ -1,9 +1,8 @@
 import nodeCluster from 'node:cluster';
-import { createLogger, format, transports } from 'winston';
+import { createLogger, format, transports, type Logger } from 'winston';
 
 import type { ClusterLike, LoggerOptions } from './types';
 import type { TransformableInfo } from 'logform';
-import type { Logger } from 'winston';
 
 const { combine, timestamp, printf, splat } = format;
 
@@ -69,14 +68,12 @@ const localLoggingFormat = printf( output => {
 // Logging format for production
 const prodLoggingFormat = printf( output => {
 	const logOutput = output as LogEntry;
-	const { timestamp: time, app, app_type: type } = logOutput;
+	const { app, app_type: type } = logOutput;
 
 	// Can't include the timestamp in the JSON
 	delete logOutput.timestamp;
 
-	return `${ String( time ) } ${ String( app ) }:${ String( type ) } ${ JSON.stringify(
-		logOutput
-	) }`;
+	return `${ String( app ) }:${ String( type ) } ${ JSON.stringify( logOutput ) }`;
 } );
 
 function createGoLogger(
